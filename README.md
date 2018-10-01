@@ -37,7 +37,7 @@ CONFIG()->set('frontend/assets/js', ['js/vendor.js', 'js/site.js']);
         <tr><td>frontend/assets/version</td><td>false</td><td>bool</td><td>Add cachebusting version to assets paths</td></tr>
         <tr><td>frontend/assets/css</td><td>[]</td><td>array</td><td>Website CSS file(s). Paths relative to `asset/` directory.</td></tr>
         <tr><td>frontend/assets/css_print</td><td>[]</td><td>array</td><td>Print CSS file(s). Paths relative to `asset/` directory.</td></tr>
-        <tr><td>frontend/assets/js</td><td>[]</td><td>array</td><td>Website JS file(s). Paths relative to `asset/` directory.</td><</tr>
+        <tr><td>frontend/assets/js</td><td>[]</td><td>array</td><td>Website JS file(s). Paths relative to `asset/` directory.</td></tr>
         <tr><td>frontend/query_params</td><td>[]</td><td>array</td><td>Add custom query params.</td></tr>
         <tr><td>frontend/hide_admin_bar</td><td>true</td><td>bool</td><td>Hide the Wordpress Admin bar on Frontend</td></tr>
         <tr><td colspan="4"><b>Login Page Settings</b></td></tr>
