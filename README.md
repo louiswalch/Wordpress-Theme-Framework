@@ -64,7 +64,7 @@ CONFIG()->set('frontend/assets/js', ['js/vendor.js', 'js/site.js']);
         <tr><td>dashboard/editor/media_buttons</td><td>false</td><td>bool</td><td></td></tr>
         <tr><td>dashboard/editor/buttons_1</td><td>['formatselect', 'bold', 'italic', 'bullist', 'numlist', 'blockquote',' alignleft', 'aligncenter','alignright', 'link', 'unlink', 'pastetext', 'removeformat']</td><td>array</td><td></td></tr>
         <tr><td>dashboard/editor/buttons_2</td><td>[]</td><td>array</td><td></td></tr>
-        <tr><td>dashboard/editor/formats</td><td>Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre<td><td>string</td><td></td></tr>
+        <tr><td>dashboard/editor/formats</td><td>Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre</td><td>string</td><td></td></tr>
         <tr><td colspan="4"><b>Image settings</b></td></tr>
         <tr><td>image/enabled</td><td>true</td><td>bool</td><td>Enable thumbnail support for this theme.</td></tr>
         <tr><td>image/sizes</td><td>['400', '600', '800', '1200', '1600', '2400']</td><td>array</td><td></td></tr>
