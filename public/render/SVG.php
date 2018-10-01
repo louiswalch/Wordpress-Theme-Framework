@@ -13,10 +13,10 @@ Louis Walch / say@hellolouis.com
 
 -- EXAMPLES --
 
-Display an in-line SVG (stored in assets/img/arrow.svg):
+// Display an in-line SVG (stored in assets/img/arrow.svg):
 echo SVG()->show('arrow');
 
-Display an SVG (stored in assets/img/arrow.svg) as <img> with attributes:
+// Display an SVG (stored in assets/img/arrow.svg) as <img> with attributes:
 echo SVG()->img('test', array('class'=>'testing', 'alt'=>'Name of the image'))
 
 
