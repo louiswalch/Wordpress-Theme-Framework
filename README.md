@@ -52,8 +52,8 @@ CONFIG()->set('frontend/assets/js', ['js/vendor.js', 'js/site.js']);
         <tr><td>dashboard/delete_lock</td><td>[]</td><td>array</td><td>Block pages/posts from being deleted.</td></tr>
         <tr><td>dashboard/remove_roles</td><td>['subscriber', 'contributor']</td><td>array</td><td>Block pages/posts from being deleted.</td></tr>
         <tr><td>dashboard/bar/howdy</td><td>false</td><td>bool</td><td>Display 'Howdy' from the top bar?</td></tr>
-        <tr><td>dashboard/bar/remove</td><td>[]</td><td>array</td><td>Remove items from the top bar.</td></tr>
-        <tr><td>dashboard/bar/relocate</td><td>[]</td><td>array</td><td>Relocate items from the sidebar into top bar.</td></tr>
+        <tr><td>dashboard/bar/remove</td><td>['wp-logo','archive','updates','new-content']</td><td>array</td><td>Remove items from the top bar.</td></tr>
+        <tr><td>dashboard/bar/relocate</td><td>['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group']</td><td>array</td><td>Relocate items from the sidebar into top bar.</td></tr>
         <tr><td colspan="4"><b>Dashboard — Metabox Settings</b></td></tr>
         <tr><td colspan="4">DOCUMENTAION COMING SOON</td></tr> 
         <tr><td colspan="4"><b>Dashboard — Content Editor Settings</b></td></tr>
@@ -62,9 +62,9 @@ CONFIG()->set('frontend/assets/js', ['js/vendor.js', 'js/site.js']);
         <tr><td>dashboard/editor/height</td><td>200</td><td>int</td><td></td></tr>
         <tr><td>dashboard/editor/resize</td><td>true</td><td>bool</td><td></td></tr>
         <tr><td>dashboard/editor/media_buttons</td><td>false</td><td>bool</td><td></td></tr>
-        <tr><td>dashboard/editor/buttons_1</td><td>[]</td><td>array</td><td></td></tr>
+        <tr><td>dashboard/editor/buttons_1</td><td>['formatselect', 'bold', 'italic', 'bullist', 'numlist', 'blockquote',' alignleft', 'aligncenter','alignright', 'link', 'unlink', 'pastetext', 'removeformat']</td><td>array</td><td></td></tr>
         <tr><td>dashboard/editor/buttons_2</td><td>[]</td><td>array</td><td></td></tr>
-        <tr><td>dashboard/editor/formats</td><td><i>empty</i></td><td>string</td><td></td></tr>
+        <tr><td>dashboard/editor/formats</td><td>Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre<td><td>string</td><td></td></tr>
         <tr><td colspan="4"><b>Image settings</b></td></tr>
         <tr><td>image/enabled</td><td>true</td><td>bool</td><td>Enable thumbnail support for this theme.</td></tr>
         <tr><td>image/sizes</td><td>['400', '600', '800', '1200', '1600', '2400']</td><td>array</td><td></td></tr>
@@ -85,6 +85,19 @@ CONFIG()->set('frontend/assets/js', ['js/vendor.js', 'js/site.js']);
         <tr><td>posts</td><td>true</td><td>bool</td><td>Enable posts for this theme.</td></tr>
     </tbody>
 </table>
+
+##### Custom Image Sizes
+
+[ TODO: Add details on how to define ]
+
+##### Custom Metaboxes
+
+[ TODO: Add details on how to define ]
+
+##### Content Editor
+
+[ TODO: Add details on how to define ]
+
 
 ------------
 
@@ -119,7 +132,6 @@ echo IMAGE()->size(600)->div(get_field('image'));
 // Output just the image src (e.g. for use in Meta Tag), passing in the size we want.
 echo IMAGE()->src(get_post_thumbnail_id(), 800); 
 ```
-<br/>
 
 #### SVG Render
 
@@ -133,7 +145,6 @@ echo SVG()->show('arrow');
 // Display an SVG (stored in assets/img/arrow.svg) as <img> with attributes:
 echo SVG()->img('test', array('class'=>'testing', 'alt'=>'Name of the image'))
 ```
-<br/>
 
 #### Include Render
 
@@ -157,13 +168,11 @@ INCLUDES()->data([ 'section'=>'about', 'background'=>'blue'])->show('header');
 // Get the contents of an include and store in variable.
 $include_contents = INCLUDES()->fetch('header');
 ```
-<br/>
 
 #### Module Render
 
 [ TODO: Add description ]
 [ TODO: Add examples ]
-<br/>
 
 ------------
 

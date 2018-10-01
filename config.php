@@ -78,10 +78,10 @@ CONFIG()->set([
     'dashboard/bar/howdy'               => false,
 
     // Remove items from the top bar.
-    'dashboard/bar/remove'              => [],
+    'dashboard/bar/remove'              => ['wp-logo','archive','updates','new-content'],
 
     // Relocate items from the sidebar into top bar.
-    'dashboard/bar/relocate'            => [],
+    'dashboard/bar/relocate'            => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group'],
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Metabox Settings
@@ -116,9 +116,9 @@ CONFIG()->set([
     'dashboard/editor/height'           => 200,
     'dashboard/editor/resize'           => true,
     'dashboard/editor/media_buttons'    => false,
-    'dashboard/editor/buttons_1'        => [],
+    'dashboard/editor/buttons_1'        => ['formatselect', 'bold','italic','bullist','numlist','blockquote','alignleft','aligncenter','alignright','link','unlink','pastetext','removeformat'],
     'dashboard/editor/buttons_2'        => [],
-    'dashboard/editor/formats'          => '',
+    'dashboard/editor/formats'          => 'Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre',
 
     // Buttons 1:
     // 'formatselect','bold','italic','bullist','numlist','blockquote','alignleft','aligncenter','alignright','link','unlink','wp_more','spellchecker','dfw','wp_adv'
