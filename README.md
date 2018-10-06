@@ -326,7 +326,7 @@ Add cachebusting version to assets paths.
 <table>
     <thead>
         <tr.>
-            <Th.>Key</th>
+            <Th>Key</th>
             <th>Default</th>
             <th>Input Type</th>
             <th>Notes</th>
