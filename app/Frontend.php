@@ -8,9 +8,13 @@ class Frontend {
 
         // Public render helper classes, must be called from global instance functions.
         require_once HELLO_DIR . '/public/render/Image.php';
+        require_once HELLO_DIR . '/public/render/ImageInstance.php';
         require_once HELLO_DIR . '/public/render/SVG.php';
+        require_once HELLO_DIR . '/public/render/SVGInstance.php';
         require_once HELLO_DIR . '/public/render/Include.php';
+        require_once HELLO_DIR . '/public/render/IncludeInstance.php';
         // require_once HELLO_DIR . '/public/render/Module.php';
+        // require_once HELLO_DIR . '/public/render/ModuleInstance.php';
 
         // Add theme specified CSS and JS assets.
         new FrontendAssets();

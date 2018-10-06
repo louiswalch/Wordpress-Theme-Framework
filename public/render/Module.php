@@ -1,5 +1,8 @@
 <?php
 
+use HelloFramework;
+
+
 /*
 
 PAGE MODULES LOADER
@@ -31,142 +34,100 @@ MODULES()->show('text_content', [
 // ---------------------------------------------------------------------------
 // Modules - Core Class.
 
-    class ModulesClass extends IncludesClass {
+class ModuleRender extends IncludesClass {
 
-        // Allow for a single instance of this class across all scopes.
-        private static $instance;
+    // Allow for a single instance of this class across all scopes.
+    private static $instance;
 
-        protected $_cache_prefix    = 'include_module_';
-        protected $_dir             = '_modules/';
-        protected $_type            = 'MODULE';
+    protected $_cache_prefix    = 'include_module_';
+    protected $_dir             = '_modules/';
+    protected $_type            = 'MODULE';
 
-        protected $_from;
+    protected $_from;
+    
+
+    // ------------------------------------------------------------
+    // Nested Data Helpers
+    // We don't need these for modules, as they aren't tested.
+
+    protected function _rememberSession() {
+        return false;
+    }
+
+    protected function _resetSession() {
+        return false;
+    }
 
 
-        // ------------------------------------------------------------
+    // ------------------------------------------------------------
+    // Load Helpers
 
-        public function __construct() {
-
-            self::$instance =& $this;
-            
-        }
-
-        // ------------------------------------------------------------
-        // This will return the class singlton, makes it easier for this to be a global class.
-        // It must be manually set in each child class.
-
-        public static function &get_instance() {
-
-            return self::$instance;
+    public function auto($field_group = 'modules', $skip = array()) {
         
+        $return     = '';
+        $modules    = get_field($field_group, $this->_from);
+        $count      = count($modules);
+
+        if (!$modules || !$count) return false;
+
+        for ($i=0; $i<$count ; $i++) { 
+
+            $first  = ($i == 0);
+            $data   = $modules[$i];
+            $type   = $data['acf_fc_layout'];
+
+            $data['field_group_name']   = $field_group;
+            $data['field_group_index']  = $i;
+
+            // Sometimes we want to skip modules and load them manually in a different location.
+            if (in_array($type, $skip)) continue;
+
+            // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
+            $return .= $this->fetch($type, $data);
+
         }
 
-        // ------------------------------------------------------------
-        // Nested Data Helpers
-        // We don't need these for modules, as they aren't tested.
+        echo $return;
 
-        protected function _rememberSession() {
-            return false;
-        }
-
-        protected function _resetSession() {
-            return false;
-        }
+    }
 
 
-        // ------------------------------------------------------------
-        // Load Helpers
+    // Manually load just one module from a group into a location on current page.
+    public function manual($field_group = 'modules', $module_name = false) {
+        
+        $return     = '';
+        $modules    = get_field($field_group, $this->_from);
+        $count      = count($modules);
 
-        public function auto($field_group = 'modules', $skip = array()) {
-            
-            $return     = '';
-            $modules    = get_field($field_group, $this->_from);
-            $count      = count($modules);
+        if (!$modules || !$count || !$module_name) return false;
 
-            if (!$modules || !$count) return false;
+        for ($i=0; $i<$count ; $i++) { 
 
-            for ($i=0; $i<$count ; $i++) { 
+            $first  = ($i == 0);
+            $data   = $modules[$i];
+            $type   = $data['acf_fc_layout'];
 
-                $first  = ($i == 0);
-                $data   = $modules[$i];
-                $type   = $data['acf_fc_layout'];
+            $data['field_group_name']   = $field_group;
+            $data['field_group_index']  = $i;
 
-                $data['field_group_name']   = $field_group;
-                $data['field_group_index']  = $i;
-
-                // Sometimes we want to skip modules and load them manually in a different location.
-                if (in_array($type, $skip)) continue;
-
+            if ($type == $module_name) {
                 // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
                 $return .= $this->fetch($type, $data);
-
             }
 
-            echo $return;
-
         }
 
-
-        // Manually load just one module from a group into a location on current page.
-        public function manual($field_group = 'modules', $module_name = false) {
-            
-            $return     = '';
-            $modules    = get_field($field_group, $this->_from);
-            $count      = count($modules);
-
-            if (!$modules || !$count || !$module_name) return false;
-
-            for ($i=0; $i<$count ; $i++) { 
-
-                $first  = ($i == 0);
-                $data   = $modules[$i];
-                $type   = $data['acf_fc_layout'];
-
-                $data['field_group_name']   = $field_group;
-                $data['field_group_index']  = $i;
-
-                if ($type == $module_name) {
-                    // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
-                    $return .= $this->fetch($type, $data);
-                }
-
-            }
-
-            echo $return;
-
-        }
-
-        // ------------------------------------------------------------
-        // Public setters.
-        // Allow for updating of options when generating an image. Meant to be used as a chained method.
-
-        public function from($value=null) {
-            if (!is_null($value)) $this->_from = $value;
-            return $this;
-        }
+        echo $return;
 
     }
 
+    // ------------------------------------------------------------
+    // Public setters.
+    // Allow for updating of options when generating an image. Meant to be used as a chained method.
 
-// ---------------------------------------------------------------------------
-// Modules - Public instance & helper function.
-
-    $ModulesClassInstance = new ModulesClass();
-
-    function MODULES() {
-
-        $instance = &ModulesClass::get_instance();
-        return $instance;
-
+    public function from($value=null) {
+        if (!is_null($value)) $this->_from = $value;
+        return $this;
     }
 
-
-// ---------------------------------------------------------------------------
-// Modules - Public function to return data by key. Meant to be used within an include file.
-
-    function get_module_var($key, $group = null) {
-
-        return MODULES()->getData($key, $group);
-    
-    }
-
+}

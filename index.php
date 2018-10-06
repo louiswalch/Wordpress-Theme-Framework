@@ -52,7 +52,7 @@ if (version_compare(PHP_VERSION, '5.3', '<')) {
 }
 
 // Public functions to allow theme access to framework functionality.
-require_once HELLO_DIR . '/public/instance.php';
+require_once HELLO_DIR . '/public/ConfigInstance.php';
 
 // Public misc custom output and functionality.
 require_once HELLO_DIR . '/public/output.php';

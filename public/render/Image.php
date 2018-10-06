@@ -40,7 +40,7 @@ echo IMAGE()->src(get_post_thumbnail_id(), 800);
 
 */
 
-class Image extends HelloFramework\Singleton {
+class ImageRender extends HelloFramework\Singleton {
 
     private $_alphadata = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
@@ -67,8 +67,7 @@ class Image extends HelloFramework\Singleton {
     }
 
     // ------------------------------------------------------------
-    // Default options, this gets called after evey request.
-
+    // Default options, these will get reset to original values once a request has completed.
     private function _reset() {
 
         $this->_alpha       = false;

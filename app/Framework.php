@@ -27,6 +27,9 @@ class Framework {
         // Should comments be disabled?
         $this->setCommentStatus();
          
+        // Should custom post types be auto-loaded from the theme?
+        $this->autoLoadCustomTypes();
+
         // Location specific customizations.
         if ($this->area == 'frontend')  new Frontend;
         if ($this->area == 'admin')     new Dashboard;
@@ -126,7 +129,7 @@ class Framework {
 
     protected function setCommentStatus() {
 
-        if (CONFIG('comments')) return;
+        if (CONFIG('dashboard/comments')) return;
 
         // Remove comments support.
         add_action('init', function() {
@@ -135,5 +138,33 @@ class Framework {
         }, 100);
 
     }
+
+
+    // ------------------------------------------------------------
+
+    protected function autoLoadCustomTypes() {
+
+        if (!CONFIG('custom_types/autoload')) return;
+
+        require_all_files(FRAMEWORK_DIR . '/' . CONFIG('custom_types/directory').'/');
+
+    }   
+
+
+
+    // ------------------------------------------------------------
+    // Build HTML attributes from an array.
+    // https://stackoverflow.com/a/34063755/107763       
+
+    // public function getAttributes($array=array()) {     
+
+    //     $array = array_merge($array, $this->_attr);
+
+    //     return implode(' ', array_map(
+    //         function ($k, $v) { return $k .'="'. htmlspecialchars($v) .'"'; },
+    //         array_keys($array), $array));
+        
+    // }
+
 
 }

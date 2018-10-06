@@ -89,7 +89,7 @@ class Dashboard  {
 
     private function _toggleComments() {
 
-        if (CONFIG('comments')) return false;
+        if (CONFIG('dashboard/comments')) return false;
 
         // Remove comment column from WP-Admin list pages.    
         add_filter('manage_pages_columns', function($defaults) {
@@ -196,7 +196,7 @@ class Dashboard  {
 
     private function _togglePosts(){
 
-        if (CONFIG('posts')) return;
+        if (CONFIG('dashboard/posts')) return;
 
         add_action('admin_menu', function() {
             remove_menu_page('edit.php');

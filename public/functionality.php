@@ -23,7 +23,7 @@ namespace {
 
     function require_all_files($directory = false) {
 
-        if (!$directory) return false;
+        if (!$directory || !is_dir($directory)) return false;
         
         foreach (scandir($directory) as $file) {
 
@@ -63,15 +63,6 @@ namespace {
             return $result;
         }
 
-        // if ($_SERVER['PHP_SELF'] === '/wp-login.php'){
-        //     return 'login';
-        // }
-        // if (is_admin()) {
-        //     return 'admin';
-        // }
-        // return 'frontend';
-
-
     }
 
 
@@ -84,15 +75,25 @@ namespace {
 
         if (is_null($result)) {
 
-            $domain    = $_SERVER['SERVER_NAME'];
+            $domain                 = $_SERVER['SERVER_NAME'];
+            $development_matches    = CONFIG('environment/development');
+            $staging_matches        = CONFIG('environment/staging');
 
-            if ((strpos($domain,'.local') !== false) || (strpos($domain,'.dev') !== false)) {
-                $result = 'development';
-            } else if ((strpos($domain,'staging') !== false) || (strpos($domain,'beta') !== false)) {
-                $result = 'staging';
-            } else {
-                $result = 'prodution';
+            foreach ($development_matches as $value) {
+                if (strpos($domain, $value) !== false) {
+                    $result = 'development';
+                }
             }
+
+            if (is_null($result)) {
+                foreach ($staging_matches as $value) {
+                    if (strpos($domain, $value) !== false) {
+                        $result = 'staging';
+                    }
+                }
+            }
+
+            $result = 'prodution';
         
         }
 
@@ -108,11 +109,9 @@ namespace {
     // Detect if current request is AJAX.
 
     function is_ajax_request() {
-
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             return true;
         }
-
         return defined('DOING_AJAX');
     }
 
@@ -121,8 +120,6 @@ namespace {
     // Get the slug fo the top-most directory this page is in - e.g. it's section.
 
     function top_level_slug() {
-
-        //global $post;
 
         $path   = trim($_SERVER['REQUEST_URI'], '/');
         $parts  = explode("/", $path); 

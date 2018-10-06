@@ -63,10 +63,12 @@ CONFIG()->set([
     'dashboard/css'                     => '',
 
     // Disable some Wordpress functionality.
-    'dashboard/tags'                    => false,
-    'dashboard/menus'                   => false,
-    'dashboard/widgets'                 => false,
+    'dashboard/comments'                => false,
     'dashboard/customizer'              => false,
+    'dashboard/menus'                   => false,
+    'dashboard/posts'                   => true,
+    'dashboard/tags'                    => false,
+    'dashboard/widgets'                 => false,
 
     // Block pages/posts from being deleted.
     'dashboard/delete_lock'             => [],
@@ -143,11 +145,15 @@ CONFIG()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // Misc Settings
+    // Environment Detection Settings
 
-    'comments'                          => false,
-    'posts'                             => true,
+    'environment/development'           => ['.local'],
+    'environment/staging'               => ['staging'],
 
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Misc
+    'custom_types/autoload'             => true,
+    'custom_types/directory'            => 'types',
 
 
 ]);
