@@ -13,8 +13,8 @@ class Frontend {
         require_once HELLO_DIR . '/public/render/SVGInstance.php';
         require_once HELLO_DIR . '/public/render/Include.php';
         require_once HELLO_DIR . '/public/render/IncludeInstance.php';
-        // require_once HELLO_DIR . '/public/render/Module.php';
-        // require_once HELLO_DIR . '/public/render/ModuleInstance.php';
+        require_once HELLO_DIR . '/public/render/Module.php';
+        require_once HELLO_DIR . '/public/render/ModuleInstance.php';
 
         // Add theme specified CSS and JS assets.
         new FrontendAssets();
@@ -23,9 +23,12 @@ class Frontend {
         $this->_addQueryParams();
 
         // Remove admin bar from website
-        if (CONFIG('frontend/hide_admin_bar') == true) {
+        if (!CONFIG('frontend/admin_bar')) {
             add_filter('show_admin_bar', '__return_false');
         }
+
+        // Add the current environment as class on BODY.
+        $this->_addEnvironmentClass();
 
         // THIRD-PARTY - Clean up the Yoast SEO fields added to user profile
         // add_filter( 'user_contactmethods', 'clean_user_contactmethods', 10, 1 );
@@ -184,6 +187,20 @@ class Frontend {
         });
 
     }
+
+
+    // ------------------------------------------------------------
+
+    private function _addEnvironmentClass() {
+
+        add_filter('body_class', function($classes) {
+            $classes[] = 'is-' . detect_environment();
+            return $classes; 
+        });
+
+    }
+
+
 
 
 }

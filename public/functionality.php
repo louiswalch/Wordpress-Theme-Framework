@@ -6,10 +6,10 @@ namespace {
     // ---------------------------------------------------------------------------
     // Get path to item in theme asset directory (CSS, JS, Images, etc).
 
-    function asset($file='', $echo=false, $server=false) {
+    function asset($file='', $echo=false, $server=false, $directory='') {
 
         $root = ($server) ? (get_template_directory()) : (get_stylesheet_directory_uri());
-        $path = $root . '/assets/' . $file;
+        $path = $root . $directory . '/assets/' . $file;
 
         if ($echo) echo $path;
             
@@ -17,6 +17,11 @@ namespace {
 
     }
 
+    function framework_asset($file='', $echo=false, $server=false) {
+        
+        return asset($file, $echo, $server, '/_framework');
+
+    }
 
     // ---------------------------------------------------------------------------
     // Require all files in specified directory. 
@@ -93,8 +98,10 @@ namespace {
                 }
             }
 
-            $result = 'prodution';
-        
+            if (is_null($result)) {
+                $result = 'prodution';
+            }
+
         }
 
         if ($match && is_string($match)) {

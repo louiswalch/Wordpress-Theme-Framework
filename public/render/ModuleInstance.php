@@ -7,7 +7,7 @@ namespace {
 
     function MODULES() {
 
-        $instance = HelloFramework\Render\ModulesRender::get_instance();
+        $instance = HelloFramework\Render\Modules::get_instance();
         return $instance;
 
     }

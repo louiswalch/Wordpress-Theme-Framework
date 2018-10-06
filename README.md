@@ -1,79 +1,135 @@
 # Wordpress Theme Framework
 
 
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
-  
-> 1. Template Libraries
-> 		* [Image](#envirius)
-> 		* SVG
-> 		* Include
-> 		* Module
-> 		* ~~Metatag~~
-> 2. Template Helper Functions
-> 3. Environment Detection
-> 4. Configuration
-> 5. Configuration Options
-> 		* Frontend 
-> 		* Login Page 
-> 		* Dashboard — General 
-> 		* Dashboard — Meatball 
-> 		* Dashboard - Content Editor 
-> 		* Custom Image Size 
-> 		* Email 
-> 6. Installation 
-> 7. Custom Post Types & Taxonomy
-> 8. Demo Theme
+:warning: **This is a private beta release of this framework, please do not share.**
 
+:email: **Feedback and suggestions are encouraged.**
 
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+    
+1. [Installation](#installation)
+1. [Frontend Libraries](#frontend-libraries)
+    * [Image](#frontend-libraries---image-render)
+    * [SVG](#frontend-libraries--svg-render)
+    * [Includes](#frontend-libraries--includes-render)
+    * [Modules](#frontend-libraries--modules-render)
+    * ~~[Metatag](#frontend-libraries--meta-tag-render)~~
+1. ~~[Frontend Helpers](#frontend-helpers)~~
+1. [Configuration](#configuration)
+1. [Configuration Options](#configuration-options)
+    * [Frontend](#xxxx)
+    * [Login](#xxxx)
+    * [Dashboard — General](#xxxx) 
+    * [Dashboard — Metaboxes](#xxxx)
+    * [Dashboard — Content Editor](#xxxx)
+    * ~~[Dashboard — ACF](#xxxx)~~
+    * [Custom Image Sizes](#xxxx)
+    * [Email](#xxxx)
+1. [Environment Detection](#environment-detection)
+1. [~~Custom Post Types & Taxonomy](#custom-post-types--taxonomy)~~
+1. [Demo Theme](#demo-theme)
 
-```
-TODO Items
+<br/>
 
-Various aspects across the entire framework that are pending finalization. Feel free to pitch in.
+------
+   
+### TODO
 
+- [ ] Name framework.
+- [ ] License?
+- [ ] Add ACF customizations.
+- [ ] Add Metatag Library.
 - [ ] Improve Configuration Options Layout 
 - [ ] Write Product introduction.
 - [ ] Configuration Options - Reformat section.
 - [ ] Configuration Options - breakdown all chained methods and end points for each example.
-- [ ] Collapse code examples for Renders.
-```
+
 
 <br/>
--------------------------------------------------
 
-### Template Library : Image Render
+------
+   
 
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
+### Installation
 
-End:
+Installation is very simple - install and activate this Plugin on your Wordpress site. Once running, most of the Frontend HTML and Dashboard UI cleanup functionality will happen automatically. If you would like to disable or customize functionality within the framework refer to the [Configuration](#configuration) section of this document.
 
- - img($image=false, $size=false, $showcaption=false)
- - src($image=false, $size=false)
+If you are using any of the Template Libraries or Helper Functions in your theme code, we suggest placing the following in your code `functions.php` file to safegaurd against errors if the event the Plugin is deactivated.
 
-Methods:
+```php
+#functions.php
+// Make sure the Theme Framework plugin is present. Required by this theme.
+if (!is_admin() && !defined('HELLO_DIR')) exit('<strong>Whooops.</strong> This theme is meant to be used with the <a href="https://github.com/louiswalch/Wordpress-Theme-Framework">Theme Framework</a>. Please install and activate.');
+```
 
-- srcset($incoming=true) {
-- wrap($incoming=false) {
-- caption($incoming=null) {
-- classes($incoming=false) {
-- lazy($incoming=true){
-- size($incoming=false) {    }
-- alpha($incoming=false)
-- attributes($incoming=false) 
-- attr($one=false, $two=
-- pinnable($incoming=false) {
+##### Directory Structure
+By default, the framework is configured for the following organization. Most are optional based on what aspects of the system you are using. Paths relative to your theme root.
 
-<details>
-  <summary>
-    **View Usage Examples**
-  </summary>
+- `_framework/`
+	- `assets/` *Login, Dashboard & Editor CSS files.*
+	- `config_development.php` *Development site overrides.*
+	- `config_staging.php` *Staging site overrides.*
+	- `config.php` *Your custom framework configuration.*
+	- `metabox/` *Custom Metabox HTML.*
+	- `types/` *Custom post type declarations.*
+- `_includes/` *Files being used with Includes.*
+- `_modules/` *Blocks being used with Modules.*
+- `assets/` *Theme CSS/JS/IMG/etc.*
+
+<br/>
+
+---
+
+### Frontend Libraries
+
+Frontend Libraries are a collection of utilities meant to streamline your template authoring. This includes utilities to simplify image output *(with a variety of options)*, render an include file *(supporting proper data and caching)*, and automating a modular layout.
+
+
+<br/>
+
+---
+
+### Frontend Libraries :  Image Render
+
+This allows you to easily output a Wordpress image, either coming from an ACF Image field or the post thumbnail. They can either be rendered as a standard IMG element a DIV with backgorund image. In both cases it supports lazy loading as well as responsive src-set.
+
+##### Example Usage - Output IMG element from custom field value:
+
+```php
+// <img src="../foo.jpg" alt="Image Title" />
+echo IMAGE()->img(get_field('image'));
+
+```
+
+The library suports a variety of parameters to customize how the image should be rendered. These methods are desiged to be chained and would be passed in prior to your final output call.
+
+> - TODO: Document
+> - srcset($incoming=true)
+> - wrap($incoming=false)
+> - caption($incoming=null)
+> - classes($incoming=false)
+> - lazy($incoming=true)
+> - size($incoming=false)
+> - alpha($incoming=false)
+> - attributes($incoming=false) 
+> - attr($one=false, $two=false)
+> - pinnable($incoming=false
+
+Once you have defined any parameters, then you call your final output - either an IMG, DIV, or to retreive the SRC.
+
+> - TODO: Document
+> - div($image=false, $size=false)
+> - img($image=false, $size=false, $showcaption=false)
+> - src($image=false, $size=false)
+
+##### More Examples:
 
 ```php
 // Output IMG element from custom field value.
 echo IMAGE()->img(get_field('image'));
 	
 // Output IMG element from Featured Image with class attribute.
-echo IMAGE()->class('thumbnail')->div(get_post_thumbnail_id()); 
+echo IMAGE()->classes('thumbnail')->div(get_post_thumbnail_id()); 
 	
 // Output IMG for lazy loading from custom field. 
 echo IMAGE()->classes('lazy image')->alpha(true)->img(get_field('image'));
@@ -94,39 +150,15 @@ echo IMAGE()->size(600)->div(get_field('image'));
 echo IMAGE()->src(get_post_thumbnail_id(), 800); 
 ```
 
-</details>
-
-
-
 <br/>
--------------------------------------------------
 
-### Template Library : SVG Render
+------
 
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
+### Frontend Libraries : SVG Render
 
-Ends:
+This allows you to easily output an SVG image from your theme's assets directory to the page. Images can either be rendered as a standard IMG element, as a DIV with background image or with the SVG source embedded within the HTML.
 
-- img($key, $attributes=array()) 
-- div($key, $attributes=array())
-- show($key)
-
-Metthods:
-
- - srcset($incoming=true) {
- - wrap($incoming=false) {
- - caption($incoming=null) {
- - classes($incoming=false) alse) {
- - lazy($incoming=true){vfalse) {
- - size($incoming=false) {flse) {
- - alpha($incoming=false) { false) {
- - attributes($incoming=false) { false) {
- - 	pinnable($incoming=false) {
-
-<details>
-  <summary>
-    **View Usage Examples**
-  </summary>
+##### Example Usage:
 
 ```php
 // Display an in-line SVG (stored in assets/img/arrow.svg):
@@ -136,45 +168,38 @@ echo SVG()->show('arrow');
 // Display an SVG (stored in assets/img/arrow.svg) as IMG with attributes:
 // <img src=".../assets/img/test.png" class="testing" alt="Name of the image" />
 echo SVG()->img('arrow.svg', array('class'=>'testing', 'alt'=>'Name of the image'))
-```
+````
 
-</details>
-
-
-
+> - TODO: Document
+> - img($key, $attributes=array()) 
+> - div($key, $attributes=array())
+> - show($key)
 
 <br/>
--------------------------------------------------
 
+------
 
-### Template Library : Includes Render
+### Frontend Libraries : Includes Render
 
+Includes allow you to separate some of your site's componants and render then within a page when needed. The main advantage over the native `get_template_part()` is that you can pass data directly into the include while rendering it in addition an include can be cached either globally or page-specific. 
 
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
+##### Example Usage - Display a simple include file.:
+```php
+INCLUDES()->show('share_icons');
+```
+XXXXXXXXX
 
-**Caching**
-**Cearing cache.**
+> - TODO: Document
+> - cache($global=false, $set=true, $key=null) {
+> - dir($dir=null) {
+> - life($life=null) {
+> - data($one=null, $two=null) {
+> - debug($incoming=null) {
+> - key($incoming=false) {
+> - fetch($key, $data=false)     // Load and output the contents of a snippet, either live or from cache.
+> - show($key, $data=false)
 
-
-**End:**
-
- - fetch($key, $data=false)     // Load and output the contents of a snippet, either live or from cache.
- - show($key, $data=false)
-
-**Methods;**
-
- - cache($global=false, $set=true, $key=null) {
- - dir($dir=null) {
- - life($life=null) {
- - data($one=null, $two=null) {
- - debug($incoming=null) {
- - key($incoming=false) {
-
-<details>
-  <summary>
-    **View Usage Examples**
-  </summary>
-  
+##### More Examples: 
 ```php
 // Display an include file. Basic usage.
 INCLUDES()->show('share_icons');
@@ -188,69 +213,78 @@ INCLUDES()->cache()->show('header');
 INCLUDES()->cache('global')->show('header_global');
 
 // Send data to include when generating it.
-INCLUDES()->data([ 'section'=>'about', 'background'=>'blue'])->show('header');
+INCLUDES()->data(['section'=>'about', 'background'=>'blue'])->show('header');
 
 // Get the contents of an include and store in variable.
 $include_contents = INCLUDES()->fetch('share_icons');
 ```
 
-</details>
-
-
+Inside your include file you can call `get_include_var` to access any data passed in.
 
 ```php
 get_include_var($key, $group = null)
 ```
 
-
 <br/>
--------------------------------------------------
 
+------
 
-### Template Library : Modules Render
+### Frontend Libraries : Modules Render
 
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
+Module are similar to Includes except they are designed to be used with the ACF Flexible Content field, automatically rendering the correct module element based on what the page has been set up with.
+
+##### Example Usage:
+```php
+Automatically load modules from current page. Default field name is 'modules'.
+MODULES()->auto();
+
+// You can have two sets of modules on one page like this:
+MODULES()->auto('content_modules');
+MODULES()->auto('sidebar_modules');
+
+// Automatically load modules from a different page.
+MODULES()->from(1234)->auto();
+
+// Manually load a specified module while passing in the data to display.
+MODULES()->show('text_content', [
+    'title' => 'Test Module',
+    'text' => 'Testing out manually including a module on this page. Did it work?',
+    ]);
+```
+
+Inside your module file you can call `get_module_var` to access all data from the current Flexible Content block.
 
 ```php
 get_module_var($key, $group = null)
 ```
 
 <br/>
--------------------------------------------------
 
+------
 
-### ~~Template Library : Meta Tag Render~~
+### ~~Frontend Libraries : Meta Tag Render~~
 
 Not yet.
 
 <br/>
--------------------------------------------------
 
-### Environment Detection
-
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
+------
 
 
-| Environment | Domain Match |
-|--|--|
-| Development | ['.local', '.dev'] |
-| Staging | ['staging', 'beta'] |
-| Producton | * |
+### ~~Frontend Helpers~~
+
+Not yet.
+
 
 <br/>
--------------------------------------------------
 
+------
 
 ### Configuration
 
-Control over the functionality contained in the framework is all done through configuration files you place in your theme. These files are loaded as inheriting from each-ohter, so the more defined the environment is potentially the moremspecificed it's confg settings.
+Customization and control over the functionality contained in the framework is done through configuration files you place in your theme. To manage the configuration of your theme, create a file at `_framework/config.php` with your desired options.
 
-The system will always first load the built-in configurationl file, theeck to see if there are user-specific or enarmy lea
-
-
-If you would like to assign a new configuration value, create a file inside your theme at `_framework/config.php`. This theme-specific configuration file can then be updated with your preferred settings. 
-
-Here is an example of a very common practice - setting your CSS and JS files to render on the new Wordpress site.
+##### Example Usage - Assigning theme CSS & JS files:
 
 ```php
 # _framework/config.php
@@ -259,29 +293,26 @@ CONFIG()->set('frontend/assets/css_print', ['css/print.min.css']);
 CONFIG()->set('frontend/assets/js', ['js/vendor.min.js', 'js/site.min.js']);
 ```
 
-In addition base level configuration file, you can also create environment-specifc (development, staging, production) files which would override all devault settings only on that server.
+In addition base level configuration file, you can also create environment-specifc (development, staging) files which would override all default settings only on that environment. This could be useful for disableing cache on development/staging or delivering non-minified assets for easier debugging.
 
-This could be useful for disableing cache on development/staging or delivering non-minified assets for easier debugging.
+##### Example Usage - Assigning alternative CSS & JS on development server:
 
 ```php
 # _framework/config_development.php
-CONFIG()->set('cache', [false]);
 CONFIG()->set('frontend/assets/css', ['css/site.css']);
 CONFIG()->set('frontend/assets/css_print', ['css/print.css']);
 CONFIG()->set('frontend/assets/js', ['js/vendor.js', 'js/site.js']);
 ```
 
+Should you ever want to inspect the current framework configuration, you can use the following command.
+
 ```php
 <? pr(CONFIG()->dump(), 'Site Configuration'); ?>
 ```
 
-
 <br/>
--------------------------------------------------
 
-
-
-
+------
 
 ### Configuration Options
 
@@ -307,77 +338,42 @@ Add cachebusting version to assets paths.
 
 
 <br/>
--------------------------------------------------
 
+------
 
-### Template Functions
+### Environment Detection
 
-Functionality
-- asset($file='', $echo=false, $server=false)
-- require_all_files($directory = false)
-- require_all_files($directory = false)
-- detect_environment($match = false)
-- is_ajax_request()
+Based on the site url, the framework will detect the current environment (development, staging, production). This information is used for loading the appropriate configuration file and adding a CSS class to the BODY. The domain match string is defined in the base configuration file if you need to update it to match your infrastrucutre.
 
-- string
-	- X
-	- X
-	- X
-- detect_area($match = false)
-- detect_environment($match = false)
-- function asset($file='', $echo=false, $server=false) {
-- require_all_files($directory = false)
-- is_ajax_request()
-- top_level_slug()
-
-
-Output:
-- pr($val, $title=false, $echo=true) {
--  safemail($email, $text = '', $title = '', $class = '') {
--  widont($str = '') {
--  format_plain_text($string) {
--  get_excerpt($field = 'snippet', $count=90, $settings=array()){
--  cycle($first_value, $values = '*') {
-
-[ TODO: Add description ]
-[ TODO: Add examples ]
-
+| Environment | Domain Match |
+|--|--|
+| Development | .local |
+| Staging | staging. |
+| Producton | * |
 
 
 <br/>
--------------------------------------------------
 
-### Installation
+---
 
+### ~~Custom Post Types & Taxonomy~~
 
-```php
-#functions.php
-// Make sure the Theme Framework plugin is present. Required by this theme.
-if (!is_admin() && !defined('HELLO_DIR')) exit('Error. This theme is meant to be used with the <a href="https://github.com/louiswalch/Wordpress-Theme-Framework">Theme Framework</a>.');
-```
+Not Yes.
 
 <br/>
--------------------------------------------------
 
-### Custom Post Types & Taxonomy
-
-
-<br/>
--------------------------------------------------
-
+------
 
 ### Demo Theme
 
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
+To familiarize yourself with developing Wordpress themes using this framework I reccommend checking out our demo theme. This is a very light implmentation showcasing most of the major features.
 
 [https://github.com/louiswalch/Wordpress-Theme-Framework-Demo](https://github.com/louiswalch/Wordpress-Theme-Framework-Demo)
 
 <br/>
--------------------------------------------------
 
+------
 
 ### License
 
-==Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.== 
-
-
+What should this be?

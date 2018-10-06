@@ -1,5 +1,7 @@
 <?php
 
+namespace HelloFramework\Render;
+
 use HelloFramework;
 
 
@@ -13,10 +15,10 @@ Louis Walch / say@hellolouis.com
 -- EXAMPLES --
 
 Automatically load modules from current page.
-Modules()->auto();
+MODULES()->auto();
 
 Automatically load modules from a different page.
-Modules()->from(1234)->auto();
+MODULES()->from(1234)->auto();
 
 You can have two sets of modules on one page like this:
 MODULES()->auto('content_modules');
@@ -34,10 +36,7 @@ MODULES()->show('text_content', [
 // ---------------------------------------------------------------------------
 // Modules - Core Class.
 
-class ModuleRender extends IncludesClass {
-
-    // Allow for a single instance of this class across all scopes.
-    private static $instance;
+class Modules extends Includes {
 
     protected $_cache_prefix    = 'include_module_';
     protected $_dir             = '_modules/';

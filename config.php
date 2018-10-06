@@ -8,10 +8,20 @@ CONFIG()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // Image Settings
+    // Wordpress Functionality
 
-    // Should thumbnail support be enabled for this theme?
-    'image/enabled'                     => true,
+    'support/comments'                  => false,
+    'support/customizer'                => false,
+    'support/menus'                     => false,
+    'support/posts'                     => true,
+    'support/tags'                      => false,
+    'support/widgets'                   => false,
+
+    'support/images'                    => true,
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Image Settings
+    // None of this is relevant if `support/images` above is false.
 
     // Add custom sizes.
     'image/sizes'                       => ['400', '600', '800', '1200', '1600', '2400'],
@@ -36,22 +46,26 @@ CONFIG()->set([
     // Frontend Settings
 
     // Add theme CSS and JS files. 
-    'frontend/assets/version'           => false,
+    // Paths relative to `asset/` directory in theme root.
     'frontend/assets/css'               => [],
     'frontend/assets/css_print'         => [],
     'frontend/assets/js'                => [],
+    'frontend/assets/version'           => false,
 
     // Add custom query parameters.
     'frontend/query_params'             => [],
 
     // Show the Wordpress Admin Bar to logged in users?
-    'frontend/hide_admin_bar'           => true,
+    'frontend/admin_bar'                => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Login Settings
 
+    // Add custom CSS to login page.
+    // Path relative to `asset/` directory in _framework directory.
     'dashboard/login/css'               => '',
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : General Settings
@@ -60,15 +74,8 @@ CONFIG()->set([
     'dashboard/footer_credit'           => '♥',
 
     // Add custom CSS to dashboard.
+    // Path relative to `asset/` directory in _framework directory.
     'dashboard/css'                     => '',
-
-    // Disable some Wordpress functionality.
-    'dashboard/comments'                => false,
-    'dashboard/customizer'              => false,
-    'dashboard/menus'                   => false,
-    'dashboard/posts'                   => true,
-    'dashboard/tags'                    => false,
-    'dashboard/widgets'                 => false,
 
     // Block pages/posts from being deleted.
     'dashboard/delete_lock'             => [],
@@ -77,13 +84,13 @@ CONFIG()->set([
     'dashboard/remove_roles'            => ['subscriber', 'contributor'],
 
     // Display 'Howdy' from the top bar?
-    'dashboard/bar/howdy'               => false,
+    'dashboard/admin_bar/howdy'         => false,
 
     // Remove items from the top bar.
-    'dashboard/bar/remove'              => ['wp-logo','archive','updates','new-content'],
+    'dashboard/admin_bar/remove'        => ['wp-logo','archive','updates','new-content'],
 
     // Relocate items from the sidebar into top bar.
-    'dashboard/bar/relocate'            => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group'],
+    'dashboard/admin_bar/relocate'      => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group'],
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Metabox Settings
@@ -138,20 +145,22 @@ CONFIG()->set([
     'email/mime'                        => 'text/html',
 
     // Send 'New User' notifications?
-    'email/change_password'             => false,
+    'email/send/change_password'        => false,
 
     // Send 'Notice of Password Change' email?
-    'email/new_user'                    => false,
+    'email/send/new_user'               => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Environment Detection Settings
 
     'environment/development'           => ['.local'],
-    'environment/staging'               => ['staging'],
+    'environment/staging'               => ['staging.'],
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // Misc
+    // Custom Post Types
+
     'custom_types/autoload'             => true,
     'custom_types/directory'            => 'types',
 

@@ -80,7 +80,7 @@ class Framework {
     protected function setImageParameters() {
 
         // If thumbnail support is not enabled, no need to do any of this.
-        if (!CONFIG('image/enabled')) return false;
+        if (!CONFIG('support/images')) return false;
 
         // Enable thumbnails for this theme.
         add_theme_support('post-thumbnails');

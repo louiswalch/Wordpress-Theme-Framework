@@ -19,7 +19,7 @@ class Dashboard  {
         // Custom Admin Dashboard CSS
         if (CONFIG('dashboard/css')) {
             add_action('admin_enqueue_scripts', function() {
-                wp_enqueue_style('custom-admin-css', asset(CONFIG('dashboard/css')));
+                wp_enqueue_style('custom-admin-css', framework_asset(CONFIG('dashboard/css')));
             }, 99);
         }
 
@@ -59,7 +59,8 @@ class Dashboard  {
 
     private function _restrictDelete(){
 
-        if (!count(CONFIG('dashboard/delete_lock'))) return;
+        if (!CONFIG('dashboard/delete_lock')) return;
+
         add_action('wp_trash_post', [$this, 'restrictDeleteCallback'], 10, 1);
         add_action('before_delete_post', [$this, 'restrictDeleteCallback'], 10, 1);
 
@@ -368,7 +369,7 @@ class Dashboard  {
 
         if (CONFIG('dashboard/editor/css')) {
             add_action( 'admin_init', function() {
-                add_editor_style(asset(CONFIG('dashboard/editor/css')));
+                add_editor_style(framework_asset(CONFIG('dashboard/editor/css')));
             });
         }
 
