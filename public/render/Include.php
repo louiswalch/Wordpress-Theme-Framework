@@ -243,7 +243,7 @@ class Includes extends HelloFramework\Singleton {
 
     }
 
-    protected function _debug($key, $source) {
+    protected function _debug($key, $source) {        
         if ($this->_debug) {
             if ($this->_cache_on && $this->_cache_this) {
                 return ('<!-- '.$this->_type.' '.$this->_key.' | Cache: '. $this->_boolDebug($this->_cache_on) .'/'. $this->_boolDebug($this->_cache_this) .' / '.$this->_cache_key.' | Source:'.$source.' -->'); 

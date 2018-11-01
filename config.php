@@ -15,17 +15,16 @@ CONFIG()->set([
     'support/menus'                     => false,
     'support/posts'                     => true,
     'support/tags'                      => false,
+    'support/thumbnails'                => true,
     'support/widgets'                   => false,
 
-    'support/images'                    => true,
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Settings
-    // None of this is relevant if `support/images` above is false.
 
     // Add custom sizes.
     'image/sizes'                       => ['400', '600', '800', '1200', '1600', '2400'],
-    // 'image/sizes'                    => [ [400, 400, false], [600, 600, false], [800, 800, false], [1200, 1200, false], [1600, 1600, false], [2400, 2400, false], [400, 400, false], [400, 400, false] ],
+    // 'image/sizes'                    => [ [400, 400, false], [600, 600, false], [800, 800, false], [1200, 1200, false], [1600, 1600, false], [2400, 2400, false] ],
 
     // JPG quality level for generated images.
     'image/jpg_quality'                 => 90,
@@ -33,7 +32,7 @@ CONFIG()->set([
     // Set the default thumbnail dimensions and crop setting.
     'image/thumbnail/w'                 => 170,
     'image/thumbnail/h'                 => 140,
-    'image/thumbnail/crop'              => true,
+    'image/thumbnail/crop'              => ['center', 'center'],
 
     // Remove specified default Wordpress image sizes.
     'image/remove_default'              => ['medium', 'medium_large', 'large'],
@@ -77,10 +76,10 @@ CONFIG()->set([
     // Path relative to `asset/` directory in _framework directory.
     'dashboard/css'                     => '',
 
-    // Block pages/posts from being deleted.
+    // Block pages/posts from being deleted. Specify post ID.
     'dashboard/delete_lock'             => [],
 
-    // Block pages/posts from being deleted.
+    // Remove some default user roles, we don't need so many.
     'dashboard/remove_roles'            => ['subscriber', 'contributor'],
 
     // Display 'Howdy' from the top bar?
@@ -122,7 +121,7 @@ CONFIG()->set([
 
     'dashboard/editor/customize'        => false,
     'dashboard/editor/css'              => '',
-    'dashboard/editor/height'           => 200,
+    'dashboard/editor/height'           => 150,
     'dashboard/editor/resize'           => true,
     'dashboard/editor/media_buttons'    => false,
     'dashboard/editor/buttons_1'        => ['formatselect', 'bold','italic','bullist','numlist','blockquote','alignleft','aligncenter','alignright','link','unlink','pastetext','removeformat'],
@@ -161,7 +160,7 @@ CONFIG()->set([
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Custom Post Types
 
-    'custom_types/autoload'             => true,
+    'custom_types/autoload'             => false,
     'custom_types/directory'            => 'types',
 
 

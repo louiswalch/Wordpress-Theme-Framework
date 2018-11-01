@@ -51,22 +51,20 @@ if (version_compare(PHP_VERSION, '5.3', '<')) {
     return;
 }
 
-// Public functions to allow theme access to framework functionality.
-require_once HELLO_DIR . '/public/ConfigInstance.php';
-
-// Public misc custom output and functionality.
-require_once HELLO_DIR . '/public/output.php';
-require_once HELLO_DIR . '/public/functionality.php';
-
 // Framework classes, eventually add autoloading.
 require_once HELLO_DIR . '/app/Singleton.php';
 require_once HELLO_DIR . '/app/Config.php';
+require_once HELLO_DIR . '/app/ConfigInstance.php';
 require_once HELLO_DIR . '/app/Framework.php';
 require_once HELLO_DIR . '/app/Login.php';
 require_once HELLO_DIR . '/app/Dashboard.php';
 require_once HELLO_DIR . '/app/DashboardNavigationBar.php';
 require_once HELLO_DIR . '/app/Frontend.php';
 require_once HELLO_DIR . '/app/FrontendAssets.php';
+
+// Public misc custom output and functionality.
+require_once HELLO_DIR . '/public/output.php';
+require_once HELLO_DIR . '/public/functionality.php';
 
 // Ok, let's get going!
 new Framework;

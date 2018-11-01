@@ -41,7 +41,7 @@
         <tr><td>dashboard/editor/buttons_2</td><td>[]</td><td>array</td><td></td></tr>
         <tr><td>dashboard/editor/formats</td><td>Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre</td><td>string</td><td></td></tr>
         <tr><td colspan="4"><b>Image settings</b></td></tr>
-        <tr><td>support/images</td><td>true</td><td>bool</td><td>Enable thumbnail support for this theme.</td></tr>
+        <tr><td>support/thumbnails</td><td>true</td><td>bool</td><td>Enable thumbnail support for this theme.</td></tr>
         <tr><td>image/sizes</td><td>['400', '600', '800', '1200', '1600', '2400']</td><td>array</td><td></td></tr>
         <tr><td>image/jpg_quality</td><td>90</td><td>int</td><td>JPG quality level for generated images.</td></tr>
         <tr><td>image/thumbnail/w</td><td>170</td><td>int</td><td>Generated thumbnail width.</td></tr>

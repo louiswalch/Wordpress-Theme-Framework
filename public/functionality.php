@@ -46,7 +46,7 @@ namespace {
     // ---------------------------------------------------------------------------
     // Detect where in Wordpress we are.
 
-    function detect_area($match = false) {
+    function detect_zone($match = false) {
 
         static $result = NULL;
 

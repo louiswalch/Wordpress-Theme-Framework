@@ -5,14 +5,14 @@ namespace HelloFramework;
 class Framework {
 
     protected $environment;
-    protected $area;
+    protected $zone;
 
     protected $config;
 
 	public function __construct() {
 
         // Determine what part of Wordpress user is in and what server this is.
-        $this->area             = detect_area();
+        $this->zone             = detect_zone();
         $this->environment      = detect_environment();
 
         // Load configuration. This will automatically load default, theme, and environment values.
@@ -20,6 +20,9 @@ class Framework {
 
         // Assign outgoing email settings.
         $this->setEmailParameters();
+
+        // Toggle core Wordpress functionality.
+        $this->toggleSupports();
 
         // Assign custom image sizes and remove unneeded ones.
         $this->setImageParameters();
@@ -31,9 +34,9 @@ class Framework {
         $this->autoLoadCustomTypes();
 
         // Location specific customizations.
-        if ($this->area == 'frontend')  new Frontend;
-        if ($this->area == 'admin')     new Dashboard;
-        if ($this->area == 'login')     new Login;
+        if ($this->zone == 'frontend')  new Frontend;
+        if ($this->zone == 'admin')     new Dashboard;
+        if ($this->zone == 'login')     new Login;
 
 	}
 
@@ -78,12 +81,6 @@ class Framework {
     // ------------------------------------------------------------
 
     protected function setImageParameters() {
-
-        // If thumbnail support is not enabled, no need to do any of this.
-        if (!CONFIG('support/images')) return false;
-
-        // Enable thumbnails for this theme.
-        add_theme_support('post-thumbnails');
 
         // Assign JPG quality for generated thumbnails/images.
         add_filter( 'jpeg_quality', function($current) {
@@ -149,6 +146,23 @@ class Framework {
         require_all_files(FRAMEWORK_DIR . '/' . CONFIG('custom_types/directory').'/');
 
     }   
+
+    protected function toggleSupports() {
+
+        if (CONFIG('support/thumbnails')) {
+            add_theme_support('post-thumbnails');
+        }
+
+        if (CONFIG('support/menus')) {
+            add_theme_support('menus');
+        }
+
+        if (CONFIG('support/widgets')) {
+            add_theme_support('widgets');
+        }
+
+
+    }
 
 
 

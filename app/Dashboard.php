@@ -7,13 +7,13 @@ class Dashboard  {
 	public function __construct() {
         
         // Remove desingnated items from the Top Navigation Bar.
-        if (CONFIG('dashboard/bar/remove')) {
-            DashboardNavigationBar::get_instance()->remove(CONFIG('dashboard/bar/remove'));
+        if (CONFIG('dashboard/admin_bar/remove')) {
+            DashboardNavigationBar::get_instance()->remove(CONFIG('dashboard/admin_bar/remove'));
         }
 
         // Move designited items from the Sidebar to Top Navigation Bar.
-        if (CONFIG('dashboard/bar/relocate')) {
-            DashboardNavigationBar::get_instance()->relocate(CONFIG('dashboard/bar/relocate'));
+        if (CONFIG('dashboard/admin_bar/relocate')) {
+            DashboardNavigationBar::get_instance()->relocate(CONFIG('dashboard/admin_bar/relocate'));
         }
 
         // Custom Admin Dashboard CSS
@@ -22,10 +22,6 @@ class Dashboard  {
                 wp_enqueue_style('custom-admin-css', framework_asset(CONFIG('dashboard/css')));
             }, 99);
         }
-
-        $this->_toggleMenus();
-
-        $this->_toggleWidgets();
 
         $this->_toggleUserRoles();
 
@@ -90,7 +86,7 @@ class Dashboard  {
 
     private function _toggleComments() {
 
-        if (CONFIG('dashboard/comments')) return false;
+        if (CONFIG('support/comments')) return false;
 
         // Remove comment column from WP-Admin list pages.    
         add_filter('manage_pages_columns', function($defaults) {
@@ -127,7 +123,7 @@ class Dashboard  {
 
     private function _toggleTags() {
 
-        if (CONFIG('dashboard/tags')) return;
+        if (CONFIG('support/tags')) return;
 
         add_action('admin_menu', function() {
             remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=post_tag');
@@ -151,7 +147,7 @@ class Dashboard  {
 
     private function _toggleCustomizer() {
 
-        if (CONFIG('dashboard/customizer')) return;
+        if (CONFIG('support/customizer')) return;
 
         add_action( 'init', function() {
 
@@ -180,6 +176,7 @@ class Dashboard  {
 
     // ------------------------------------------------------------
     // Remove unneeded user roles.
+    // TODO: This really only needs to happen once, like on plugin activation.
 
     private function _toggleUserRoles() {
 
@@ -197,7 +194,7 @@ class Dashboard  {
 
     private function _togglePosts(){
 
-        if (CONFIG('dashboard/posts')) return;
+        if (CONFIG('support/posts')) return;
 
         add_action('admin_menu', function() {
             remove_menu_page('edit.php');
@@ -285,26 +282,6 @@ class Dashboard  {
 
     }
 
-
-    // ------------------------------------------------------------
-
-    private function _toggleMenus() {
-
-        if (CONFIG('dashboard/menus')) {
-            add_theme_support('menus');
-        }
-
-    }
-
-    private function _toggleWidgets() {
-
-        if (CONFIG('dashboard/widgets')) {
-            add_theme_support('widgets');
-        }
-
-    }
-
-
     // ------------------------------------------------------------
     // Clean up the 'User Edit' screen in Dashboard.
     
@@ -379,18 +356,18 @@ class Dashboard  {
             $settings['editor_height']                      = CONFIG('dashboard/editor/height');
             $settings['tinymce']['wp_autoresize_on']        = CONFIG('dashboard/editor/resize');
             $settings['tinymce']['resize']                  = CONFIG('dashboard/editor/resize');
-            $settings['tinymce']['statusbar']               = false;
+            $settings['tinymce']['statusbar']               = true;
             return $settings;
         }, 10, 2 );
 
         // Cut down the first row of editor icons to just what we need.
         add_filter('mce_buttons', function($buttons, $editor_id) {
-            return CONFIG('dashboard/editor/buttons_1');
+            return CONFIG('dashboard/editor/buttons_1') ?: [];
         }, 10, 2 );
 
         // Also cut down the second row of editor icons to just what we need.
         add_filter('mce_buttons_2', function($buttons, $editor_id) {
-            return CONFIG('dashboard/editor/buttons_2');
+            return CONFIG('dashboard/editor/buttons_2') ?: [];
         }, 10, 2 );
 
         // Change the options available in format dropdown.    

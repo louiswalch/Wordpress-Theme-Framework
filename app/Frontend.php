@@ -7,6 +7,7 @@ class Frontend {
 	public function __construct() {
 
         // Public render helper classes, must be called from global instance functions.
+        // require_all_files(HELLO_DIR . '/public/render/');
         require_once HELLO_DIR . '/public/render/Image.php';
         require_once HELLO_DIR . '/public/render/ImageInstance.php';
         require_once HELLO_DIR . '/public/render/SVG.php';
@@ -82,6 +83,9 @@ class Frontend {
         // Remove the REST API endpoint.
         remove_action('rest_api_init', 'wp_oembed_register_route');
 
+        // Remove DNS-Prefetch
+        remove_action( 'wp_head', 'wp_resource_hints', 2 );
+
         // Turn off oEmbed auto discovery.
         // Don't filter oEmbed results.
         remove_filter('oembed_dataparse', 'wp_filter_oembed_result', 10);
@@ -90,26 +94,14 @@ class Frontend {
         remove_action('wp_head', 'wp_oembed_add_discovery_links');
 
         // Remove oEmbed-specific JavaScript from the front-end and back-end.
-        remove_action('wp_head', 'wp_oembed_add_host_js');
-
-        // Remove 'noscript' code, we don't need that from WooCommerce.
-        remove_action( 'wp_head', 'wc_gallery_noscript', 10 );
+        // remove_action('wp_head', 'wp_oembed_add_host_js');
 
         // Other dumb stuff in the HEAD
-        remove_action( 'wp_head', 'rest_output_link_wp_head');
-        remove_action( 'wp_head', 'wp_oembed_add_discovery_links');
-        remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
+        // remove_action( 'wp_head', 'wp_oembed_add_discovery_links');
+        // remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
 
         // Remove pesky injected css for recent comments widget
-        add_filter( 'show_recent_comments_widget_style', '__return_false', 1 );
-
-        // $hook = 'wp_head';
-        // global $wp_filter;
-        // if( empty( $hook ) || !isset( $wp_filter[$hook] ) )
-        //     return;
-        // print '<pre>';
-        // print_r( $wp_filter[$hook] );
-        // print '</pre>';
+        // add_filter( 'show_recent_comments_widget_style', '__return_false', 1 );
 
     }
 
@@ -199,8 +191,6 @@ class Frontend {
         });
 
     }
-
-
 
 
 }

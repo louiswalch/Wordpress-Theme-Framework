@@ -337,10 +337,9 @@ class ImageRender extends HelloFramework\Singleton {
         $attributes             = $this->_getAttributes($data);
         $output                 = '<img '.$attributes.' />';
 
-        // For now, turning off captoins for all IMG. This should default to false but still allow true override.
-        // if ($showcaption) {
-        //     $output .= (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
-        // }
+        if ($showcaption) {
+            $output .= (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
+        }
 
         $output                 = $this->_getWrap($output);
 
