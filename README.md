@@ -305,7 +305,7 @@ Add cachebusting version to assets paths.
 
 <table>
     <thead>
-        <tr.>
+        <tr>
             <Th>Key</th>
             <th>Default</th>
             <th>Input Type</th>
@@ -361,6 +361,7 @@ Add cachebusting version to assets paths.
         <tr><td>email/change_password</td><td>false</td><td>bool</td><td>Send 'New User' notifications?</td></tr>
         <tr><td>email/new_user</td><td>false</td><td>bool</td><td>Send 'Notice of Password Change' email?</td></tr>
         <tr><td colspan="4"><b>Wordpress Functionality</b></td></tr>
+        <tr><td>support/categories</td><td>true</td><td>bool</td><td>Enable post categories support for this theme.</td></tr>
         <tr><td>support/comments</td><td>false</td><td>bool</td><td>Enable comment support for this theme.</td></tr>
         <tr><td>support/customizer</td><td>false</td><td>bool</td><td>Enable customizer support for this theme.</td></tr>
         <tr><td>support/menus</td><td>false</td><td>bool</td><td>Enable comment menus for this theme.</td></tr>

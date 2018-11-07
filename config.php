@@ -10,6 +10,7 @@ CONFIG()->set([
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Wordpress Functionality
 
+    'support/categories'                => true,
     'support/comments'                  => false,
     'support/customizer'                => false,
     'support/menus'                     => false,
