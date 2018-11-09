@@ -288,17 +288,10 @@ To inspect the current framework configuration you can use the following command
 
 ##### Frontend Settings
 
-`frontend/assets/version`  
-Type: `bool`  
-Default: `false`  
-Add cachebusting version to assets paths.
-
-
-
 <table>
     <thead>
         <tr>
-            <Th>Key</th>
+            <th>Key</th>
             <th>Default</th>
             <th>Input Type</th>
             <th>Notes</th>
