@@ -12,22 +12,14 @@ Frontend Libraries are a collection of utilities meant to streamline your templa
     
 1. [Installation](#installation)
 1. Frontend Libraries
-    * [Includes](#frontend-libraries--includes-render)
-    * [Modules](#frontend-libraries--modules-render)
-    * [Image](#frontend-libraries---image-render)
-    * [SVG](#frontend-libraries--svg-render)
-    * ~~[Metatag](#frontend-libraries--meta-tag-render)~~
+    * [Includes](#frontend-library--includes-render)
+    * [Modules](#frontend-library--modules-render)
+    * [Image](#frontend-library---image-render)
+    * [SVG](#frontend-library--svg-render)
+    * ~~[Metatag](#frontend-library--meta-tag-render)~~
 1. ~~[Frontend Helpers](#frontend-helpers)~~
 1. [Configuration](#configuration)
 1. [Configuration Options](#configuration-options)
-    * [Frontend](#xxxx)
-    * [Login](#xxxx)
-    * [Dashboard — General](#xxxx) 
-    * [Dashboard — Metaboxes](#xxxx)
-    * [Dashboard — Content Editor](#xxxx)
-    * ~~[Dashboard — ACF](#xxxx)~~
-    * [Custom Image Sizes](#xxxx)
-    * [Email](#xxxx)
 1. [Environment Detection](#environment-detection)
 1. ~~[Custom Post Types & Taxonomy](#custom-post-types--taxonomy)~~
 1. [Demo Theme](#demo-theme)
@@ -315,9 +307,10 @@ Add cachebusting version to assets paths.
     <tbody>
         <tr><td colspan="4"><b>Frontend Settings</b></td></tr>
         <tr><td>frontend/assets/version</td><td>false</td><td>bool</td><td>Add cachebusting version to assets paths</td></tr>
-        <tr><td>frontend/assets/css</td><td>[]</td><td>array</td><td>Website CSS file(s). Paths relative to `asset/` directory.</td></tr>
+        <tr><td>frontend/assets/css</td><td>[]</td><td>array</td><td>CSS file(s). Paths relative to `asset/` directory.</td></tr>
         <tr><td>frontend/assets/css_print</td><td>[]</td><td>array</td><td>Print CSS file(s). Paths relative to `asset/` directory.</td></tr>
-        <tr><td>frontend/assets/js</td><td>[]</td><td>array</td><td>Website JS file(s). Paths relative to `asset/` directory.</td></tr>
+        <tr><td>frontend/assets/js_head</td><td>[]</td><td>array</td><td>Head JS file(s). Paths relative to `asset/` directory.</td></tr>
+        <tr><td>frontend/assets/js</td><td>[]</td><td>array</td><td>Footer JS file(s). Paths relative to `asset/` directory.</td></tr>
         <tr><td>frontend/query_params</td><td>[]</td><td>array</td><td>Add custom query params.</td></tr>
         <tr><td>frontend/hide_admin_bar</td><td>true</td><td>bool</td><td>Hide the Wordpress Admin bar on Frontend</td></tr>
         <tr><td colspan="4"><b>Login Page Settings</b></td></tr>
@@ -445,3 +438,4 @@ To familiarize yourself with developing Wordpress themes using this framework I 
 ### License
 
 What should this be?
+

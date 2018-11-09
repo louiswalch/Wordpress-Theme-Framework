@@ -50,6 +50,7 @@ CONFIG()->set([
     'frontend/assets/css'               => [],
     'frontend/assets/css_print'         => [],
     'frontend/assets/js'                => [],
+    'frontend/assets/js_head'           => [],
     'frontend/assets/version'           => false,
 
     // Add custom query parameters.

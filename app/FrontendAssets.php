@@ -31,6 +31,9 @@ class FrontendAssets {
         // Add CSS file(s) for print to document head.
         $this->_addAsset('style', CONFIG('frontend/assets/css_print'), $set_version, 'print');
 
+        // Add JS file(s) to document header.
+        $this->_addAsset('script', CONFIG('frontend/assets/js_head'), $set_version);
+
         // Add JS file(s) to document footer.
         $this->_addAsset('script', CONFIG('frontend/assets/js'), $set_version, true);
 
