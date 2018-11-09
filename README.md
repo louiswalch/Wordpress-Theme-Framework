@@ -286,8 +286,6 @@ To inspect the current framework configuration you can use the following command
 
 ### Configuration Options
 
-##### Frontend Settings
-
 <table>
     <thead>
         <tr>
