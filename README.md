@@ -353,7 +353,6 @@ To inspect the current framework configuration you can use the following command
         <tr><td>support/tags</td><td>false</td><td>bool</td><td>Enable tags support for this theme.</td></tr>
         <tr><td>support/thumbnails</td><td>true</td><td>bool</td><td>Enable thumbnails support for this theme.</td></tr>
         <tr><td>support/widgets</td><td>false</td><td>bool</td><td>Enable widgets support for this theme.</td></tr>
-
     </tbody>
 </table>
 
