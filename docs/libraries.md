@@ -1,6 +1,6 @@
 ⬅ [Return to main README](../README.md)
 
-<br/>
+# Wordpress Theme Framework
 
 ### Frontend Library
 

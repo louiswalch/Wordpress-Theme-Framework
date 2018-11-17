@@ -4,7 +4,7 @@
 1. [Installation](#installation)
 1. [Demo Theme](#demo-theme)
 1. [Frontend Libraries ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/libraries.md) 
-1. [Frontend Helpers ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/helpers) 
+1. [Frontend Helpers ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/helpers.md) 
 1. [Configuration](#configuration)
 1. [Configuration Options](#configuration-options)
 1. [Environment Detection](#environment-detection)
@@ -89,7 +89,8 @@ To inspect the current framework configuration you can use the following command
 
 ### Configuration Options
 
-For a list of all available 
+For a list of all available options that be configured through your theme's config.php file, refer to [this list ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/helpers.md).
+
 
 ##### Custom Image Sizes
 
