@@ -89,7 +89,7 @@ To inspect the current framework configuration you can use the following command
 
 ### Configuration Options
 
-For a list of all available options that be configured through your theme's `config.php` file, refer to [this list ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/configuration_options).
+For a list of all available options that be configured through your theme's `config.php` file, refer to [this list ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/configuration_options.md).
 
 <br/>
 
