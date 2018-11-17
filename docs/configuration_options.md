@@ -174,7 +174,7 @@ See the Configuration section in [README](README.md) for more information about 
 > - **Default:** true
 > - **Input Type:** bool
 
-##### `dashboard/editor/media_buttons
+##### `dashboard/editor/media_buttons`
 > - **Default:** false
 > - **Input Type:** bool
 
@@ -252,7 +252,7 @@ See the Configuration section in [README](README.md) for more information about 
 > - **Input Type:** string
 
 ##### `email/address`
-> - **Default:** 'noreply@' . $_SERVER['HTTP_HOST']
+> - **Default:** `'noreply@' . $_SERVER['HTTP_HOST']`
 > - **Input Type:** string
 
 ##### `email/mime`
@@ -325,5 +325,20 @@ See the Configuration section in [README](README.md) for more information about 
 > - **Input Type:** bool
 
 
+<br/>
 
+------
 
+##### Custom Image Sizes
+
+[ TODO: Add details on how to define ]
+
+##### Custom Metaboxes
+
+[ TODO: Add details on how to define ]
+
+##### Content Editor
+
+[ TODO: Add details on how to define ]
+
+<br/>

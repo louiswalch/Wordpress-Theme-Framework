@@ -2,14 +2,14 @@
 
     
 1. [Installation](#installation)
-1. [Demo Theme](#demo-theme)
+1. [Demo Theme](#getting-started-with-the-demo-theme)
 1. [Frontend Libraries ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/libraries.md) 
 1. [Frontend Helpers ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/helpers.md) 
 1. [Configuration](#configuration)
-1. [Configuration Options](#configuration-options)
+1. [Configuration Options ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/configuration_options.md) 
 1. [Environment Detection](#environment-detection)
 1. ~~[Custom Post Types & Taxonomy](#custom-post-types--taxonomy)~~
-1. [Demo Theme](#demo-theme)
+
 
 <br/>
 
@@ -85,24 +85,11 @@ To inspect the current framework configuration you can use the following command
 
 <br/>
 
-------
+-----
 
 ### Configuration Options
 
-For a list of all available options that be configured through your theme's config.php file, refer to [this list ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/helpers.md).
-
-
-##### Custom Image Sizes
-
-[ TODO: Add details on how to define ]
-
-##### Custom Metaboxes
-
-[ TODO: Add details on how to define ]
-
-##### Content Editor
-
-[ TODO: Add details on how to define ]
+For a list of all available options that be configured through your theme's `config.php` file, refer to [this list ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/configuration_options).
 
 <br/>
 
