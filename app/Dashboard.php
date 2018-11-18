@@ -128,6 +128,23 @@ class Dashboard  {
             $wp_admin_bar->remove_menu('comments');
         });
 
+        // Remove comments support.
+        remove_post_type_support('post', 'comments');
+        remove_post_type_support('page', 'comments');
+
+        // Remove metabox from edit post page.
+        add_action( 'admin_init', function() {
+            remove_meta_box( 'commentsdiv', 'post', 'normal' );
+            remove_meta_box( 'commentsdiv', 'page', 'normal' );
+            remove_meta_box( 'commentstatusdiv', 'post', 'normal' );
+            remove_meta_box( 'commentstatusdiv', 'page', 'normal' );
+            remove_meta_box( 'trackbacksdiv', 'post', 'normal' );
+            remove_meta_box( 'trackbacksdiv', 'page', 'normal' );
+        });
+
+
+
+
     }
 
 
