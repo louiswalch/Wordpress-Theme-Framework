@@ -257,12 +257,10 @@ class ImageRender extends HelloFramework\Singleton {
         if ($incoming) $this->_classes[] = $incoming;
         return $this;
     }
-    public function lazy($incoming=true){
-        if ($incoming) {
-            $this->_classes[] = 'lazy';
-        } else {
-            unset($this->classes['lazy']);
-        }
+    public function lazy(){
+        $this->_alpha = true;
+        $this->_classes[] = 'lazyload';
+        $this->_attr['data-sizes'] = 'auto';
         return $this;            
     }
     public function size($incoming=false) {
@@ -340,7 +338,6 @@ class ImageRender extends HelloFramework\Singleton {
         if ($showcaption) {
             $output .= (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
         }
-
         $output                 = $this->_getWrap($output);
 
         // Reset all the request settings.
