@@ -177,7 +177,7 @@ class ImageRender extends HelloFramework\Singleton {
         $image_srcset   = $this->_srcset ? wp_get_attachment_image_srcset( $image_id, $this->_size ) : '';
         $image_sizes    = $this->_srcset ? ('(max-width: '.$this->max.'px) 100vw, '.$this->max.'px') : '';
 
-        $image_align    = get_field('crop_alignment', $image_id);
+        $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
 
         return array(
             'alt'       => $image_alt,

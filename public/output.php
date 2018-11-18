@@ -6,20 +6,21 @@ namespace {
     // Protect email addresses from bots.
 
     function safemail($email, $text = '', $title = '', $class = '') {
+
+        // Encode a string into something that doesn't recognize an email address.
+        function _encode($text) {
+            $output = '';
+            for ($i = 0; $i < strlen($text); $i++) { 
+                $output .= '&#'.ord($text[$i]).';'; 
+            } 
+
+            return $output;
+        }
         
-        // Make email address as default text
-        $text   = $text == '' ? $email : $text; 
+        // Make email address as default text.
+        $text           = $text == '' ? $email : $text; 
 
-        return '<a href="'.safemail_encode('mailto:'.$email).'" '.($title ? 'title="'.safemail_encode($title).'"' : '').' '.($class ? 'class="'.$class.'"' : '').' style="unicode-bidi:bidi-override;direction:rtl">'.strrev($text).'</a>';
-    }
-
-    function safemail_encode($text) {
-        $output = '';
-        for ($i = 0; $i < strlen($text); $i++) { 
-            $output .= '&#'.ord($text[$i]).';'; 
-        } 
-
-        return $output;
+        return '<a href="'._encode('mailto:'.$email).'" '.($title ? 'title="'._encode($title).'"' : '').' '.($class ? 'class="'.$class.'"' : '').' style="unicode-bidi:bidi-override;direction:rtl">'.strrev($text).'</a>';
     }
 
 

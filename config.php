@@ -145,11 +145,17 @@ CONFIG()->set([
     'email/address'                     => 'noreply@' . $_SERVER['HTTP_HOST'],
     'email/mime'                        => 'text/html',
 
+    // Skin outgoing emails by wrapping the message in an HTML header & footer.
+    // Values should be defined as paths inside the `_includes` directory.
+    'email/skin'                        => false,
+    'email/skin/header'                 => '',
+    'email/skin/footer'                 => '',
+
     // Send 'New User' notifications?
     'email/send/change_password'        => false,
 
-    // Send 'Notice of Password Change' email?
-    'email/send/new_user'               => false,
+    // // Send 'Notice of Password Change' email?
+    // 'email/send/new_user'               => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -

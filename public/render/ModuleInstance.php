@@ -15,9 +15,9 @@ namespace {
     // ---------------------------------------------------------------------------
     // Modules - Public function to return data by key. Meant to be used within an include file.
 
-    function get_module_var($key, $group = null) {
+    function get_module_var($key, $default = false, $group = null) {
 
-        return MODULES()->getData($key, $group);
+        return MODULES()->getData($key, $default = false, $group);
     
     }
 

@@ -23,6 +23,19 @@ class Dashboard  {
             }, 99);
         }
 
+        // Remove 'Howdy' from the Admin Top Bar.
+        add_filter('admin_bar_menu', function($wp_admin_bar) {
+
+            $my_account = $wp_admin_bar->get_node('my-account');
+            $newtitle   = str_replace('Howdy,', '', $my_account->title );
+            $wp_admin_bar->add_node(array(
+                'id'    => 'my-account',
+                'title' => $newtitle,
+                )
+            );
+
+        }, 25);
+
         $this->_toggleUserRoles();
 
         $this->_restrictDelete();
@@ -275,6 +288,7 @@ class Dashboard  {
         if (!CONFIG('dashboard/footer_credit')) return;
 
         add_action( 'admin_init', function() {
+            remove_filter('admin_footer_text', 'fau_swap_footer_admin');
             add_filter( 'admin_footer_text', function() {
                 return CONFIG('dashboard/footer_credit');
             }, 11 );

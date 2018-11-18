@@ -48,7 +48,7 @@ class Framework {
         // General settings for all outgoing emails.
         add_filter('wp_mail_content_type', function() {
             return CONFIG('email/mime');
-        }, 11);
+        });
         add_filter('wp_mail_from', function( $original ) {
             return CONFIG('email/address');
         });
@@ -56,14 +56,48 @@ class Framework {
             return CONFIG('email/name');
         });
 
-        // Remove site name from subject line of all outgoing emails.
-        // https://wordpress.stackexchange.com/a/116287/8642        
         add_filter('wp_mail', function($email) {
+
+            // Remove site name from subject line of all outgoing emails.
+            // https://wordpress.stackexchange.com/a/116287/8642        
             $blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
             $email['subject'] = str_replace("[".$blogname."] - ", "", $email['subject']);    
             $email['subject'] = str_replace("[".$blogname."]", "", $email['subject']);
+
+            // Wrap all outgoing email from Wordpress.
+            if (CONFIG('email/skin')) {
+
+                $header_output      = '';
+                $header_file        = get_template_directory() . '/_includes/' . CONFIG('email/skin/header') .'.php';
+                $footer_output      = '';
+                $footer_file        = get_template_directory() . '/_includes/' . CONFIG('email/skin/footer') .'.php';
+
+                if (file_exists($header_file)) {
+
+                    ob_start();
+                    include($header_file);
+                    $header_output = ob_get_contents();
+                    ob_end_clean();
+
+                }
+
+                if (file_exists($footer_file)) {
+
+                    ob_start();
+                    include($footer_file);
+                    $footer_output = ob_get_contents();
+                    ob_end_clean();
+
+                }
+
+                $email['message'] = $header_output  . $email['message'] . $footer_output;
+
+            }
+
             return $email;
-        });
+
+        }, 1000);
+
 
         // Disable 'Notice of Password Change' email.
         if (!CONFIG('email/change_password')) {
@@ -71,9 +105,9 @@ class Framework {
         }
 
         // Disable 'New User' notification sent to Admin.
-        if (!CONFIG('email/new_user')) {    
-            add_filter('wp_new_user_notification_email_admin', '__return_false');
-        }
+        // if (!CONFIG('email/new_user')) {    
+        //     add_filter('wp_new_user_notification_email_admin', '__return_false');
+        // }
 
     }
 
@@ -88,9 +122,7 @@ class Framework {
         }, 10, 2);
 
         // Define custom thumbnail size.
-        update_option('thumbnail_size_w', CONFIG('image/thumbnail/w'));
-        update_option('thumbnail_size_h', CONFIG('image/thumbnail/h'));
-        update_option('thumbnail_crop', CONFIG('image/thumbnail/crop'));
+        set_post_thumbnail_size(CONFIG('image/thumbnail/w'), CONFIG('image/thumbnail/h'), CONFIG('image/thumbnail/crop'));
 
         // Add custom image sizes that work better with 'srcset'.
         foreach (CONFIG('image/sizes') as $size) {

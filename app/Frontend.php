@@ -94,14 +94,14 @@ class Frontend {
         remove_action('wp_head', 'wp_oembed_add_discovery_links');
 
         // Remove oEmbed-specific JavaScript from the front-end and back-end.
-        // remove_action('wp_head', 'wp_oembed_add_host_js');
+        remove_action('wp_head', 'wp_oembed_add_host_js');
 
         // Other dumb stuff in the HEAD
-        // remove_action( 'wp_head', 'wp_oembed_add_discovery_links');
-        // remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
+        remove_action( 'wp_head', 'wp_oembed_add_discovery_links');
+        remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
 
         // Remove pesky injected css for recent comments widget
-        // add_filter( 'show_recent_comments_widget_style', '__return_false', 1 );
+        add_filter( 'show_recent_comments_widget_style', '__return_false', 1 );
 
     }
 

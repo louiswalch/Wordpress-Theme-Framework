@@ -73,7 +73,7 @@ class Includes extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Public getter.
 
-    public function getData($key=null, $group = null, $default = false) {
+    public function getData($key=null, $default = false, $group = null) {
 
         $value  = $default;
 
@@ -305,6 +305,7 @@ class Includes extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // PUBLIC
     // Load and output the contents of a snippet, either live or from cache.
+
 
     public function fetch($key, $data=false) {
 
