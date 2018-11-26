@@ -61,6 +61,14 @@ CONFIG()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Render Libraries
+
+    // Attribute control for the Image Render library.
+    'render/image/div_src'              => 'data-src',
+    'render/image/div_srcset'           => 'data-srcset',
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Login Settings
 
     // Add custom CSS to login page.

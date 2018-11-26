@@ -300,8 +300,8 @@ class ImageRender extends HelloFramework\Singleton {
         $caption        = (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
         $pinterest      = $this->_getPinterest($image, $data['caption']);
 
-        $data['data-src']       = $data['src'];
-        $data['data-srcset']    = $data['srcset'];
+        $data[CONFIG('render/image/div_src')]       = $data['src'];
+        $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
 
         unset($data['caption']);
         unset($data['alt']);
