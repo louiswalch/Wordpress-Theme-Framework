@@ -194,7 +194,7 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Generate Pinterest image. Used when drawing as a background image.
 
-    private function _getPinterest($image=false, $alt='') {    
+    private function _getPinterestForDiv($image=false, $alt='') {    
 
         // if ($this->_pinnable) {
 
@@ -298,7 +298,7 @@ class ImageRender extends HelloFramework\Singleton {
         $data           = $this->_getImageData($image);
 
         $caption        = (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
-        $pinterest      = $this->_getPinterest($image, $data['caption']);
+        $pinterest      = $this->_getPinterestForDiv($image, $data['caption']);
 
         $data[CONFIG('render/image/div_src')]       = $data['src'];
         $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
@@ -330,6 +330,10 @@ class ImageRender extends HelloFramework\Singleton {
         if ($this->_alpha) {
             $data['data-src']   = $data['src'];
             $data['src']        = $this->_alphadata;
+        }
+
+        if (!$this->_pinnable) {
+            $data['data-pin-nopin'] = 'true';
         }
 
         $attributes             = $this->_getAttributes($data);
