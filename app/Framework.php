@@ -105,11 +105,45 @@ class Framework {
         }
 
         // Disable 'New User' notification sent to Admin.
-        // if (!CONFIG('email/new_user')) {    
-        //     add_filter('wp_new_user_notification_email_admin', '__return_false');
-        // }
+        if (!CONFIG('email/new_user')) {    
+            add_filter('wp_new_user_notification_email_admin', '__return_false');
+        }
+
+        // 'New User' notification email.
+        // https://wordpress.stackexchange.com/a/296427/8642
+        add_filter('wp_new_user_notification_email', function( $email, $user, $blogname ) {
+
+            global $wpdb, $wp_hasher;
+
+            // ---
+            // Generate password key & add to database.
+
+            $key        = wp_generate_password( 20, false );
+            $hashed     = time() . ':' . $wp_hasher->HashPassword( $key );
+
+            do_action( 'retrieve_password_key', $user->user_login, $key );
+
+            if ( empty( $wp_hasher ) ) {
+                require_once ABSPATH . WPINC . '/class-phpass.php';
+                $wp_hasher = new PasswordHash( 8, true );
+            }
+            $wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user->user_login ) );
+
+            switch_to_locale( get_user_locale( $user ) );
+
+            $email['message']   = trim($email['message']) . '?action=rp&key='.$key.'&login=' . rawurlencode($user->user_login);
+
+            if (CONFIG('email/skin')) {
+                $email['message'] = nl2br($email['message']);
+            }
+
+            return $email;
+
+        }, 10, 3 );
+
 
     }
+
 
 
     // ------------------------------------------------------------
