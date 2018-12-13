@@ -56,6 +56,38 @@ class Framework {
             return CONFIG('email/name');
         });
 
+        // Disable 'Notice of Password Change' email.
+        if (!CONFIG('email/change_password')) {
+            add_filter('send_email_change_email', '__return_false' );
+        }
+
+        // Disable 'New User' notification sent to Admin.
+        if (!CONFIG('email/new_user')) {    
+            add_filter('wp_new_user_notification_email_admin', '__return_false');
+        }
+
+        // Clean up password reset email, there are some weird brackets in there that mess up when HTML.
+        add_filter('retrieve_password_message', function( $message ) {
+            $message = str_replace('<','',$message);
+            $message = str_replace('>','',$message);
+            return $message;
+        }, 10, 1 );
+
+        // Clean up new user email, there are some weird brackets in there that mess up when HTML.
+        add_filter('wp_new_user_notification_email', function( $email, $user, $blogname ) {
+
+            $email['message'] = str_replace('<', '', $email['message']);
+            $email['message'] = str_replace('>', '', $email['message']);
+
+            $email['message'] = str_replace(wp_login_url().'?', '__XXX__', $email['message']);
+            $email['message'] = str_replace(wp_login_url(), '', $email['message']);
+            $email['message'] = str_replace('__XXX__', wp_login_url().'?', $email['message']);
+
+            return $email;
+
+        }, 10, 3 );
+
+        // Skin outgoing email.
         add_filter('wp_mail', function($email) {
 
             // Remove site name from subject line of all outgoing emails.
@@ -90,56 +122,13 @@ class Framework {
 
                 }
 
-                $email['message'] = $header_output  . $email['message'] . $footer_output;
+                $email['message'] = $header_output  . nl2br($email['message']) . $footer_output;
 
             }
 
             return $email;
 
         }, 1000);
-
-
-        // Disable 'Notice of Password Change' email.
-        if (!CONFIG('email/change_password')) {
-            add_filter('send_email_change_email', '__return_false' );
-        }
-
-        // Disable 'New User' notification sent to Admin.
-        if (!CONFIG('email/new_user')) {    
-            add_filter('wp_new_user_notification_email_admin', '__return_false');
-        }
-
-        // 'New User' notification email.
-        // https://wordpress.stackexchange.com/a/296427/8642
-        add_filter('wp_new_user_notification_email', function( $email, $user, $blogname ) {
-
-            global $wpdb, $wp_hasher;
-
-            // ---
-            // Generate password key & add to database.
-
-            $key        = wp_generate_password( 20, false );
-            $hashed     = time() . ':' . $wp_hasher->HashPassword( $key );
-
-            do_action( 'retrieve_password_key', $user->user_login, $key );
-
-            if ( empty( $wp_hasher ) ) {
-                require_once ABSPATH . WPINC . '/class-phpass.php';
-                $wp_hasher = new PasswordHash( 8, true );
-            }
-            $wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user->user_login ) );
-
-            switch_to_locale( get_user_locale( $user ) );
-
-            $email['message']   = trim($email['message']) . '?action=rp&key='.$key.'&login=' . rawurlencode($user->user_login);
-
-            if (CONFIG('email/skin')) {
-                $email['message'] = nl2br($email['message']);
-            }
-
-            return $email;
-
-        }, 10, 3 );
 
 
     }
