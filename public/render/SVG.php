@@ -103,7 +103,13 @@ class SVG extends HelloFramework\Singleton {
         // Make sure the file exists before 
         if (file_exists($path)) {
 
-            return file_get_contents($path);
+            // Get SVG file contents.
+            $result = file_get_contents($path);
+
+            // Strip out <?xml tag.
+            $result = preg_replace('/\<\?xml.+\?\>/', '', $result, 1);
+
+            return $result;
 
         } else {
 

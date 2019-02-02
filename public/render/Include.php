@@ -85,11 +85,11 @@ class Includes extends HelloFramework\Singleton {
             $value =  $this->_data[$key];
         }
         
-        if (is_array($value) && count($value) == 1){
-            return $value[0];
-        } else {
+        // if (is_array($value) && count($value) == 1){
+        //     return $value[0];
+        // } else {
             return $value;
-        }
+        // }
 
     }
 
