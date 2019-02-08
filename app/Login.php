@@ -10,7 +10,7 @@ class Login  {
         if (CONFIG('dashboard/login/css')) {
             add_action( 'login_enqueue_scripts', function() {
                 wp_enqueue_style( 'custom_login_css', framework_asset(CONFIG('dashboard/login/css')), false);
-            }, 10 );
+            }, 99 );
         }
 
         // Misc login stuff.
