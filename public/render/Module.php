@@ -47,8 +47,11 @@ class Modules extends Includes {
 
     // ------------------------------------------------------------
     // Nested Data Helpers
-    // We don't need these for modules, as they aren't tested.
+    // We only want to remember the dir, but this will only work for 2 level nesting. Not 3.
 
+    public function newSession() {
+        return false;
+    }
     protected function _rememberSession() {
         return false;
     }
@@ -63,9 +66,11 @@ class Modules extends Includes {
 
     public function auto($field_group = 'modules', $skip = array()) {
         
-        $return     = '';
-        $modules    = get_field($field_group, $this->_from);
-        $count      = count($modules);
+        $return         = '';
+        $modules        = get_field($field_group, $this->_from);
+        $count          = count($modules);
+
+        $data_global    = $this->_data;
 
         if (!$modules || !$count) return false;
 
@@ -82,7 +87,7 @@ class Modules extends Includes {
             if (in_array($type, $skip)) continue;
 
             // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
-            $return .= $this->fetch($type, $data);
+            $return .= $this->fetch($type, array_merge($data, $data_global));
 
         }
 

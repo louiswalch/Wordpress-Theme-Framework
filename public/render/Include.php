@@ -211,9 +211,9 @@ class Includes extends HelloFramework\Singleton {
         } else {
 
             if (WP_DEBUG) {
-                $output = '<section style="padding:10px; border: 1px solid #ff00ff; color: #ff00ff;">Include not found ('  .$this->_key.  ')</section>';
+                $output = '<section style="padding:10px; border: 1px solid #ff00ff; color: #ff00ff;">Include not found ('  .$this->_key.  '/ '.$path. ' )</section>';
             } else {
-                $output = '<!--  ERROR: Include not found ('  .$this->_key.  ') -->';
+                $output = '<!--  ERROR: Include not found ('  .$this->_key. ') -->';
             }
 
         }
@@ -232,14 +232,7 @@ class Includes extends HelloFramework\Singleton {
         // Prepend name of the directory we store all our includes in.
         $path = $this->_dir . $path;
 
-        $full_path = get_template_directory() . '/' . $path;
-
-        // First let's check in the local theme.
-        if (file_exists(get_template_directory() . '/' . $path)) {
-            return get_template_directory() . '/' . $path;
-        }
-
-        return false;
+        return get_template_directory() . '/' . $path;
 
     }
 
