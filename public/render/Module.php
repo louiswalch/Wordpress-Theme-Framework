@@ -109,7 +109,7 @@ class Modules extends Includes {
         $modules        = get_field($field_group, $this->_from);
         $count          = count($modules);
 
-        $data_global    = []; //$this->_data;
+        $data_global    = $this->_data;
 
         if (!$modules || !$count) return false;
 
