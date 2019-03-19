@@ -62,6 +62,12 @@ Inside your include file you can call `get_include_var` to access any data passe
 get_include_var($key, $default = false, $group = null)
 ```
 
+For debugging purposes or if you don't know what data is accessible to you, you can output the `$data` variable.
+
+```php
+pr($data, 'Include Data');
+```
+
 <br/>
 
 ------
@@ -103,7 +109,13 @@ MODULES()->show('text_content', [
 Inside your module file you can call `get_module_var` to access all data from the current Flexible Content block.
 
 ```php
-get_module_var($key, $default = false, $group = null)
+get_module_var($key, $default = false, $group = null);
+```
+
+For debugging purposes or if you don't know what data is accessible to you, you can output the `$data` variable.
+
+```php
+pr($data, 'Module Data');
 ```
 
 <br/>
