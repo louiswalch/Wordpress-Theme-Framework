@@ -14,17 +14,25 @@ Louis Walch / say@hellolouis.com
 
 -- EXAMPLES --
 
-Automatically load modules from current page.
+# Automatically load modules from current page.
 MODULES()->auto();
 
-Automatically load modules from a different page.
+# Automatically load modules from a different page.
 MODULES()->from(1234)->auto();
 
-You can have two sets of modules on one page like this:
+# You can have two sets of modules on one page like this:
 MODULES()->auto('content_modules');
 MODULES()->auto('sidebar_modules');
 
-Manually load a specified module while passing in the data to display.
+# Alter the name of module file to be included: Adding a prefix.
+# For a module named 'gallery' in the CMS, it would include 'exhibition_gallery'.
+MODULES()->filename('exhibition_')->auto('content_modules');
+
+# Alter the name of module file to be included: Using string match.
+# For a module named 'gallery' in the CMS, it would include 'exhibition_gallery_preview'.
+MODULES()->filename('exhibition_%s_preview')->auto('content_modules');
+
+# Manually load a specified module while passing in the data to display.
 MODULES()->show('text_content', [
     'title' => 'Test Module',
     'text' => 'Testing out manually including a module on this page. Did it work?',
@@ -42,12 +50,14 @@ class Modules extends Includes {
     protected $_dir             = '_modules/';
     protected $_type            = 'MODULE';
 
+    protected $_filename        = false;
+
     protected $_from;
     
 
     // ------------------------------------------------------------
     // Nested Data Helpers
-    // We only want to remember the dir, but this will only work for 2 level nesting. Not 3.
+    // This doesn't work with modules because it's called on 'fetch', which happens multiple times per session.
 
     public function newSession() {
         return false;
@@ -60,6 +70,35 @@ class Modules extends Includes {
         return false;
     }
 
+
+    // ------------------------------------------------------------
+
+    protected function _resetModuleSession() {
+        $this->_dir = '_modules/';
+        $this->_filename = false;
+    }
+
+    // ------------------------------------------------------------
+
+    protected function  _getIncludeFile() {
+
+        $value = parent::_getIncludeFile();
+
+        if ($this->_filename) {
+
+            if (strpos($this->_filename , '%s')) {
+                return sprintf($this->_filename, $value);
+            } else {
+                return $this->_filename . $value;
+            }
+
+        } else {
+
+            return $value;
+
+        } 
+
+    }
 
     // ------------------------------------------------------------
     // Load Helpers
@@ -91,6 +130,8 @@ class Modules extends Includes {
 
         }
 
+        $this->_resetModuleSession();
+
         echo $return;
 
     }
@@ -121,6 +162,8 @@ class Modules extends Includes {
 
         }
 
+        $this->_resetModuleSession();
+
         echo $return;
 
     }
@@ -133,5 +176,11 @@ class Modules extends Includes {
         if (!is_null($value)) $this->_from = $value;
         return $this;
     }
+
+    public function filename($value=null) {
+        if (!is_null($value)) $this->_filename = $value;
+        return $this;        
+    }
+
 
 }

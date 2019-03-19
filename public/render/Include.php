@@ -222,9 +222,15 @@ class Includes extends HelloFramework\Singleton {
 
     }
 
-    private function _getIncludePath() {
+    protected function  _getIncludeFile() {
 
-        $path = $this->_key;
+        return $this->_key;
+
+    }
+
+    protected function _getIncludePath() {
+
+        $path = $this->_getIncludeFile();
 
         // Make sure that the file name ends with .php
         if (!strpos('.php', $path)) $path .= '.php';
