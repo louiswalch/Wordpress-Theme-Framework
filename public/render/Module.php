@@ -60,26 +60,22 @@ class Modules extends Includes {
 
     // ------------------------------------------------------------
     // Nested Data Helpers
-    // This doesn't work with modules because it's called on 'fetch', which happens multiple times per session.
+    // Little different then how includes work so let's hardcode the memory for now.
 
     public function newSession() {
-        return false;
+        return $this;
     }
     protected function _rememberSession() {
         return false;
     }
-
     protected function _resetSession() {
+        $this->_dir         = '_modules/';
+        $this->_filename    = false;
+        $this->_from        = false;
+        $this->_data        = [];
         return false;
     }
 
-
-    // ------------------------------------------------------------
-
-    protected function _resetModuleSession() {
-        $this->_dir = '_modules/';
-        $this->_filename = false;
-    }
 
     // ------------------------------------------------------------
 
@@ -103,6 +99,7 @@ class Modules extends Includes {
 
     }
 
+
     // ------------------------------------------------------------
     // Load Helpers
 
@@ -112,7 +109,7 @@ class Modules extends Includes {
         $modules        = get_field($field_group, $this->_from);
         $count          = count($modules);
 
-        $data_global    = $this->_data;
+        $data_global    = []; //$this->_data;
 
         if (!$modules || !$count) return false;
 
@@ -129,11 +126,11 @@ class Modules extends Includes {
             if (in_array($type, $skip)) continue;
 
             // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
-            $return .= $this->fetch($type, array_merge($data, $data_global));
+            $return .= $this->_fetch($type, array_merge($data, $data_global));
 
         }
 
-        $this->_resetModuleSession();
+        $this->_resetSession();
 
         echo $return;
 
@@ -160,16 +157,17 @@ class Modules extends Includes {
 
             if ($type == $module_name) {
                 // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
-                $return .= $this->fetch($type, $data);
+                $return .= $this->_fetch($type, $data);
             }
 
         }
 
-        $this->_resetModuleSession();
+        $this->_resetSession();
 
         echo $return;
 
     }
+
 
     // ------------------------------------------------------------
     // Public setters.

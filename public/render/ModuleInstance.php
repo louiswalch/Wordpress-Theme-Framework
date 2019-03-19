@@ -8,7 +8,7 @@ namespace {
     function MODULES() {
 
         $instance = HelloFramework\Render\Modules::get_instance();
-        return $instance;
+        return $instance->newSession();
 
     }
 
