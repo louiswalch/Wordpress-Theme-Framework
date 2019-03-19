@@ -14,25 +14,25 @@ Louis Walch / say@hellolouis.com
 
 -- EXAMPLES --
 
-# Automatically load modules from current page.
+// Automatically load modules from current page.
 MODULES()->auto();
 
-# Automatically load modules from a different page.
+// Automatically load modules from a different page.
 MODULES()->from(1234)->auto();
 
-# You can have two sets of modules on one page like this:
+// You can have two sets of modules on one page like this:
 MODULES()->auto('content_modules');
 MODULES()->auto('sidebar_modules');
 
-# Alter the name of module file to be included: Adding a prefix.
-# For a module named 'gallery' in the CMS, it would include 'exhibition_gallery'.
+// Alter the name of module file to be included: Adding a prefix.
+// For a module named 'gallery' in the CMS, it would include 'exhibition_gallery'.
 MODULES()->filename('exhibition_')->auto('content_modules');
 
-# Alter the name of module file to be included: Using string match.
-# For a module named 'gallery' in the CMS, it would include 'exhibition_gallery_preview'.
+// Alter the name of module file to be included: Using string match.
+// For a module named 'gallery' in the CMS, it would include 'exhibition_gallery_preview'.
 MODULES()->filename('exhibition_%s_preview')->auto('content_modules');
 
-# Manually load a specified module while passing in the data to display.
+// Manually load a specified module while passing in the data to display.
 MODULES()->show('text_content', [
     'title' => 'Test Module',
     'text' => 'Testing out manually including a module on this page. Did it work?',
