@@ -2,6 +2,7 @@
 
 namespace {
 
+
     // ---------------------------------------------------------------------------
     // Protect email addresses from bots.
 
@@ -25,6 +26,7 @@ namespace {
 
 
     // ---------------------------------------------------------------------------
+    // Prevent paragraphs from having a 'widow' word hanging off the end.
 
     function widont($str = '') {
         $str = rtrim($str);
@@ -48,6 +50,35 @@ namespace {
 
     }
 
+    // Character Limiter
+    // Limits the string based on the character count.  Preserves complete words so the 
+    // character count may not be exactly as specified.
+    function character_limiter($str, $n = 500, $end_char = '&#8230;') {
+
+        if (mb_strlen($str) < $n) {
+            return $str;
+        }
+
+        // a bit complicated, but faster than preg_replace with \s+
+        $str = preg_replace('/ {2,}/', ' ', str_replace(array("\r", "\n", "\t", "\x0B", "\x0C"), ' ', $str));
+
+        if (mb_strlen($str) <= $n) {
+            return $str;
+        }
+
+        $out = '';
+        foreach (explode(' ', trim($str)) as $val) {
+            $out .= $val.' ';
+
+            if (mb_strlen($out) >= $n) {
+                $out = trim($out);
+                return (mb_strlen($out) === mb_strlen($str)) ? $out : $out.$end_char;
+            }
+        }
+    }
+
+
+    /*
     function get_excerpt($field = 'snippet', $count=90, $settings=array()){
 
         global $post;
@@ -104,6 +135,7 @@ namespace {
         echo $excerpt;
 
     }
+    */
 
 
     // ---------------------------------------------------------------------------

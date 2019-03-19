@@ -60,6 +60,9 @@ class Dashboard  {
 
         $this->_setContentEditor();
 
+        // Remove Gutenberg panel on Dashboard.
+        remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
+
     }
 
 
@@ -381,16 +384,34 @@ class Dashboard  {
             });
         }
 
-        add_filter( 'wp_editor_settings', function($settings, $editor_id ) {
-            $settings['quicktags']                          = false;
-            $settings['media_buttons']                      = CONFIG('dashboard/editor/media_buttons');
-            $settings['editor_height']                      = CONFIG('dashboard/editor/height');
-            $settings['tinymce']['wp_autoresize_on']        = CONFIG('dashboard/editor/resize');
-            $settings['tinymce']['resize']                  = CONFIG('dashboard/editor/resize');
-            $settings['tinymce']['statusbar']               = true;
-            return $settings;
-        }, 10, 2 );
+        // add_filter( 'wp_editor_settings', function($settings, $editor_id ) {
+        //     if (!array_key_exists('tinymce', $settings) || !is_array($settings['tinymce'])) {
+        //         $settings['tinymce'] = array();
+        //     }
+        //     $settings['quicktags']                          = false;
+        //     $settings['media_buttons']                      = CONFIG('dashboard/editor/media_buttons');
+        //     $settings['editor_height']                      = CONFIG('dashboard/editor/height');
+        //     $settings['tinymce']['wp_autoresize_on']        = CONFIG('dashboard/editor/resize');
+        //     $settings['tinymce']['resize']                  = CONFIG('dashboard/editor/resize');
+        //     $settings['tinymce']['statusbar']               = true;
+        //     return $settings;
+        // }, 10, 2 );
 
+        add_filter('tiny_mce_before_init', function($settings) {
+            $settings['height']                  = CONFIG('dashboard/editor/height');
+            $settings['wp_autoresize_on']        = CONFIG('dashboard/editor/resize');
+            $settings['resize']                  = CONFIG('dashboard/editor/resize');
+            $settings['statusbar']               = true;
+            return $settings; 
+        }, 10);
+
+        // Forcefully hide all the 'Add Media' buttons for Content Editor.
+        if (!CONFIG('dashboard/editor/media_buttons')) {
+            add_action('admin_head', function(){
+                remove_action( 'media_buttons', 'media_buttons' );
+            });
+        }
+        
         // Cut down the first row of editor icons to just what we need.
         add_filter('mce_buttons', function($buttons, $editor_id) {
             return CONFIG('dashboard/editor/buttons_1') ?: [];

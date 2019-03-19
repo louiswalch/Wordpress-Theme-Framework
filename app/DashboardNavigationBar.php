@@ -141,7 +141,7 @@ class DashboardNavigationBar extends Singleton {
 
     public function addCSS() {
         echo '<style>
-            #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-label  { color: #aaa !important; }
+            #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-label  { color: rgba(255,255,255,0.5) !important; }
             #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-label  { color: #fff !important; }
             #wpadminbar .custom_top_menu .ab-sub-wrapper ul li a:hover { color: #00a0d2 !important;}
             #wpadminbar .custom_top_menu .ab-icon:before { top: 2px;}

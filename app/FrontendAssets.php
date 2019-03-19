@@ -13,6 +13,8 @@ class FrontendAssets {
 
         add_action( 'wp_default_scripts', [$this, 'removeDefaultScript']);
 
+        add_action( 'wp_print_styles', [$this, 'removeDefaultStyle'], 100 );
+
         if (!CONFIG('frontend/assets/version')) {
             add_filter( 'style_loader_src', [$this, 'removeAssetVersion']);
             add_filter( 'script_loader_src', [$this, 'removeAssetVersion']);
@@ -79,6 +81,17 @@ class FrontendAssets {
 
     }
 
+
+    // ------------------------------------------------------------
+    // Remove gutenburbg CSS.
+
+    public function removeDefaultStyle() {
+
+        wp_dequeue_style('wp-block-library');
+
+    }
+
+    
     // ------------------------------------------------------------
     // Remove version number from CSS and JS embed. 
 
