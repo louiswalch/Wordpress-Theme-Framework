@@ -17,12 +17,16 @@ Louis Walch / say@hellolouis.com
 // Automatically load modules from current page.
 MODULES()->auto();
 
-// Automatically load modules from a different page.
-MODULES()->from(1234)->auto();
-
 // You can have two sets of modules on one page like this:
 MODULES()->auto('content_modules');
 MODULES()->auto('sidebar_modules');
+
+// Automatically load modules from a different page, or from the ACF Options.
+MODULES()->from(1234)->auto('content_modules');
+MODULES()->from('options')->auto('footer_modules');
+
+// When automatically loading all modules, you can specify certain ones to ignore.
+MODULES()->auto('content_modules', ['unwanted_module_name', 'ugly_thing']);
 
 // Alter the name of module file to be included: Adding a prefix.
 // For a module named 'gallery' in the CMS, this would include 'exhibition_gallery'.

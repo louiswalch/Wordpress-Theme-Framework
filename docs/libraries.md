@@ -85,8 +85,12 @@ MODULES()->auto();
 MODULES()->auto('content_modules');
 MODULES()->auto('sidebar_modules');
 
-// Automatically load modules from a different page.
-MODULES()->from(1234)->auto();
+// When automatically loading modules, you can specify certain ones to ignore.
+MODULES()->auto('content_modules', ['unwanted_module_name', 'ugly_thing']);
+
+// Automatically load modules from a different page, or from the ACF Options.
+MODULES()->from(1234)->auto('content_modules');
+MODULES()->from('options')->auto('footer_modules');
 
 // Alter the name of module file to be included: Adding a prefix.
 // For a module named 'gallery' in the CMS, this would include 'exhibition_gallery'.
