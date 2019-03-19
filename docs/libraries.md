@@ -89,7 +89,7 @@ MODULES()->filename('exhibition_')->auto('content_modules');
 // You can also use the `filename()` prefix option to map to a subdirectory of _modules.
 MODULES()->filename('exhibition/')->auto('content_modules');
 
-// Alter the name of module file to be included: Using string match.
+// Alter the name of module file to be included: Using `sprintf` command.
 // For a module named 'gallery' in the CMS, this would include 'exhibition_gallery_preview'.
 MODULES()->filename('exhibition_%s_preview')->auto('content_modules');
 
