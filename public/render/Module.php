@@ -25,11 +25,14 @@ MODULES()->auto('content_modules');
 MODULES()->auto('sidebar_modules');
 
 // Alter the name of module file to be included: Adding a prefix.
-// For a module named 'gallery' in the CMS, it would include 'exhibition_gallery'.
+// For a module named 'gallery' in the CMS, this would include 'exhibition_gallery'.
 MODULES()->filename('exhibition_')->auto('content_modules');
 
+// You can also use the `filename()` prefix option to map to a subdirectory of _modules.
+MODULES()->filename('exhibition/')->auto('content_modules');
+
 // Alter the name of module file to be included: Using string match.
-// For a module named 'gallery' in the CMS, it would include 'exhibition_gallery_preview'.
+// For a module named 'gallery' in the CMS, this would include 'exhibition_gallery_preview'.
 MODULES()->filename('exhibition_%s_preview')->auto('content_modules');
 
 // Manually load a specified module while passing in the data to display.
