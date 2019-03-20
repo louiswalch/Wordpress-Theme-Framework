@@ -99,7 +99,7 @@ CONFIG()->set([
     'dashboard/admin_bar/remove'        => ['wp-logo','archive','updates','new-content'],
 
     // Relocate items from the sidebar into top bar.
-    'dashboard/admin_bar/relocate'      => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group'],
+    'dashboard/admin_bar/relocate'      => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group', 'profile.php'],
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Metabox Settings
