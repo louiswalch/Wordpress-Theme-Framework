@@ -73,11 +73,11 @@ class ImageRender extends HelloFramework\Singleton {
         $this->_alpha       = false;
         $this->_attr        = array();
         $this->_classes     = array();
-        $this->_pinnable    = true;
-        $this->_showcaption = true;
-        $this->_size        = '1600';
+        $this->_pinnable    = CONFIG('render/image/default_pinnable');
+        $this->_showcaption = CONFIG('render/image/default_caption');
+        $this->_size        = CONFIG('render/image/default_size');
         $this->_srcset      = true;
-        $this->_wrap        = false;
+        $this->_wrap        = CONFIG('render/image/default_wrap');
 
     }
 
@@ -234,7 +234,9 @@ class ImageRender extends HelloFramework\Singleton {
 
         if (!$this->_wrap) return $string;
 
-        return '<div class="image_wrapper '.$this->_wrap.'">' . $string .'</div>';
+        $class = is_string($this->_wrap) ? $this->_wrap : '';
+
+        return '<div class="image_wrapper '.$class.'">' . $string .'</div>';
 
     }
 
@@ -321,7 +323,7 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Image Generator: Return a IMG element with this image. 
 
-    public function img($image=false, $size=false, $showcaption=false) {
+    public function img($image=false, $size=false) {
 
         $this->size($size);
 
@@ -339,9 +341,8 @@ class ImageRender extends HelloFramework\Singleton {
         $attributes             = $this->_getAttributes($data);
         $output                 = '<img '.$attributes.' />';
 
-        if ($showcaption) {
-            $output .= (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
-        }
+        $output .= (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
+
         $output                 = $this->_getWrap($output);
 
         // Reset all the request settings.

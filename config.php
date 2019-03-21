@@ -66,6 +66,10 @@ CONFIG()->set([
     // Attribute control for the Image Render library.
     'render/image/div_src'              => 'data-src',
     'render/image/div_srcset'           => 'data-srcset',
+    'render/image/default_size'         => '1600',
+    'render/image/default_caption'      => true,
+    'render/image/default_pinnable'     => true,
+    'render/image/default_wrap'         => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
