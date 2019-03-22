@@ -139,11 +139,15 @@ CONFIG()->set([
     'dashboard/editor/resize'           => true,
     'dashboard/editor/media_buttons'    => false,
     'dashboard/editor/buttons_1'        => ['formatselect', 'bold','italic','bullist','numlist','blockquote','alignleft','aligncenter','alignright','link','unlink','pastetext','removeformat'],
+    'dashboard/editor/buttons_1_basic'  => ['bold','italic','bullist','link','unlink'],
     'dashboard/editor/buttons_2'        => [],
     'dashboard/editor/formats'          => 'Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre',
 
     // Buttons 1:
     // 'formatselect','bold','italic','bullist','numlist','blockquote','alignleft','aligncenter','alignright','link','unlink','wp_more','spellchecker','dfw','wp_adv'
+
+    // Buttons 1 Basic:
+    // 'bold','italic','underline','blockquote','strikethrough','bullist','numlist','alignleft','aligncenter','alignright','undo','redo','link','fullscreen'
 
     // Buttons 2:    
     // 'strikethrough','hr','forecolor','pastetext','removeformat','charmap','outdent','indent','undo','redo','wp_hel'

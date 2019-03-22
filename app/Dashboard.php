@@ -397,6 +397,8 @@ class Dashboard  {
         //     return $settings;
         // }, 10, 2 );
 
+
+        // Basic Content Editor settings.
         add_filter('tiny_mce_before_init', function($settings) {
             $settings['height']                  = CONFIG('dashboard/editor/height');
             $settings['wp_autoresize_on']        = CONFIG('dashboard/editor/resize');
@@ -427,6 +429,16 @@ class Dashboard  {
             $init['block_formats'] = CONFIG('dashboard/editor/formats');
             return $init;
         });
+
+        // ACF adds a 'Basic' button Toolbar option, also allow this to be controlled.
+        if (CONFIG('dashboard/editor/buttons_1_basic')) {
+            add_filter('acf/fields/wysiwyg/toolbars', function($toolbars) {
+                if (isset($toolbars['Basic'])) {
+                    $toolbars['Basic'][1] = CONFIG('dashboard/editor/buttons_1_basic');
+                }
+                return $toolbars;
+            });
+        }
     
         // Removing the Media Button causes Content Editor to appear too close to the permalink.
         if (!CONFIG('dashboard/editor/media_buttons')) {
