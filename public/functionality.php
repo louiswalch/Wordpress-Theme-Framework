@@ -28,7 +28,11 @@ namespace {
 
     function require_all_files($directory = false) {
 
-        if (!$directory || !is_dir($directory)) return false;
+        if (!$directory) return false;
+        if (!is_dir($directory)) {
+            $directory = get_template_directory() . '/' . $directory;
+            if (!is_dir($directory)) return false;
+        }
         
         foreach (scandir($directory) as $file) {
 
