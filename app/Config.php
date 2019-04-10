@@ -10,7 +10,7 @@ class Config extends Singleton {
 
     // ------------------------------------------------------------
 
-    public function __construct($custom = false) {
+    public function __construct() {
 
         parent::__construct();
 
@@ -20,10 +20,8 @@ class Config extends Singleton {
         // Load theme-specific configuration overrides.
         $this->_load(FRAMEWORK_DIR . $this->_config_file);
 
-        // Load environment-specific configuration overrides.
-        if ($custom) {
-            $this->_load(FRAMEWORK_DIR . $this->_config_file .'_'. $custom);
-        }
+        // Load environment-specific configuration overrides if they exist.
+        $this->_load(FRAMEWORK_DIR . $this->_config_file .'_'. detect_environment());
 
     }
 

@@ -12,7 +12,7 @@ class Framework {
 	public function __construct() {
 
         // Load configuration. This will automatically load default, theme, and environment values.
-        $this->config           = new Config($this->environment);
+        $this->config           = new Config();
 
         // Determine what part of Wordpress user is in and what server this is.
         $this->zone             = detect_zone();
