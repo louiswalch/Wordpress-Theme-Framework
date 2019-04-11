@@ -103,7 +103,7 @@ namespace {
             }
 
             if (is_null($result)) {
-                $result = 'prodution';
+                $result = 'production';
             }
 
         }
