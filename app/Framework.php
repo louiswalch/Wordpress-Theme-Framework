@@ -122,6 +122,14 @@ class Framework {
 
                 }
 
+                // Force all links (<a href="...">) in the email body to have the following color.
+                if (($link_color = CONFIG('email/skin/link_color'))) {
+
+                    $email['message'] = preg_replace('@style="(.*)"@U', '', $email['message']);
+                    $email['message'] = preg_replace('@<a(.*)>@U', '<a$1 style="color: '.$link_color.';">', $email['message']);
+
+                }
+
                 $email['message'] = $header_output  . nl2br($email['message']) . $footer_output;
 
             }

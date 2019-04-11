@@ -15,7 +15,8 @@ See the Configuration section in [README](README.md) for more information about 
     * [Metabox Options](#dashboard--metabox-settings)
     * [Content Editor Options](#dashboard--content-editor-settings)
 1. [Image Options](#image-settings)
-1. [Email Options](#email-settings)
+1. [Email General Options](#email-general-settings)
+1. [Email Skinning Options](#email-skinning-settings)
 1. [Wordpress Supports Options](#wordpress-functionality)
 
 <br/>
@@ -252,13 +253,17 @@ See the Configuration section in [README](README.md) for more information about 
 
 ------
 
-### Email Settings
+### Email General Settings
 
 ##### `email/name`
+> Sender name in emails sent from Wordpress.
+>
 > - **Default:** get_option('blogname')
 > - **Input Type:** string
 
 ##### `email/address`
+> Sender address in emails sent from Wordpress.
+>
 > - **Default:** `'noreply@' . $_SERVER['HTTP_HOST']`
 > - **Input Type:** string
 
@@ -267,16 +272,49 @@ See the Configuration section in [README](README.md) for more information about 
 > - **Input Type:** string
 
 ##### `email/change_password`
->  Send 'New User' notifications to admin?
+>  Should 'New User' notifications to admin be sent?
 > 
 >  - **Default:** false
 >  - **Input Type:** bool
 
 ##### `email/new_user`
->  Send 'Notice of Password Change' email to admin?
+>  Should 'Notice of Password Change' email to admin be sent?
 > 
 >  - **Default:** false
 >  - **Input Type:** bool
+
+<br/>
+
+------
+
+### Email Skinning Settings
+
+##### `email/skin`
+> Should outgoing Wordpress emails be skinned?
+>
+> - **Default:** false
+> - **Input Type:** bool
+
+##### `email/skin/header`
+> Header to be included before all outgoing Wordpress emails.
+> Value should be defined as path inside the `_includes` directory.
+>
+> - **Default:** <i>empty</i>
+> - **Input Type:** string
+
+##### `email/skin/footer`
+> Footer to be included after all outgoing Wordpress emails.
+> Value should be defined as path inside the `_includes` directory.
+>
+> - **Default:** <i>empty</i>
+> - **Input Type:** string
+
+##### `email/skin/link_color`
+> Force all links (<a href="...">) in the email body to have the following color. 
+> Value supplied should be a hex color value.
+> 
+> - **Default:** <i>empty</i>
+> - **Input Type:** string
 
 <br/>
 

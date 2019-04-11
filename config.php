@@ -170,6 +170,8 @@ CONFIG()->set([
     'email/skin'                        => false,
     'email/skin/header'                 => '',
     'email/skin/footer'                 => '',
+    // Force all links (<a href="...">) in the email body to have the following color. Supply hex color value.
+    'email/skin/link_color'             => '', 
 
     // Send 'New User' notifications?
     'email/send/change_password'        => false,
