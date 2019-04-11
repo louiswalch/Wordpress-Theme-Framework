@@ -55,7 +55,7 @@ CONFIG()->set([
 
     // Replace version of jQuery.
     // Path is relative to `asset/` directory in theme root.
-    'frontend/assets/js_jquery'         => false,
+    'frontend/assets/js_jquery'         => '',
 
     // Add custom query parameters.
     'frontend/query_params'             => [],

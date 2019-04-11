@@ -49,6 +49,13 @@ See the Configuration section in [README](README.md) for more information about 
 > - **Default:** []
 > - **Input Type:** array
 
+##### `frontend/assets/js_jquery`
+> Replace version of jQuery. Path is relative to `asset/` directory.
+>
+> - **Default:** <i>empty</i>
+> - **Input Type:** string
+
+
 ##### `frontend/assets/js`
 > Footer JS file(s). Paths relative to `asset/` directory.
 >
