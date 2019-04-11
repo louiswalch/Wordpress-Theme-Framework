@@ -310,7 +310,7 @@ See the Configuration section in [README](README.md) for more information about 
 > - **Input Type:** string
 
 ##### `email/skin/link_color`
-> Force all links (<a href="...">) in the email body to have the following color. 
+> Force all links in the email body to have the following color. 
 > Value supplied should be a hex color value.
 > 
 > - **Default:** <i>empty</i>
