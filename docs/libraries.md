@@ -67,7 +67,6 @@ For debugging purposes or if you don't know what data is accessible to you, you 
 ```php
 pr($data, 'Include Data');
 ```
-
 <br/>
 
 ------
@@ -121,6 +120,15 @@ For debugging purposes or if you don't know what data is accessible to you, you 
 ```php
 pr($data, 'Module Data');
 ```
+
+##### Special Variables: 
+
+The following built-in variables are made available within your module file. These can be referenced directly (e.g. `$_name`) or using `get_module_var()`.
+
+- `_name` *(String)* Name specified for this module within the CMS.
+- `_index` *(Int)* Index of the current module within iteration.
+- `_first` *(Bool)* Whether or not the current module is first.
+- `_last` *(Bool)* Whether or not the current module is last.
 
 <br/>
 

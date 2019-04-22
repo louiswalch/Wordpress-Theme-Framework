@@ -120,11 +120,14 @@ class Modules extends Includes {
         for ($i=0; $i<$count ; $i++) { 
 
             $first  = ($i == 0);
+            $last   = ($i == ($count - 1));
             $data   = $modules[$i];
             $type   = $data['acf_fc_layout'];
 
-            $data['field_group_name']   = $field_group;
-            $data['field_group_index']  = $i;
+            $data['_name']   = $field_group;
+            $data['_index']  = $i;
+            $data['_first']  = $first;
+            $data['_last']   = $last;
 
             // Sometimes we want to skip modules and load them manually in a different location.
             if (in_array($type, $skip)) continue;
@@ -153,11 +156,14 @@ class Modules extends Includes {
         for ($i=0; $i<$count ; $i++) { 
 
             $first  = ($i == 0);
+            $last   = ($i == ($count - 1));
             $data   = $modules[$i];
             $type   = $data['acf_fc_layout'];
 
-            $data['field_group_name']   = $field_group;
-            $data['field_group_index']  = $i;
+            $data['_name']   = $field_group;
+            $data['_index']  = $i;
+            $data['_first']  = $first;
+            $data['_last']   = $last;
 
             if ($type == $module_name) {
                 // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
