@@ -80,12 +80,17 @@ Module are similar to Includes except they are designed to be used with the ACF 
 // Automatically load modules from current page. Default field name is 'modules'.
 MODULES()->auto();
 
+// Automatically load all modules passing the module (Flexible Content) value.
+MODULES()->auto( $my_modules );
+
 // You can have two sets of modules on one page like this:
 MODULES()->auto('content_modules');
 MODULES()->auto('sidebar_modules');
 
 // When automatically loading modules, you can specify certain ones to ignore.
 MODULES()->auto('content_modules', ['unwanted_module_name', 'ugly_thing']);
+// Manually load certain modules passing the module (Flexible Content) value, and an array of layout to skip.
+MODULES()->auto( $my_modules, ['unwanted_module_name', 'ugly_thing'] );
 
 // Automatically load modules from a different page, or from the ACF Options.
 MODULES()->from(1234)->auto('content_modules');
