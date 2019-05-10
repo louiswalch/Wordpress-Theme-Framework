@@ -110,7 +110,7 @@ class Modules extends Includes {
     public function auto($field_group = 'modules', $skip = array()) {
         
         $return         = '';
-        $modules        = get_field($field_group, $this->_from);
+        $modules        = gettype( $field_group ) === 'string' ? get_field($field_group, $this->_from) : $field_group;
         $count          = count($modules);
 
         $data_global    = $this->_data;
@@ -148,7 +148,7 @@ class Modules extends Includes {
     public function manual($field_group = 'modules', $module_name = false) {
         
         $return     = '';
-        $modules    = get_field($field_group, $this->_from);
+        $modules    = gettype( $field_group ) === 'string' ? get_field($field_group, $this->_from) : $field_group;
         $count      = count($modules);
 
         if (!$modules || !$count || !$module_name) return false;
