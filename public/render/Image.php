@@ -370,4 +370,12 @@ class ImageRender extends HelloFramework\Singleton {
         return $image_src;
     }
 
+    // ------------------------------------------------------------
+    // Caption Generator: Just the caption.
+
+    public function get_caption(){
+        $data                   = $this->_getImageData($image);
+        return (!empty($data['caption'])) ? $data['caption'] : '';
+    }
+
 }
