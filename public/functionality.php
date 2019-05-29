@@ -34,16 +34,19 @@ namespace {
             if (!is_dir($directory)) return false;
         }
         
-        foreach (scandir($directory) as $file) {
+        if ($dh = opendir($directory)){
+            while (($file = readdir($dh)) !== false) {
 
-            // if (substr($file, 0, 1) === '.') continue;
-            if (substr($file, 0, 3) === 'OFF') continue;
-            if (substr($file, -4) !== '.php') continue;
+                // if (substr($file, 0, 1) === '.') continue;
+                if (substr($file, 0, 3) === 'OFF') continue;
+                if (substr($file, -4) !== '.php') continue;
 
-            require($directory . $file);
-
-        }
+                require($directory . $file);
         
+            }
+            closedir($dh);
+        }
+
     }
 
     

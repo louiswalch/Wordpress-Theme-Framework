@@ -49,6 +49,8 @@ class ImageRender extends HelloFramework\Singleton {
     private $_classes;
     private $_pinnable;
     private $_showcaption;
+    private $_low;
+    private $_low_size;
     private $_size;
     private $_srcset;
     private $_wrap;
@@ -74,6 +76,8 @@ class ImageRender extends HelloFramework\Singleton {
         $this->_attr        = array();
         $this->_classes     = array();
         $this->_pinnable    = CONFIG('render/image/default_pinnable');
+        $this->_low         = false;
+        $this->_low_size    = '400';
         $this->_showcaption = CONFIG('render/image/default_caption');
         $this->_size        = CONFIG('render/image/default_size');
         $this->_srcset      = true;
@@ -173,6 +177,7 @@ class ImageRender extends HelloFramework\Singleton {
         $image_alt      = $this->_getImageAlt($image);
 
         $image_src      = wp_get_attachment_image_url($image_id, $this->_size);
+        $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
 
         $image_srcset   = $this->_srcset ? wp_get_attachment_image_srcset( $image_id, $this->_size ) : '';
         $image_sizes    = $this->_srcset ? ('(max-width: '.$this->max.'px) 100vw, '.$this->max.'px') : '';
@@ -184,6 +189,7 @@ class ImageRender extends HelloFramework\Singleton {
             'caption'   => $image_caption,
             'class'     => $image_align .' '. implode(' ', $this->_classes),
             'src'       => $image_src,
+            'src_low'   => $image_srclow,
             'srcset'    => $image_srcset,
             'sizes'     => $image_sizes
             );
@@ -243,6 +249,10 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Allow for updating of options when generating an image. Meant to be used as a chained method.
 
+    public function low($incoming=true) {
+        if (isset($incoming)) $this->_low = $incoming;
+        return $this;
+    }
     public function srcset($incoming=true) {
         if (isset($incoming)) $this->_srcset = $incoming;
         return $this;
@@ -305,8 +315,13 @@ class ImageRender extends HelloFramework\Singleton {
         $data[CONFIG('render/image/div_src')]       = $data['src'];
         $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
 
-        unset($data['caption']);
+        if ($this->_low) {
+            $data['style'] = 'background-image: url(' . $data['src_low'] . ');';
+        }
+
         unset($data['alt']);
+        unset($data['caption']);
+        unset($data['src_low']);
         unset($data['src']);
         unset($data['srcset']);
 
@@ -338,6 +353,12 @@ class ImageRender extends HelloFramework\Singleton {
             $data['data-pin-nopin'] = 'true';
         }
 
+        if ($this->_low) {
+            $data['src'] = $data['src_low'];
+        }
+
+        unset($data['src_low']);
+
         $attributes             = $this->_getAttributes($data);
         $output                 = '<img '.$attributes.' />';
 
@@ -352,11 +373,12 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
-
     // ------------------------------------------------------------
     // Image Generator: Just the image source.
 
     public function src($image=false, $size=false) {
+
+        if (!$image) return false;
 
         $this->size($size);
 

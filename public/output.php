@@ -4,6 +4,15 @@ namespace {
 
 
     // ---------------------------------------------------------------------------
+    // Include SVG or HTML into current page, loaded asynchronously. See article for explaination of this approach.
+    // https://www.filamentgroup.com/lab/html-includes/
+
+    function async_embed($path = false) {
+        if ($path) return '<iframe src="'. $path .'" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>';    
+    }
+
+    
+    // ---------------------------------------------------------------------------
     // Protect email addresses from bots.
 
     function safemail($email, $text = '', $title = '', $class = '') {
@@ -55,7 +64,7 @@ namespace {
     // character count may not be exactly as specified.
     function character_limiter($str, $n = 500, $end_char = '&#8230;') {
 
-        $str = strip_tags($str);
+        $str = format_plain_text($str);
 
         if (mb_strlen($str) < $n) {
             return $str;

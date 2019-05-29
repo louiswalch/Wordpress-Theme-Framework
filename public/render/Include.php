@@ -196,6 +196,8 @@ class Includes extends HelloFramework\Singleton {
             if (count($this->_data)) {
                 extract($this->_data); 
                 $data = $this->_data;
+            } else {
+                $data = array();
             }
 
             include($path);

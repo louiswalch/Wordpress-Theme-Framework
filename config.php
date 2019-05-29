@@ -33,7 +33,7 @@ CONFIG()->set([
     // Set the default thumbnail dimensions and crop setting.
     'image/thumbnail/w'                 => 170,
     'image/thumbnail/h'                 => 140,
-    'image/thumbnail/crop'              => ['center', 'center'],
+    'image/thumbnail/crop'              => false,
 
     // Remove specified default Wordpress image sizes.
     'image/remove_default'              => ['medium', 'medium_large', 'large'],
@@ -107,7 +107,8 @@ CONFIG()->set([
     'dashboard/admin_bar/remove'        => ['wp-logo','archive','updates','new-content'],
 
     // Relocate items from the sidebar into top bar.
-    'dashboard/admin_bar/relocate'      => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group', 'profile.php'],
+    'dashboard/admin_bar/relocate'      => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group', 'profile.php', 'wpseo_dashboard'],
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Metabox Settings
