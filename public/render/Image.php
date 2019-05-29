@@ -149,7 +149,7 @@ class ImageRender extends HelloFramework\Singleton {
 
     private function _getImageCaption($image) {
 
-        if (!$this->_showcaption) return false;
+        //if (!$this->_showcaption) return false;
 
         if (is_object($image) && property_exists($image, 'caption')) {
             return $image->caption;
@@ -309,7 +309,7 @@ class ImageRender extends HelloFramework\Singleton {
 
         $data           = $this->_getImageData($image);
 
-        $caption        = (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
+        $caption        = (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
         $pinterest      = $this->_getPinterestForDiv($image, $data['caption']);
 
         $data[CONFIG('render/image/div_src')]       = $data['src'];
@@ -362,7 +362,7 @@ class ImageRender extends HelloFramework\Singleton {
         $attributes             = $this->_getAttributes($data);
         $output                 = '<img '.$attributes.' />';
 
-        $output .= (!empty($data['caption'])) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
+        $output .= (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
 
         $output                 = $this->_getWrap($output);
 
@@ -390,6 +390,14 @@ class ImageRender extends HelloFramework\Singleton {
         $this->_reset();
 
         return $image_src;
+    }
+
+    // ------------------------------------------------------------
+    // Caption Generator: Just the caption.
+
+    public function get_caption($image=false){
+        $data                   = $this->_getImageData($image);
+        return (!empty($data['caption'])) ? $data['caption'] : '';
     }
 
 }
