@@ -281,8 +281,8 @@ class Dashboard  {
                 $id         = 'custom_' . $key;
                 $name       = $box[0];
                 $path       = FRAMEWORK_DIR .'/metabox/' . $box[1];
-                $context    = (!empty($box[2])) ? $box[2] : 'side';
-                $priority   = (!empty($box[3])) ? $box[3] : 'high';
+                $context    = (!empty($box[2])) ? $box[2] : 'normal';
+                $priority   = (!empty($box[3])) ? $box[3] : 'default';
 
                 if (!file_exists($path))  continue;
 
@@ -352,8 +352,6 @@ class Dashboard  {
         // $output = preg_replace('#<tr class="user-rich-editing-wrap(.*?)</tr>#s', '', $output, 1);
         // // Remove the "Keyboard Shortcuts"
         // $output = preg_replace('#<tr class="user-comment-shortcuts-wrap(.*?)</tr>#s', '', $output, 1); 
-        // Remove the "Display name publicly as" field
-        $output = preg_replace('#<tr class="user-display-name-wrap(.*?)</tr>#s', '', $output, 1);
         // // Remove the "Website" field
         // $output = preg_replace('#<tr class="user-url-wrap(.*?)</tr>#s', '', $output, 1);
 
@@ -383,20 +381,6 @@ class Dashboard  {
                 add_editor_style(framework_asset(CONFIG('dashboard/editor/css')));
             });
         }
-
-        // add_filter( 'wp_editor_settings', function($settings, $editor_id ) {
-        //     if (!array_key_exists('tinymce', $settings) || !is_array($settings['tinymce'])) {
-        //         $settings['tinymce'] = array();
-        //     }
-        //     $settings['quicktags']                          = false;
-        //     $settings['media_buttons']                      = CONFIG('dashboard/editor/media_buttons');
-        //     $settings['editor_height']                      = CONFIG('dashboard/editor/height');
-        //     $settings['tinymce']['wp_autoresize_on']        = CONFIG('dashboard/editor/resize');
-        //     $settings['tinymce']['resize']                  = CONFIG('dashboard/editor/resize');
-        //     $settings['tinymce']['statusbar']               = true;
-        //     return $settings;
-        // }, 10, 2 );
-
 
         // Basic Content Editor settings.
         add_filter('tiny_mce_before_init', function($settings) {
