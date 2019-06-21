@@ -46,10 +46,10 @@ class Config extends Singleton {
         }
 
         // If already set, make sure the data type if the same. Reduces chance for error.
-        if (array_key_exists($key, $this->_data) && (gettype($this->_data[$key]) != gettype($value))) {
-            // trigger_error('Type mis-match for configuration "'.$key.'"', E_USER_NOTICE);
-            return false;
-        }
+        // if (array_key_exists($key, $this->_data) && (gettype($this->_data[$key]) != gettype($value))) {
+        //    // trigger_error('Type mis-match for configuration "'.$key.'"', E_USER_NOTICE);
+        //     return false;
+        // }
         
         // Update the value.
         $this->_data[$key] = $value;

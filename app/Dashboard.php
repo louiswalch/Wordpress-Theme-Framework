@@ -408,11 +408,19 @@ class Dashboard  {
             return CONFIG('dashboard/editor/buttons_2') ?: [];
         }, 10, 2 );
 
-        // Change the options available in format dropdown.    
-        add_filter('tiny_mce_before_init', function($init) {
-            $init['block_formats'] = CONFIG('dashboard/editor/formats');
-            return $init;
-        });
+        // Change the options available in format dropdown.
+        add_filter( 'tiny_mce_before_init', function($init) {  
+            $editor_formats = CONFIG('dashboard/editor/formats');
+            if (is_array($editor_formats)) {
+                // https://wordpress.stackexchange.com/a/128950/8642
+                // Make sure you are using the 'styleselect' button rather then 'formatselect'.
+                $init['style_formats'] = json_encode(CONFIG('dashboard/editor/formats'));  
+                unset($init['preview_styles']);
+            } else {
+                $init['block_formats'] = $editor_formats;
+            }
+            return $init;  
+        });   
 
         // ACF adds a 'Basic' button Toolbar option, also allow this to be controlled.
         if (CONFIG('dashboard/editor/buttons_1_basic')) {

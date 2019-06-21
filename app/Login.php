@@ -15,7 +15,7 @@ class Login  {
 
         // Misc login stuff.
         add_filter( 'login_headerurl', function() { return home_url(); });
-        add_filter( 'login_headertitle', function() { return get_option( 'blogname' ); });
+        // add_filter( 'login_headertitle', function() { return get_option( 'blogname' ); });
 
     }
 

@@ -120,7 +120,8 @@ class DashboardNavigationBar extends Singleton {
 
         $title  = $item[0];
         $id     = $parent.'-'.$key;
-        $href   = (strpos($item[2], '.php')) ? $item[2] : ('admin.php?page='.$item[2]);
+        $href   = (strpos($item[2], '.php') && ($item[2] != 'redirection.php')) ? $item[2] : ('admin.php?page='.$item[2]);
+        //$href   = 'admin.php?page='.$item[2];
         $href   = admin_url($href);
 
         $wp_admin_bar->add_menu(array('parent' => $parent, 'title' => $title, 'id' => $id, 'href' => $href ));

@@ -149,11 +149,8 @@ class ImageRender extends HelloFramework\Singleton {
 
     private function _getImageCaption($image) {
 
-        //if (!$this->_showcaption) return false;
-
         if (is_object($image) && property_exists($image, 'caption')) {
             return $image->caption;
-
         }
 
         if (is_array($image) && array_key_exists('caption', $image)) {
