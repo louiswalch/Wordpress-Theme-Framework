@@ -247,11 +247,11 @@ class ImageRender extends HelloFramework\Singleton {
             $w = $props[1];
 
             //$class .= ' img-wrapper';
-            $style .= 'padding-bottom: ' . ($h/$w*100) . '%;';
+            $style .= ' style="padding-bottom: ' . ($h/$w*100) . '%;"';
 
         }
 
-        return '<div class="image_wrapper '.$class.'" style="' . $style . '">' . $string .'</div>';
+        return '<div class="image_wrapper ' . $class . '" ' . $style . '>' . $string .'</div>';
 
     }
 
