@@ -233,13 +233,25 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Sometimes we wrap the output in another div.
 
-    private function _getWrap($string) {
+    private function _getWrap($string, $image) {
 
         if (!$this->_wrap) return $string;
 
         $class = is_string($this->_wrap) ? $this->_wrap : '';
 
-        return '<div class="image_wrapper '.$class.'">' . $string .'</div>';
+        $style = '';
+        if ( $class === 'autosize' ){
+
+            $props = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
+            $h = $props[2];
+            $w = $props[1];
+
+            //$class .= ' img-wrapper';
+            $style .= 'padding-bottom: ' . ($h/$w*100) . '%;';
+
+        }
+
+        return '<div class="image_wrapper '.$class.'" style="' . $style . '">' . $string .'</div>';
 
     }
 
@@ -323,7 +335,7 @@ class ImageRender extends HelloFramework\Singleton {
         unset($data['srcset']);
 
         $attributes     = $this->_getAttributes($data);
-        $output         = $this->_getWrap('<div '.$attributes.'>'. $caption . $pinterest .'</div>');
+        $output         = $this->_getWrap('<div '.$attributes.'>'. $caption . $pinterest .'</div>', $image);
 
         // Reset all the request settings.
         $this->_reset();
@@ -361,7 +373,7 @@ class ImageRender extends HelloFramework\Singleton {
 
         $output .= (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
 
-        $output                 = $this->_getWrap($output);
+        $output                 = $this->_getWrap($output, $image);
 
         // Reset all the request settings.
         $this->_reset();
