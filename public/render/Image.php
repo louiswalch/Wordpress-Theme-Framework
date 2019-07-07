@@ -275,12 +275,17 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;
     }
     public function classes($incoming=false) {
+        if ($incoming){
+            if ( strrpos($incoming, 'lazyload') !== false ){
+                $incoming .= ' lazyload-persist';
+            }
+        }
         if ($incoming) $this->_classes[] = $incoming;
         return $this;
     }
     public function lazy(){
         $this->_alpha = true;
-        $this->_classes[] = 'lazyload';
+        $this->_classes[] = 'lazyload lazyload-persist';
         $this->_attr['data-sizes'] = 'auto';
         return $this;            
     }
