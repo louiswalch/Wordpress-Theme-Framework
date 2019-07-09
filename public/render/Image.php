@@ -165,7 +165,7 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
-    private function _getImageData($image) {
+    private function _getImageData($image, $strip_tags=true) {
 
         $image_id       = $this->_getImageId($image);
 
@@ -182,8 +182,8 @@ class ImageRender extends HelloFramework\Singleton {
         $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
 
         return array(
-            'alt'       => strip_tags($image_alt),
-            'caption'   => strip_tags($image_caption),
+            'alt'       => $strip_tags ? strip_tags($image_alt) : $image_alt,
+            'caption'   => $strip_tags ? strip_tags($image_caption) : $image_caption,
             'class'     => $image_align .' '. implode(' ', $this->_classes),
             'src'       => $image_src,
             'src_low'   => $image_srclow,
@@ -221,10 +221,10 @@ class ImageRender extends HelloFramework\Singleton {
 
     private function _getAttributes($array=array()) {     
 
-        $array = array_merge($array, $this->_attr);
+        $array = array_merge( $array, $this->_attr );
 
         return implode(' ', array_map(
-            function ($k, $v) { return $k .'="'. htmlspecialchars($v) .'"'; },
+            function ($k, $v) { return $k .'="'.  htmlspecialchars($v) .'"'; },
             array_keys($array), $array));
         
     }
@@ -374,7 +374,7 @@ class ImageRender extends HelloFramework\Singleton {
         unset($data['src_low']);
 
         $attributes             = $this->_getAttributes($data);
-        $output                 = '<img '.$attributes.' />';
+        $output                 = '<img '. $attributes .' />';
 
         $output .= (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
 
@@ -410,7 +410,7 @@ class ImageRender extends HelloFramework\Singleton {
     // Caption Generator: Just the caption.
 
     public function get_caption($image=false){
-        $data                   = $this->_getImageData($image);
+        $data                   = $this->_getImageData($image,false);
         return (!empty($data['caption'])) ? $data['caption'] : '';
     }
 
