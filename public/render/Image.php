@@ -182,8 +182,8 @@ class ImageRender extends HelloFramework\Singleton {
         $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
 
         return array(
-            'alt'       => $image_alt,
-            'caption'   => $image_caption,
+            'alt'       => strip_tags($image_alt),
+            'caption'   => strip_tags($image_caption),
             'class'     => $image_align .' '. implode(' ', $this->_classes),
             'src'       => $image_src,
             'src_low'   => $image_srclow,
