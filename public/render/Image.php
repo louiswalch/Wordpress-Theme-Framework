@@ -89,26 +89,26 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Image getters.
 
-    private function _getImageObject($image) {
+    // private function _getImageObject($image) {
 
-        // Sometimes an object is passed in.
-        if (is_object($image) && property_exists($image, 'ID')) {
-            return $image;
-        }
+    //     // Sometimes an object is passed in.
+    //     if (is_object($image) && property_exists($image, 'ID')) {
+    //         return $image;
+    //     }
 
-        // Sometimes an array is passed in.
-        if (is_array($image) && array_key_exists('ID', $image)) {
-            return $image;
-        }
+    //     // Sometimes an array is passed in.
+    //     if (is_array($image) && array_key_exists('ID', $image)) {
+    //         return $image;
+    //     }
 
-        // Now make sure we have an ID. Should this error?
-        if (is_numeric($image)) {
-            return wp_get_attachment_image($image);
-        }
+    //     // Now make sure we have an ID. Should this error?
+    //     if (is_numeric($image)) {
+    //         return wp_get_attachment_image($image);
+    //     }
 
-        return false;
+    //     return false;
 
-    }
+    // }
 
     private function _getImageId($image) {
 
