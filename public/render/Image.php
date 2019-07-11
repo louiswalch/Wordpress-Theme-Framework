@@ -169,9 +169,9 @@ class ImageRender extends HelloFramework\Singleton {
 
         $image_id       = $this->_getImageId($image);
 
-        $image_caption  = $this->_getImageCaption($image);
+        $image_caption  = $this->_getImageCaption($image_id);
 
-        $image_alt      = $this->_getImageAlt($image);
+        $image_alt      = $this->_getImageAlt($image_id);
 
         $image_src      = wp_get_attachment_image_url($image_id, $this->_size);
         $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
