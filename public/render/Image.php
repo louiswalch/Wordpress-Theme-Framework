@@ -165,7 +165,7 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
-    private function _getImageData($image) {
+    private function _getImageData($image, $strip_tags=true) {
 
         $image_id       = $this->_getImageId($image);
 
@@ -182,8 +182,8 @@ class ImageRender extends HelloFramework\Singleton {
         $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
 
         return array(
-            'alt'       => $image_alt,
-            'caption'   => $image_caption,
+            'alt'       => $strip_tags ? strip_tags($image_alt) : $image_alt,
+            'caption'   => $strip_tags ? strip_tags($image_caption) : $image_caption,
             'class'     => $image_align .' '. implode(' ', $this->_classes),
             'src'       => $image_src,
             'src_low'   => $image_srclow,
@@ -221,10 +221,10 @@ class ImageRender extends HelloFramework\Singleton {
 
     private function _getAttributes($array=array()) {     
 
-        $array = array_merge($array, $this->_attr);
+        $array = array_merge( $array, $this->_attr );
 
         return implode(' ', array_map(
-            function ($k, $v) { return $k .'="'. htmlspecialchars($v) .'"'; },
+            function ($k, $v) { return $k .'="'.  htmlspecialchars($v) .'"'; },
             array_keys($array), $array));
         
     }
@@ -233,13 +233,25 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Sometimes we wrap the output in another div.
 
-    private function _getWrap($string) {
+    private function _getWrap($string, $image) {
 
         if (!$this->_wrap) return $string;
 
         $class = is_string($this->_wrap) ? $this->_wrap : '';
 
-        return '<div class="image_wrapper '.$class.'">' . $string .'</div>';
+        $style = '';
+        if ( $class === 'autosize' ){
+
+            $props = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
+            $h = $props[2];
+            $w = $props[1];
+
+            //$class .= ' img-wrapper';
+            $style .= ' style="padding-bottom: ' . ($h/$w*100) . '%;"';
+
+        }
+
+        return '<div class="image_wrapper ' . $class . '" ' . $style . '>' . $string .'</div>';
 
     }
 
@@ -263,12 +275,17 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;
     }
     public function classes($incoming=false) {
+        if ($incoming){
+            if ( strrpos($incoming, 'lazyload') !== false ){
+                $incoming .= ' lazyload-persist';
+            }
+        }
         if ($incoming) $this->_classes[] = $incoming;
         return $this;
     }
     public function lazy(){
         $this->_alpha = true;
-        $this->_classes[] = 'lazyload';
+        $this->_classes[] = 'lazyload lazyload-persist';
         $this->_attr['data-sizes'] = 'auto';
         return $this;            
     }
@@ -323,7 +340,7 @@ class ImageRender extends HelloFramework\Singleton {
         unset($data['srcset']);
 
         $attributes     = $this->_getAttributes($data);
-        $output         = $this->_getWrap('<div '.$attributes.'>'. $caption . $pinterest .'</div>');
+        $output         = $this->_getWrap('<div '.$attributes.'>'. $caption . $pinterest .'</div>', $image);
 
         // Reset all the request settings.
         $this->_reset();
@@ -357,11 +374,11 @@ class ImageRender extends HelloFramework\Singleton {
         unset($data['src_low']);
 
         $attributes             = $this->_getAttributes($data);
-        $output                 = '<img '.$attributes.' />';
+        $output                 = '<img '. $attributes .' />';
 
         $output .= (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
 
-        $output                 = $this->_getWrap($output);
+        $output                 = $this->_getWrap($output, $image);
 
         // Reset all the request settings.
         $this->_reset();
@@ -393,7 +410,7 @@ class ImageRender extends HelloFramework\Singleton {
     // Caption Generator: Just the caption.
 
     public function get_caption($image=false){
-        $data                   = $this->_getImageData($image);
+        $data                   = $this->_getImageData($image,false);
         return (!empty($data['caption'])) ? $data['caption'] : '';
     }
 
