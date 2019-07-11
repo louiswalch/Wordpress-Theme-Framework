@@ -74,6 +74,7 @@ CONFIG()->set([
     'render/image/default_caption'      => true,
     'render/image/default_pinnable'     => true,
     'render/image/default_wrap'         => false,
+    'render/image/alt_fallback'         => true,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -

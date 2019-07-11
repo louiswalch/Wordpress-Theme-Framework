@@ -131,37 +131,37 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
-    private function _getImageAlt($image) {
+    private function _getImageAlt($image_id) {
 
-        // Sometimes an object is passed in.
-        if (is_object($image) && property_exists($image, 'alt')) {
-            return $image->alt;
+        // // Sometimes an object is passed in.
+        // if (is_object($image) && property_exists($image, 'alt')) {
+        //     return $image->alt;
+        // }
+
+        // // Sometimes an array is passed in.
+        // if (is_array($image) && array_key_exists('alt', $image)) {
+        //     return $image['alt'];
+        // }
+
+        // pr($image, '_getImageAlt');
+
+        $alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
+
+        if (strlen($alt)) {
+            return $alt;
         }
 
-        // Sometimes an array is passed in.
-        if (is_array($image) && array_key_exists('alt', $image)) {
-            return $image['alt'];
+        if (CONFIG('render/image/alt_fallback')) {
+            return get_the_title($image_id);
         }
 
         return '';
 
     }
 
-    private function _getImageCaption($image) {
+    private function _getImageCaption($image_id) {
 
-        if (is_object($image) && property_exists($image, 'caption')) {
-            return $image->caption;
-        }
-
-        if (is_array($image) && array_key_exists('caption', $image)) {
-            return $image['caption'];
-        }
-
-        if (is_numeric($image)) {
-            return wp_get_attachment_caption($image);
-        }
-
-        return false;
+        return wp_get_attachment_caption($image_id);
 
     }
 
