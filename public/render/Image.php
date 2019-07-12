@@ -219,7 +219,10 @@ class ImageRender extends HelloFramework\Singleton {
     // Build HTML attributes from an array.
     // https://stackoverflow.com/a/34063755/107763       
 
-    private function _getAttributes($array=array()) {     
+    private function _getAttributes($array=array()) {
+
+        // caption is not a valid HTML5 Attribute (Accessibility)
+        unset( $array[ 'caption' ] ); 
 
         $array = array_merge( $array, $this->_attr );
 
