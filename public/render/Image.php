@@ -238,17 +238,13 @@ class ImageRender extends HelloFramework\Singleton {
         if (!$this->_wrap) return $string;
 
         $class = is_string($this->_wrap) ? $this->_wrap : '';
-
         $style = '';
-        if ( $class === 'autosize' ){
-
-            $props = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
-            $h = $props[2];
-            $w = $props[1];
-
-            //$class .= ' img-wrapper';
-            $style .= ' style="padding-bottom: ' . ($h/$w*100) . '%;"';
-
+        
+        if ( strpos($class, 'autosize') !== false ){
+            $props  = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
+            $h      = $props[2];
+            $w      = $props[1];
+            $style  = ' style="padding-bottom: ' . ($h/$w*100) . '%;"';
         }
 
         return '<div class="image_wrapper ' . $class . '" ' . $style . '>' . $string .'</div>';
