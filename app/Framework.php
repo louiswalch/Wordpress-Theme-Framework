@@ -130,7 +130,7 @@ class Framework {
 
                 }
 
-                $email['message'] = $header_output  . nl2br($email['message']) . $footer_output;
+                $email['message'] = $header_output  . $email['message'] . $footer_output;
 
             }
 
