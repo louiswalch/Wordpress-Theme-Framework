@@ -220,7 +220,14 @@ class ImageRender extends HelloFramework\Singleton {
     // Build HTML attributes from an array.
     // https://stackoverflow.com/a/34063755/107763       
 
-    private function _getAttributes($array=array()) {     
+    private function _getAttributes($array=array(),$forImg=true) {
+
+        // caption is not a valid HTML5 Attribute for img/div (WC3 Standards)
+        unset( $array[ 'caption' ] ); 
+        if ( !$forImg ){
+             // sizes is not a valid HTML5 Attribute for DIV (WC3 Standards)
+            unset( $array[ 'sizes' ] );
+        }
 
         $array = array_merge( $array, $this->_attr );
 
@@ -339,7 +346,7 @@ class ImageRender extends HelloFramework\Singleton {
         unset($data['src']);
         unset($data['srcset']);
 
-        $attributes     = $this->_getAttributes($data);
+        $attributes     = $this->_getAttributes($data, false);
         $output         = $this->_getWrap('<div '.$attributes.'>'. $caption . $pinterest .'</div>', $image);
 
         // Reset all the request settings.
