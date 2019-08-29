@@ -72,6 +72,7 @@ CONFIG()->set([
     'render/image/div_srcset'           => 'data-srcset',
     'render/image/default_size'         => '1600',
     'render/image/default_caption'      => true,
+    'render/image/default_draggable'    => false,
     'render/image/default_pinnable'     => true,
     'render/image/default_wrap'         => false,
     'render/image/alt_fallback'         => true,
