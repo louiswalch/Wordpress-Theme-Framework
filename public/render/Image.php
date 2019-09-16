@@ -55,7 +55,7 @@ class ImageRender extends HelloFramework\Singleton {
     private $_srcset;
     private $_wrap;
 
-    public $max         = 2400;
+    // public $max         = 2400;
 
     // ------------------------------------------------------------
 
@@ -75,6 +75,7 @@ class ImageRender extends HelloFramework\Singleton {
         $this->_alpha       = false;
         $this->_attr        = array();
         $this->_classes     = array();
+        $this->_draggable   = CONFIG('render/image/default_draggable');
         $this->_pinnable    = CONFIG('render/image/default_pinnable');
         $this->_low         = false;
         $this->_low_size    = '400';
@@ -177,8 +178,7 @@ class ImageRender extends HelloFramework\Singleton {
         $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
 
         $image_srcset   = $this->_srcset ? wp_get_attachment_image_srcset( $image_id, $this->_size ) : '';
-        //$image_sizes    = $this->_srcset ? ('(max-width: '.$this->max.'px) 100vw, '.$this->max.'px') : '';
-        $image_sizes    = 'auto';
+        $image_sizes    = $this->_srcset ? ('(max-width: '. CONFIG('image/srcset_max') .'px) 100vw, '. CONFIG('image/srcset_max') .'px') : '';
 
         $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
 
@@ -246,17 +246,13 @@ class ImageRender extends HelloFramework\Singleton {
         if (!$this->_wrap) return $string;
 
         $class = is_string($this->_wrap) ? $this->_wrap : '';
-
         $style = '';
-        if ( $class === 'autosize' ){
-
-            $props = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
-            $h = $props[2];
-            $w = $props[1];
-
-            //$class .= ' img-wrapper';
-            $style .= ' style="padding-bottom: ' . ($h/$w*100) . '%;"';
-
+        
+        if ( strpos($class, 'autosize') !== false ){
+            $props  = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
+            $h      = $props[2];
+            $w      = $props[1];
+            $style  = ' style="padding-bottom: ' . ($h/$w*100) . '%;"';
         }
 
         return '<div class="image_wrapper ' . $class . '" ' . $style . '>' . $string .'</div>';
@@ -298,7 +294,10 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;            
     }
     public function size($incoming=false) {
-        if ($incoming) $this->_size = $incoming;
+        if ($incoming) {
+            $this->_size = $incoming;
+            CONFIG()->set('image/srcset_max', (int) $incoming);
+        }
         return $this;
     }
     public function alpha($incoming=false) {
@@ -373,6 +372,10 @@ class ImageRender extends HelloFramework\Singleton {
 
         if (!$this->_pinnable) {
             $data['data-pin-nopin'] = 'true';
+        }
+
+        if (!$this->_draggable) {
+            $data['draggable'] = 'false';
         }
 
         if ($this->_low) {
