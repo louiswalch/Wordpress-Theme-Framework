@@ -178,7 +178,8 @@ class ImageRender extends HelloFramework\Singleton {
         $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
 
         $image_srcset   = $this->_srcset ? wp_get_attachment_image_srcset( $image_id, $this->_size ) : '';
-        $image_sizes    = $this->_srcset ? ('(max-width: '. CONFIG('image/srcset_max') .'px) 100vw, '. CONFIG('image/srcset_max') .'px') : '';
+        //$image_sizes    = $this->_srcset ? ('(max-width: '. CONFIG('image/srcset_max') .'px) 100vw, '. CONFIG('image/srcset_max') .'px') : '';
+        $image_sizes    = 'auto'; // For LazySizes configuration.
 
         $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
 
