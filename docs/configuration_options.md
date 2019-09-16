@@ -243,12 +243,6 @@ See the Configuration section in [README](README.md) for more information about 
 > - **Default:** ['medium', 'medium_large', 'large']
 > - **Input Type:** array
 
-##### `image/srcset_max`
-> Max width for responsive srcset images.
-> 
-> - **Default:** 2400
-> - **Input Type:** int
-
 <br/>
 
 ------

@@ -180,7 +180,7 @@ class Framework {
         // Increase the Wordpress Max 'srcset' Size 
         // http://aaronrutley.com/responsive-images-in-wordpress-with-acf/
         add_filter( 'max_srcset_image_width', function() {
-            return CONFIG('image/srcset_max');
+            return CONFIG('render/image/srcset_max');
         }, 10 , 2 );
 
     }
