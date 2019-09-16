@@ -197,6 +197,7 @@ class ImageRender extends HelloFramework\Singleton {
             $attributes['data-src']      = $image_src;
             $attributes['data-srcset']   = $image_srcset;
             $attributes['data-sizes']    = 'auto';
+            unset($attributes['sizes']);
         }
         
         return $attributes;
