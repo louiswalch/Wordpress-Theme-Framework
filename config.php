@@ -40,6 +40,10 @@ CONFIG()->set([
 
     // Max width for responsive srcset images.
     'image/srcset_max'                  => 2400,
+    'image/srcset_sizes'                => '(max-width: 2400px) 100vw, 2400px',
+
+    // Output customizations when using the `lazysizes` library.
+    'image/lazysizes'                   => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
