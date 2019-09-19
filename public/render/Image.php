@@ -178,26 +178,29 @@ class ImageRender extends HelloFramework\Singleton {
         $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
 
         $image_srcset   = $this->_srcset ? wp_get_attachment_image_srcset( $image_id, $this->_size ) : '';
-        $image_sizes    = $this->_srcset ? ('(max-width: '. CONFIG('image/srcset_max') .'px) 100vw, '. CONFIG('image/srcset_max') .'px') : '';
-        //$image_sizes    = 'auto'; // For LazySizes configuration.
+        $image_sizes    = $this->_srcset ? CONFIG('render/image/srcset_sizes') : '';
 
         $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
 
-        return array(
-            'alt'           => $strip_tags ? strip_tags($image_alt) : $image_alt,
-            'caption'       => $strip_tags ? strip_tags($image_caption) : $image_caption,
-            'class'         => $image_align .' '. implode(' ', $this->_classes),
-            'src'           => $image_src,
-            'src_low'       => $image_srclow,
-            'srcset'        => $this->_alphadata, // changed
-            'sizes'         => $image_sizes,
-
-            // added
-            'data-src'      => $image_src,
-            'data-srcset'   => $image_srcset,
-            'data-sizes'    => 'auto',
-            'data-caption'  => $strip_tags ? strip_tags($image_caption) : $image_caption
+        $attributes     = array(
+            'alt'       => $strip_tags ? strip_tags($image_alt) : $image_alt,
+            'caption'   => $strip_tags ? strip_tags($image_caption) : $image_caption,
+            'class'     => $image_align .' '. implode(' ', $this->_classes),
+            'src'       => $image_src,
+            'src_low'   => $image_srclow,
+            'srcset'    => $image_srcset,
+            'sizes'     => $image_sizes
             );
+
+        if (CONFIG('render/image/lazysizes')) {
+            $attributes['srcset']        = $this->_alphadata;
+            $attributes['data-src']      = $image_src;
+            $attributes['data-srcset']   = $image_srcset;
+            $attributes['data-sizes']    = 'auto';
+            unset($attributes['sizes']);
+        }
+        
+        return $attributes;
 
     }
 

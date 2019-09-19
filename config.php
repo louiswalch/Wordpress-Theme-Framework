@@ -40,7 +40,7 @@ CONFIG()->set([
 
     // Max width for responsive srcset images.
     'image/srcset_max'                  => 2400,
-
+    
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Frontend Settings
@@ -76,6 +76,12 @@ CONFIG()->set([
     'render/image/default_pinnable'     => true,
     'render/image/default_wrap'         => false,
     'render/image/alt_fallback'         => true,
+
+    // Max width for responsive srcset images.
+    'render/image/srcset_sizes'         => '(max-width: 2400px) 100vw, 2400px',
+
+    // Output customizations when using the `lazysizes` library.
+    'render/image/lazysizes'            => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
