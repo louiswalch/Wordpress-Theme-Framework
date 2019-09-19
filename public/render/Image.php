@@ -196,6 +196,7 @@ class ImageRender extends HelloFramework\Singleton {
             'data-src'      => $image_src,
             'data-srcset'   => $image_srcset,
             'data-sizes'    => 'auto',
+            'data-caption'  => $strip_tags ? strip_tags($image_caption) : $image_caption
             );
 
     }
