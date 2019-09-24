@@ -185,6 +185,7 @@ class ImageRender extends HelloFramework\Singleton {
         $attributes     = array(
             'alt'       => $strip_tags ? strip_tags($image_alt) : $image_alt,
             'caption'   => $strip_tags ? strip_tags($image_caption) : $image_caption,
+            //'data-caption' => $strip_tags ? strip_tags($image_caption) : $image_caption,
             'class'     => $image_align .' '. implode(' ', $this->_classes),
             'src'       => $image_src,
             'src_low'   => $image_srclow,
