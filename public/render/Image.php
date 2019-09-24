@@ -194,6 +194,7 @@ class ImageRender extends HelloFramework\Singleton {
             );
 
         if (CONFIG('render/image/lazysizes')) {
+            $attributes['src']           = $this->_alphadata;
             $attributes['srcset']        = $this->_alphadata;
             $attributes['data-src']      = $image_src;
             $attributes['data-srcset']   = $image_srcset;
