@@ -343,8 +343,13 @@ class ImageRender extends HelloFramework\Singleton {
         $caption        = (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
         $pinterest      = $this->_getPinterestForDiv($image, $data['caption']);
 
-        $data[CONFIG('render/image/div_src')]       = $data['src'];
-        $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
+        if (CONFIG('render/image/lazysizes')) {
+            $data[CONFIG('render/image/div_src')]       = $data['data-src'];
+            $data[CONFIG('render/image/div_srcset')]    = $data['data-srcset'];
+        } else {
+            $data[CONFIG('render/image/div_src')]       = $data['src'];
+            $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
+        }
 
         if ($this->_low) {
             $data['style'] = 'background-image: url(' . $data['src_low'] . ');';
