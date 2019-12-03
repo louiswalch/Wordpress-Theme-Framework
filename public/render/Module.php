@@ -63,6 +63,18 @@ class Modules extends Includes {
     
 
     // ------------------------------------------------------------
+
+    public function __construct() {
+
+        parent::__construct();
+
+        // Default settings.
+        $this->_from    = get_the_ID();
+
+    }    
+
+
+    // ------------------------------------------------------------
     // Nested Data Helpers
     // Little different then how includes work so let's hardcode the memory for now.
 
@@ -75,7 +87,7 @@ class Modules extends Includes {
     protected function _resetSession() {
         $this->_dir         = '_modules/';
         $this->_filename    = false;
-        $this->_from        = false;
+        $this->_from        = get_the_ID();
         $this->_data        = [];
         return false;
     }
@@ -110,15 +122,9 @@ class Modules extends Includes {
     public function auto($field_group = 'modules', $skip = array()) {
         
         $return         = '';
-
-if (is_null($this->_from)) {
-    $this->_from = get_the_ID();
-}
  
         $modules        = gettype( $field_group ) === 'string' ? get_field($field_group, $this->_from) : $field_group;
-
         $count          = is_array($modules) ? count($modules) : 0;
-
         $data_global    = $this->_data;
 
         if (!$modules || !$count) return false;
