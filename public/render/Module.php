@@ -59,19 +59,7 @@ class Modules extends Includes {
 
     protected $_filename        = false;
 
-    protected $_from;
-    
-
-    // ------------------------------------------------------------
-
-    public function __construct() {
-
-        parent::__construct();
-
-        // Default settings.
-        $this->_from    = get_the_ID();
-
-    }    
+    protected $_from            = false; 
 
 
     // ------------------------------------------------------------
@@ -87,7 +75,7 @@ class Modules extends Includes {
     protected function _resetSession() {
         $this->_dir         = '_modules/';
         $this->_filename    = false;
-        $this->_from        = get_the_ID();
+        $this->_from        = false;
         $this->_data        = [];
         return false;
     }
