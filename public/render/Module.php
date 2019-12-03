@@ -110,8 +110,14 @@ class Modules extends Includes {
     public function auto($field_group = 'modules', $skip = array()) {
         
         $return         = '';
+
+if (is_null($this->_from)) {
+    $this->_from = get_the_ID();
+}
+ 
         $modules        = gettype( $field_group ) === 'string' ? get_field($field_group, $this->_from) : $field_group;
-        $count          = count($modules);
+
+        $count          = is_array($modules) ? count($modules) : 0;
 
         $data_global    = $this->_data;
 
