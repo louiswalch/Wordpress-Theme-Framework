@@ -149,7 +149,7 @@ class ImageRender extends HelloFramework\Singleton {
         $alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
 
         if (strlen($alt)) {
-            return $alt;
+            return character_limiter($alt, 95);
         }
 
         if (CONFIG('render/image/alt_fallback')) {
