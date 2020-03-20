@@ -20,7 +20,6 @@
 - [ ] Name framework? Something short - 3 to 4 characters.
 - [ ] Move Frontend Libraries and Helpers to their own Plugin?
 - [ ] Add ACF customizations.
-- [ ] Add Metatag Library.
 - [ ] Write Product introduction.
 
 <br/>

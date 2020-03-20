@@ -12,7 +12,6 @@ See the Configuration section in [README](README.md) for more information about 
 1. [Login Page Options](#login-page-settings)
 1. Dashboard
     * [General Options](#dashboard--general-settings)
-    * [Metabox Options](#dashboard--metabox-settings)
     * [Content Editor Options](#dashboard--content-editor-settings)
 1. [Image Options](#image-settings)
 1. [Email General Options](#email-general-settings)
@@ -23,57 +22,54 @@ See the Configuration section in [README](README.md) for more information about 
 
 ------
 
+Each configuation rule has it's own require input type, refer to the default value to know what you should provide. Non-matching input types will be ignored.
+
+------
+
 
 ### Frontend Settings
 
 ##### `frontend/assets/version`
 > Add cachebusting version to assets paths
 >
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `frontend/assets/css`
 > CSS file(s). Paths relative to `asset/` directory. 
 > 
-> - **Default:** []
-> - **Input Type:** array
+> **Default:** []
 
 ##### `frontend/assets/css_print`
 > Print CSS file(s). Paths relative to `asset/` directory.
 >
-> - **Default:** []
-> - **Input Type:** array
+> **Default:** []
 
 ##### `frontend/assets/js_head`
 > Head JS file(s). Paths relative to `asset/` directory.
 >
-> - **Default:** []
-> - **Input Type:** array
+> **Default:** []
 
 ##### `frontend/assets/js_jquery`
 > Replace version of jQuery. Path is relative to `asset/` directory.
 >
-> - **Default:** <i>empty</i>
-> - **Input Type:** string
+> **Default:** <i>empty</i>
+
 
 
 ##### `frontend/assets/js`
 > Footer JS file(s). Paths relative to `asset/` directory.
 >
-> - **Default:** []
-> - **Input Type:** array
+> **Default:** []
 
 ##### `frontend/query_params`
 > Add custom query params.
 >
-> - **Default:** []
-> - **Input Type:** array
+> **Default:** []
 
 ##### `frontend/hide_admin_bar`
 > Hide the Wordpress Admin bar on Frontend
 >
-> - **Default:** true
-> - **Input Type:** bool
+> **Default:** true
 
 <br/>
 
@@ -84,8 +80,8 @@ See the Configuration section in [README](README.md) for more information about 
 ##### `dashboard/login/css`
 > CSS file. Paths relative to `asset/` directory.
 >
-> - **Default:** <i>empty</i>
-> - **Input Type:** string
+> **Default:** <i>empty</i>
+
 
 <br/>
 
@@ -96,62 +92,53 @@ See the Configuration section in [README](README.md) for more information about 
 ##### `dashboard/footer_credit`
 > Add custom CSS to dashboard.
 >
-> - **Default:** ♥
-> - **Input Type:** string
+> **Default:** ♥
+
 
 ##### `dashboard/css`
 > Add custom CSS to dashboard.
 >
-> - **Default:** <i>empty</i>
-> - **Input Type:** string
+> **Default:** <i>empty</i>
+
 
 ##### `dashboard/tags`
 > Disable some Wordpress functionality.
 >
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `dashboard/menus`
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `dashboard/widgets`
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `dashboard/customizer`
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `dashboard/delete_lock`
 > Block pages/posts from being deleted.
 > 
-> - **Default:** []
-> - **Input Type:** array
+> **Default:** []
 
 ##### `dashboard/remove_roles`
 > Block pages/posts from being deleted.
 > 
-> - **Default:** ['subscriber', 'contributor']
-> - **Input Type:** array
+> **Default:** ['subscriber', 'contributor']
 
 ##### `dashboard/admin_bar/howdy`
 > Display 'Howdy' from the top bar?
 > 
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `dashboard/admin_bar/remove`
 > Remove items from the top bar.
 > 
-> - **Default:** ['wp-logo','archive','updates','new-content']
-> - **Input Type:** array
+> **Default:** ['wp-logo','archive','updates','new-content']
 
 ##### `dashboard/admin_bar/relocate`
 > Relocate items from the sidebar into top bar.
 > 
-> - **Default:** ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group']
-> - **Input Type:** array
+> **Default:** ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group']
 
 <br/>
 
@@ -167,36 +154,31 @@ See the Configuration section in [README](README.md) for more information about 
 ### Dashboard — Content Editor Settings
 
 ##### `dashboard/editor/customize`
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `dashboard/editor/css`
-> - **Default:** <i>empty</i>
-> - **Input Type:** string
+> **Default:** <i>empty</i>
+
 
 ##### `dashboard/editor/height`
-> - **Default:** 200
-> - **Input Type:** int
+> **Default:** 200
+> **Input Type:** int
 
 ##### `dashboard/editor/resize`
-> - **Default:** true
-> - **Input Type:** bool
+> **Default:** true
 
 ##### `dashboard/editor/media_buttons`
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `dashboard/editor/buttons_1`
-> - **Default:** ['formatselect', 'bold', 'italic', 'bullist', 'numlist', 'blockquote',' alignleft', 'aligncenter','alignright', 'link', 'unlink', 'pastetext', 'removeformat']
-> - **Input Type:** array
+> **Default:** ['formatselect', 'bold', 'italic', 'bullist', 'numlist', 'blockquote',' alignleft', 'aligncenter','alignright', 'link', 'unlink', 'pastetext', 'removeformat']
 
 ##### `dashboard/editor/buttons_2`
-> - **Default:** []
-> - **Input Type:** array
+> **Default:** []
 
 ##### `dashboard/editor/formats`
-> - **Default:** Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre
-> - **Input Type:** string
+> **Default:** Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre
+
 
 <br/>
 
@@ -207,41 +189,37 @@ See the Configuration section in [README](README.md) for more information about 
 ##### `image/enabled`
 > Enable thumbnail support for this theme.
 > 
-> - **Default:** true
-> - **Input Type:** bool
+> **Default:** true
 
 ##### `image/sizes`
-> - **Default:** ['400', '600', '800', '1200', '1600', '2400']
-> - **Input Type:** array
+> **Default:** ['400', '600', '800', '1200', '1600', '2400']
 
 ##### `image/jpg_quality`
 > JPG quality level for generated images.
 > 
-> - **Default:** 90
-> - **Input Type:** int
+> **Default:** 90
+> **Input Type:** int
 
 ##### `image/thumbnail/w`
 > Generated thumbnail width.
 > 
-> - **Default:** 170
-> - **Input Type:** int
+> **Default:** 170
+> **Input Type:** int
 
 ##### `image/thumbnail/h`
 > Generated thumbnail height.
 > 
-> - **Default:** 140
-> - **Input Type:** int
+> **Default:** 140
+> **Input Type:** int
 
 ##### `image/thumbnail/crop`
 > Generated thumbnail crop.
-> - **Default:** true
-> - **Input Type:** bool
+> **Default:** true
 
 ##### `image/remove_default`
 > Remove specified default Wordpress image sizes.
 > 
-> - **Default:** ['medium', 'medium_large', 'large']
-> - **Input Type:** array
+> **Default:** ['medium', 'medium_large', 'large']
 
 <br/>
 
@@ -252,18 +230,18 @@ See the Configuration section in [README](README.md) for more information about 
 ##### `email/name`
 > Sender name in emails sent from Wordpress.
 >
-> - **Default:** get_option('blogname')
-> - **Input Type:** string
+> **Default:** get_option('blogname')
+
 
 ##### `email/address`
 > Sender address in emails sent from Wordpress.
 >
-> - **Default:** `'noreply@' . $_SERVER['HTTP_HOST']`
-> - **Input Type:** string
+> **Default:** `'noreply@' . $_SERVER['HTTP_HOST']`
+
 
 ##### `email/mime`
-> - **Default:** 'text/html'
-> - **Input Type:** string
+> **Default:** 'text/html'
+
 
 ##### `email/change_password`
 >  Should 'New User' notifications to admin be sent?
@@ -286,29 +264,28 @@ See the Configuration section in [README](README.md) for more information about 
 ##### `email/skin`
 > Should outgoing Wordpress emails be skinned?
 >
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `email/skin/header`
 > Header to be included before all outgoing Wordpress emails.
 > Value should be defined as path inside the `_includes` directory.
 >
-> - **Default:** <i>empty</i>
-> - **Input Type:** string
+> **Default:** <i>empty</i>
+
 
 ##### `email/skin/footer`
 > Footer to be included after all outgoing Wordpress emails.
 > Value should be defined as path inside the `_includes` directory.
 >
-> - **Default:** <i>empty</i>
-> - **Input Type:** string
+> **Default:** <i>empty</i>
+
 
 ##### `email/skin/link_color`
 > Force all links in the email body to have the following color. 
 > Value supplied should be a hex color value.
 > 
-> - **Default:** <i>empty</i>
-> - **Input Type:** string
+> **Default:** <i>empty</i>
+
 
 <br/>
 
@@ -318,50 +295,42 @@ See the Configuration section in [README](README.md) for more information about 
 ##### `support/categories`
 > Enable post categories support for this theme.
 > 
-> - **Default:** true
-> - **Input Type:** bool
+> **Default:** true
 
 ##### `support/comments`
 > Enable comment support for this theme.
 > 
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `support/customizer`
 > Enable customizer support for this theme.
 > 
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `support/menus`
 > Enable comment menus for this theme.
 > 
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `support/posts`
 > Enable posts support for this theme.
 > 
-> - **Default:** true
-> - **Input Type:** bool
+> **Default:** true
 
 ##### `support/tags`
 > Enable tags support for this theme.
 > 
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 ##### `support/thumbnails`
 > Enable thumbnails support for this theme.
 > 
-> - **Default:** true
-> - **Input Type:** bool
+> **Default:** true
 
 ##### `support/widgets`
 > Enable widgets support for this theme.
 > 
-> - **Default:** false
-> - **Input Type:** bool
+> **Default:** false
 
 
 <br/>

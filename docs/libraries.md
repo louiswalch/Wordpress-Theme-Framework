@@ -10,7 +10,6 @@ Frontend Libraries are a collection of utilities meant to streamline your templa
 1. [Modules](#frontend-library--modules-render)
 1. [Image](#frontend-library---image-render)
 1. [SVG](#frontend-library--svg-render)
-1. ~~[Metatag](#frontend-library--meta-tag-render)~~
 
 <br/>
 
@@ -320,11 +319,3 @@ echo SVG()->img('arrow.svg', array('class'=>'testing', 'alt'=>'Name of the image
 > - img($key, $attributes=array()) 
 > - div($key, $attributes=array())
 > - show($key)
-
-<br/>
-
-------
-
-### ~~Frontend Library : Meta Tag Render~~
-
-Not yet.
