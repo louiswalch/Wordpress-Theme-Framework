@@ -268,7 +268,7 @@ In most cases you will be interfacing with this by adding parameters to your cal
 ```php
 // Enable caption display for single render (e.g. if it's disabled by default) Pretty simple.
 // <img src="foo.png" ... /><div class="caption">This is my caption.</div>
-echo IMAGE()->caption->(true)->img(get_field('image'));
+echo IMAGE()->caption(true)->img(get_field('image'));
 
 // Enable caption display and change the display location from default 'after-image' to 'last'. I'm also enabling the 'wrap' functionality here and outputting as a div to get a better idea of how this could be useful.
 // <div class="image_wrapper">
