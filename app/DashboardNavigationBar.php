@@ -146,6 +146,8 @@ class DashboardNavigationBar extends Singleton {
             #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-label  { color: #fff !important; }
             #wpadminbar .custom_top_menu .ab-sub-wrapper ul li a:hover { color: #00a0d2 !important;}
             #wpadminbar .custom_top_menu .ab-icon:before { top: 2px;}
+            #wpadminbar .custom_top_menu:hover { opacity: 1; }
+            #wpadminbar .custom_top_menu:hover .ab-sub-wrapper { display: block; }
         </style>';
     }
 

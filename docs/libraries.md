@@ -151,11 +151,12 @@ echo IMAGE()->img(get_field('image'));
 
 ```
 
-The library suports a variety of parameters to customize how the image should be rendered. These methods are designed to be chained and would be passed in prior to your final output call.
+The library supports a variety of parameters to customize how the image should be rendered. These methods are designed to be chained and would be passed in prior to your final output call.
 
 > - TODO: Document
 > - srcset($incoming=true)
 > - wrap($incoming=false)
+> - autosize($incoming=false)
 > - caption($incoming=null)
 > - classes($incoming=false)
 > - lazy($incoming=true)
@@ -172,7 +173,7 @@ Once you have defined any parameters, then you call your final output - either a
 > - img($image=false, $size=false, $showcaption=false)
 > - src($image=false, $size=false)
 
-##### More Examples:
+##### Basic Rendering Examples:
 
 ```php
 // Output IMG element from custom field value.
@@ -198,6 +199,89 @@ echo IMAGE()->size(600)->div(get_field('image'));
     
 // Output just the image src (e.g. for use in Meta Tag), passing in the size we want.
 echo IMAGE()->src(get_post_thumbnail_id(), 800); 
+```
+
+##### Image Render Library - Wrapper Functionality
+
+Placing your image embed inside another element (e.g wrapping it) most notably for working with responsive images. You can either enable this functionality across all IMAGE renders on your site through your framework `config.php` file, or you can set it up globally each time you call the library.
+
+The framework configuration settings appropriate to Image Render wrapping are (along with their default values):
+```php
+// Enable or disable the wrapping functionality across all renders.
+CONFIG()->set('render/image/default_wrap' , false);
+
+// This class will be added to the wrapping DIV element and would correspond to any CSS you have to managing responsive images.
+CONFIG()->set('render/image/default_wrap_class' , 'image_wrapper');
+
+// This is an extra class that gets added to show the correct size for this particular image. 
+CONFIG()->set('render/image/default_wrap_size' , '');
+
+// Enable or disable the autosize functionality across all wraps. This will calculate an image's aspect ratio and add CSS to the element matching.
+CONFIG()->set('render/image/default_wrap_autosize' , false);
+```
+
+In most cases you will be interfacing with this by adding parameters to your call to the Image Render library. The examples below go through some common use cases, they all use DIV render method but wrapping can also be useful for IMG render.
+```php
+// Enable wrapping and output an image. Pretty simple.
+// <div class="image_wrapper"><div style="background-image: url(foo.png);"></div></div>
+echo IMAGE()->wrap(true)->div(get_field('image'));
+
+// Enable wrapping, setting a size class to be added and output an image. 
+// <div class="image_wrapper square"><div style="background-image: url(foo.png);"></div></div>
+echo IMAGE()->wrap('square')->div(get_field('image'));
+
+// Enable wrapping with the 'autosize' functionality turned on and output an image. In this example the image is a square.
+// <div class="image_wrapper" style="padding-bottom: 100%;"><div style="background-image: url(foo.png);"></div></div>
+echo IMAGE()->wrap('auto')->div(get_field('image'));
+
+// If desired, you also can pass in autosize as it's own parameter in the render request:
+echo IMAGE()->wrap(true)->autosize(true)->div(get_field('image'));
+```
+
+
+##### Image Render Library - Working with captions.
+
+
+All images in Wordpress have the capability to store a caption. This information can also be displayed easily when you are calling the Image Render Library. You can either enable this functionality across all IMAGE renders on your site through your framework `config.php` file, or you can set it up globally each time you call the library.
+
+The framework configuration settings appropriate to Image Render wrapping are (along with their default values):
+```php
+// Enable or disable including the image caption all renders.
+CONFIG()->set('render/image/default_caption' , true);
+
+// Control where the caption is included. This is most important for when you are using the wrap functionality.
+// Possible values are 'after-image' or 'end'. Examples will be provided below.
+CONFIG()->set('render/image/default_caption_location', 'after-image');
+
+// Included you also have the ability to change the caption element to something other then a DIV and also change it's class.
+CONFIG()->set('render/image/caption_element' , 'div');
+CONFIG()->set('render/image/caption_class' , 'caption');
+```
+
+In most cases you will be interfacing with this by adding parameters to your call to the Image Render library. 
+```php
+// Enable caption display for single render (e.g. if it's disabled by default) Pretty simple.
+// <img src="foo.png" ... /><div class="caption">This is my caption.</div>
+echo IMAGE()->caption->(true)->img(get_field('image'));
+
+// Enable caption display and change the display location from default 'after-image' to 'last'. I'm also enabling the 'wrap' functionality here and outputting as a div to get a better idea of how this could be useful.
+// <div class="image_wrapper"><div style="background-image: url(foo.png);"></div></div><div class="caption">This is my caption.</div>
+echo IMAGE()->caption('last')->wrap(true)->div(get_field('image'));
+
+// For reference, here is what that markup would look like with default caption positioning.
+// <div class="image_wrapper"><div style="background-image: url(foo.png);"></div><div class="caption">This is my caption.</div></div>
+echo IMAGE()->caption(true)->wrap(true)->div(get_field('image'));
+```
+
+And that's not it! If you'd like more control over where the caption for your image appears, you can fetch it yourself. This helper function returns an image caption (either formatted or not) for you do to as you like.
+```php
+// Fetch the last image's caption, as formatted HTML. The system remembers which image was last rendered so no parameters required.
+// '<div class="caption">This is my caption.</div></div>'
+$caption = IMAGE()->get_caption();
+
+// Fetch a specific image's caption as plain text.
+// 'This is some other caption.'
+$caption = IMAGE()->get_caption(1244, false);
 ```
 
 <br/>

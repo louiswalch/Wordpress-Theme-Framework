@@ -7,18 +7,10 @@ use HelloFramework;
 /*
 
 SVG LOADER 
-
 Louis Walch / say@hellolouis.com
 
-
--- EXAMPLES --
-
-// Display an in-line SVG (stored in assets/img/arrow.svg):
-echo SVG()->show('arrow');
-
-// Display an SVG (stored in assets/img/arrow.svg) as <img> with attributes:
-echo SVG()->img('test', array('class'=>'testing', 'alt'=>'Name of the image'))
-
+For documentation and examples of how to use this, visit:
+https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/libraries.md
 
 */
 

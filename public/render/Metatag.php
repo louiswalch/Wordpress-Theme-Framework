@@ -6,8 +6,8 @@ META TAGS
 
 Louis Walch / say@hellolouis.com
 
-
--- EXAMPLES --
+For documentation and examples of how to use this, visit:
+https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/libraries.md
 
 */
 

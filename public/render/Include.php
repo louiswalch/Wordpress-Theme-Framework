@@ -7,27 +7,10 @@ use HelloFramework;
 /*
 
 WORDPRESS INCLUDES
-
 Louis Walch / say@hellolouis.com
 
-
--- EXAMPLES --
-
-// Display an include file. Basic usage.
-INCLUDES()->show('share_icons');
-
-// Display an include file and cache the output.
-// Useful for areas which perform a lot of database calls but hardly change (e.g. your site's header).
-INCLUDES()->cache()->show('share_icons');
-
-// Display an include file and cache the output, globally.
-// Normally cache is page-specific, but if your include doesn't change between pages you can set it to be site-wide.
-INCLUDES()->cache('global')->show('header');
-
-// Send data to include when generating it.
-INCLUDES()->data([ 'section'=>'about', 'background'=>'blue'])->show('header');
-
-// Get the contents of an include and store in variable.
+For documentation and examples of how to use this, visit:
+https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/libraries.mdble.
 $include_contents = INCLUDES()->fetch('header');
 
 */

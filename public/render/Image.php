@@ -7,36 +7,10 @@ use HelloFramework;
 /*
 
 IMAGE LOADER 
-
 Louis Walch / say@hellolouis.com
 
-
--- EXAMPLES --
--- Note: You must also have the IMAGE instance helper function in global scope --
-
-// Output <IMG> element from custom field value.
-echo IMAGE()->img(get_field('image'));
-
-// Output <IMG> element from Featured Image with class attribute.
-echo IMAGE()->class('thumbnail')->div(get_post_thumbnail_id()); 
-
-// Output <IMG> for lazy loading from custom field. 
-echo IMAGE()->classes('lazy image')->alpha(true)->img(get_field('image'));
-
-// Output <IMG> from a custom field, adding custom attributes, example 1.
-echo IMAGE()->attr(array('data-test1'=>'value1', 'data-test2'=>'value2'))->img(get_field('image'));
-
-// Output <IMG> from a custom field, adding custom attributes, example 2.
-echo IMAGE()->attr('data-test1', 'value1')->img(get_field('image'));
-
-// Output a <DIV> element with from image in a custom field with class attribute.
-echo IMAGE()->classes('thumbnail')->div(get_field('image'));
-
-// Output a <DIV> element from image in a custom field, setting it's base size to something smaller.
-echo IMAGE()->size(600)->div(get_field('image'));
-
-// Output just the image src (e.g. for use in Meta Tag), passing in the size we want.
-echo IMAGE()->src(get_post_thumbnail_id(), 800); 
+For documentation and examples of how to use this, visit:
+https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/libraries.md
 
 */
 
@@ -44,6 +18,10 @@ class ImageRender extends HelloFramework\Singleton {
 
     private $_alphadata = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
+    // Keep track of the last image we rendered.
+    private $_last_id;
+
+    // All of these get reset after each request because they can be set for each emebed,
     private $_alpha;
     private $_attr;
     private $_classes;
@@ -54,8 +32,13 @@ class ImageRender extends HelloFramework\Singleton {
     private $_size;
     private $_srcset;
     private $_wrap;
+    private $_wrap_class;
+    private $_wrap_size;
+    private $_wrap_autosize;
+    private $_caption_location;
+    private $_caption_element;
+    private $_caption_class;
 
-    // public $max         = 2400;
 
     // ------------------------------------------------------------
 
@@ -72,17 +55,25 @@ class ImageRender extends HelloFramework\Singleton {
     // Default options, these will get reset to original values once a request has completed.
     private function _reset() {
 
-        $this->_alpha       = false;
-        $this->_attr        = array();
-        $this->_classes     = array();
-        $this->_draggable   = CONFIG('render/image/default_draggable');
-        $this->_pinnable    = CONFIG('render/image/default_pinnable');
-        $this->_low         = false;
-        $this->_low_size    = '400';
-        $this->_showcaption = CONFIG('render/image/default_caption');
-        $this->_size        = CONFIG('render/image/default_size');
-        $this->_srcset      = true;
-        $this->_wrap        = CONFIG('render/image/default_wrap');
+        $this->_alpha               = false;
+        $this->_attr                = array();
+        $this->_classes             = array();
+        $this->_draggable           = CONFIG('render/image/default_draggable');
+        $this->_pinnable            = CONFIG('render/image/default_pinnable');
+        $this->_low                 = false;
+        $this->_low_size            = '400';
+        $this->_size                = CONFIG('render/image/default_size');
+        $this->_srcset              = true;
+
+        $this->_showcaption         = CONFIG('render/image/default_caption');
+        $this->_caption_location    = CONFIG('render/image/default_caption_location');
+        $this->_caption_element     = CONFIG('render/image/caption_element');
+        $this->_caption_class       = CONFIG('render/image/caption_class');
+
+        $this->_wrap                = CONFIG('render/image/default_wrap');
+        $this->_wrap_size           = CONFIG('render/image/default_wrap_size');
+        $this->_wrap_autosize       = CONFIG('render/image/default_wrap_autosize');
+        $this->_wrap_class          = CONFIG('render/image/default_wrap_class');
 
     }
 
@@ -90,45 +81,36 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Image getters.
 
-    // private function _getImageObject($image) {
-
-    //     // Sometimes an object is passed in.
-    //     if (is_object($image) && property_exists($image, 'ID')) {
-    //         return $image;
-    //     }
-
-    //     // Sometimes an array is passed in.
-    //     if (is_array($image) && array_key_exists('ID', $image)) {
-    //         return $image;
-    //     }
-
-    //     // Now make sure we have an ID. Should this error?
-    //     if (is_numeric($image)) {
-    //         return wp_get_attachment_image($image);
-    //     }
-
-    //     return false;
-
-    // }
-
     private function _getImageId($image) {
+
+        $image_id = false;
 
         // Sometimes an object is passed in.
         if (is_object($image) && property_exists($image, 'ID')) {
-            return $image->ID;
+            $image_id = $image->ID;
         }
 
         // Sometimes an array is passed in.
         if (is_array($image) && array_key_exists('ID', $image)) {
-            return $image['ID'];
+            $image_id = $image['ID'];
         }
 
         // Now make sure we have an ID. Should this error?
         if (is_numeric($image)) {
-            return $image;
+            $image_id = $image;
         }
 
-        return false;
+        if ($image_id) {
+    
+            // Keep reference to the last image we rendered. Could be useful.
+            $this->_last_id = $image_id;
+            return $image_id;
+    
+        } else {
+    
+            return false;
+
+        }
 
     }
 
@@ -157,12 +139,6 @@ class ImageRender extends HelloFramework\Singleton {
         }
 
         return '';
-
-    }
-
-    private function _getImageCaption($image_id) {
-
-        return wp_get_attachment_caption($image_id);
 
     }
 
@@ -203,6 +179,18 @@ class ImageRender extends HelloFramework\Singleton {
         }
         
         return $attributes;
+
+    }
+
+    private function _getImageAutosizePaddingRatio($image) {
+
+        if (!$this->_wrap_autosize) return '';
+
+        $props  = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
+        $h      = $props[2];
+        $w      = $props[1];
+        
+        return 'padding-bottom:' . ($h/$w*100) . '%;';
 
     }
 
@@ -253,21 +241,67 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Sometimes we wrap the output in another div.
 
-    private function _getWrap($string, $image) {
+    private function _getWrap($image_embed, $image, $image_data) {
 
-        if (!$this->_wrap) return $string;
+        if ($this->_wrap) {
 
-        $class = is_string($this->_wrap) ? $this->_wrap : '';
-        $style = '';
-        
-        if ( strpos($class, 'autosize') !== false ){
-            $props  = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
-            $h      = $props[2];
-            $w      = $props[1];
-            $style  = ' style="padding-bottom: ' . ($h/$w*100) . '%;"';
+            $wrapper_attrubutes = [
+                'class' => $this->_wrap_class .' '. $this->_wrap_size,
+                'style' => $this->_getImageAutosizePaddingRatio($image),
+            ];
+
+            // If the caption is set to appear right after the image, add it to the HTML before we wrap it.
+            $image_embed .= $this->_getCaptionElement($image_data, 'after-image');
+
+            // Wrap the image in our wrapper element.
+            $image_embed = '<div ' . $this->_getAttributes($wrapper_attrubutes) . '>' . $image_embed .'</div>';
+
+            // If the caption is set to appear after the wrappe, now we add it.
+            $image_embed .= $this->_getCaptionElement($image_data, 'last');
+
+        } else {
+
+            // If we aren't wrapping the image, still need to add the caption,
+            $image_embed .= $this->_getCaptionElement($image_data, '*');
+
         }
 
-        return '<div class="image_wrapper ' . $class . '" ' . $style . '>' . $string .'</div>';
+        return $image_embed;
+
+    }
+
+
+    // ------------------------------------------------------------
+    // Caption output helper
+
+    private function _getCaptionElement($image_data, $location = null) {
+
+        if (empty($image_data['caption']) || !$this->_showcaption) return '';
+
+        if ($location == '*' || $this->_caption_location != $location) return '';
+
+        return $this->_formatCaption($image_data['caption']);
+
+    }
+
+    private function _formatCaption($caption ) {
+        return '<'. $this->_caption_element .' class="'. $this->_caption_class .'">' . $caption . '</'. $this->_caption_element .'>';
+    }
+
+    private function _getImageCaption($image_id, $format = true) {
+        return wp_get_attachment_caption($image_id);
+    }
+
+    public function get_caption($image=false, $format = true) {
+
+        $image_id   = $image ?: $this->_last_id;
+        $caption    = $this->_getImageCaption($image);
+    
+        if ($format) {
+            return $this->_formatCaption($caption);
+        } else {
+            return $caption;
+        }
 
     }
 
@@ -282,12 +316,33 @@ class ImageRender extends HelloFramework\Singleton {
         if (isset($incoming)) $this->_srcset = $incoming;
         return $this;
     }
-    public function wrap($incoming=false) {
-        if (isset($incoming)) $this->_wrap = $incoming;
+    public function wrap($one=false) {
+        // - Passing in a boolean will allow you to enable/disable the wrap feature.
+        // - Passing in a string will treat that value as a class name denoting size and add it to the wrap element.
+        // - There is a special cause where passing in 'autosize' will enable the autosize calculation.
+        if (is_string($one)) {
+            $this->_wrap = true;
+            $this->_wrap_size = $one;
+        } else if (is_bool($one)) {
+            $this->_wrap = $one;
+        }
+        if (in_array($this->_wrap_size, ['autosize', 'auto'])) {
+            $this->_wrap_autosize = true;
+        }
+        return $this;
+
+    }
+    public function autosize($incoming=null) {
+        if (!is_null($incoming)) $this->_wrap_autosize = $incoming;
         return $this;
     }
-    public function caption($incoming=null) {
-        if (!is_null($incoming)) $this->_showcaption = $incoming;
+    public function caption($one=null) {
+        if (is_string($one)) {
+            $this->_caption = true;
+            $this->_caption_location = $one;
+        } else if (is_bool($one)) {
+            $this->_caption = $one;
+        }
         return $this;
     }
     public function classes($incoming=false) {
@@ -300,15 +355,15 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;
     }
     public function lazy(){
-        $this->_alpha = true;
-        $this->_classes[] = 'lazyload lazyload-persist';
-        $this->_attr['data-sizes'] = 'auto';
+        $this->_alpha               = true;
+        $this->_classes[]           = 'lazyload lazyload-persist';
+        $this->_attr['data-sizes']  = 'auto';
         return $this;            
     }
     public function size($incoming=false) {
         if ($incoming) {
             $this->_size = $incoming;
-            CONFIG()->set('image/srcset_max', (int) $incoming);
+            // CONFIG()->set('image/srcset_max', (int) $incoming);
         }
         return $this;
     }
@@ -342,7 +397,6 @@ class ImageRender extends HelloFramework\Singleton {
 
         $data           = $this->_getImageData($image);
 
-        $caption        = (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
         $pinterest      = $this->_getPinterestForDiv($image, $data['caption']);
 
         if (CONFIG('render/image/lazysizes')) {
@@ -358,13 +412,13 @@ class ImageRender extends HelloFramework\Singleton {
         }
 
         unset($data['alt']);
-        unset($data['caption']);
+        // unset($data['caption']);
         unset($data['src_low']);
         unset($data['src']);
         unset($data['srcset']);
 
         $attributes     = $this->_getAttributes($data, false);
-        $output         = $this->_getWrap('<div '.$attributes.'>'. $caption . $pinterest .'</div>', $image);
+        $output         = $this->_getWrap('<div '.$attributes.'>'. $pinterest .'</div>', $image, $data);
 
         // Reset all the request settings.
         $this->_reset();
@@ -404,9 +458,7 @@ class ImageRender extends HelloFramework\Singleton {
         $attributes             = $this->_getAttributes($data);
         $output                 = '<img '. $attributes .' />';
 
-        $output .= (!empty($data['caption']) && $this->_showcaption ) ? ('<div class="caption">'.$data['caption'].'</div>') : '';
-
-        $output                 = $this->_getWrap($output, $image);
+        $output                 = $this->_getWrap($output, $image, $data);
 
         // Reset all the request settings.
         $this->_reset();
@@ -434,12 +486,5 @@ class ImageRender extends HelloFramework\Singleton {
         return $image_src;
     }
 
-    // ------------------------------------------------------------
-    // Caption Generator: Just the caption.
-
-    public function get_caption($image=false){
-        $data                   = $this->_getImageData($image,false);
-        return (!empty($data['caption'])) ? $data['caption'] : '';
-    }
 
 }

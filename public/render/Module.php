@@ -8,42 +8,10 @@ use HelloFramework;
 /*
 
 PAGE MODULES LOADER
-
 Louis Walch / say@hellolouis.com
 
-
--- EXAMPLES --
-
-// Automatically load modules from current page.
-MODULES()->auto();
-
-// You can have two sets of modules on one page like this:
-MODULES()->auto('content_modules');
-MODULES()->auto('sidebar_modules');
-
-// Automatically load modules from a different page, or from the ACF Options.
-MODULES()->from(1234)->auto('content_modules');
-MODULES()->from('options')->auto('footer_modules');
-
-// When automatically loading all modules, you can specify certain ones to ignore.
-MODULES()->auto('content_modules', ['unwanted_module_name', 'ugly_thing']);
-
-// Alter the name of module file to be included: Adding a prefix.
-// For a module named 'gallery' in the CMS, this would include 'exhibition_gallery'.
-MODULES()->filename('exhibition_')->auto('content_modules');
-
-// You can also use the `filename()` prefix option to map to a subdirectory of _modules.
-MODULES()->filename('exhibition/')->auto('content_modules');
-
-// Alter the name of module file to be included: Using `sprintf` command.
-// For a module named 'gallery' in the CMS, this would include 'exhibition_gallery_preview'.
-MODULES()->filename('exhibition_%s_preview')->auto('content_modules');
-
-// Manually load a specified module while passing in the data to display.
-MODULES()->show('text_content', [
-    'title' => 'Test Module',
-    'text' => 'Testing out manually including a module on this page. Did it work?',
-    ]);
+For documentation and examples of how to use this, visit:
+https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/libraries.md
 
 */
 

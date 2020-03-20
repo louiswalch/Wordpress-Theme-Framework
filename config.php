@@ -68,20 +68,30 @@ CONFIG()->set([
     // Render Libraries
 
     // Attribute control for the Image Render library.
-    'render/image/div_src'              => 'data-src',
-    'render/image/div_srcset'           => 'data-srcset',
-    'render/image/default_size'         => '1600',
-    'render/image/default_caption'      => true,
-    'render/image/default_draggable'    => false,
-    'render/image/default_pinnable'     => true,
-    'render/image/default_wrap'         => false,
-    'render/image/alt_fallback'         => true,
+    'render/image/div_src'                  => 'data-src',
+    'render/image/div_srcset'               => 'data-srcset',
+    'render/image/default_size'             => '1600',
+    'render/image/default_draggable'        => false,
+    'render/image/default_pinnable'         => true,
+    'render/image/alt_fallback'             => true,
+
+    // Image caption control for the Image Render library.
+    'render/image/default_caption'          => true,
+    'render/image/default_caption_location' => 'after-image', // Two options: after-image & last
+    'render/image/caption_element'          => 'div',
+    'render/image/caption_class'            => 'caption',
+
+    // Wrapper element control for the Image Render library.
+    'render/image/default_wrap'             => false,
+    'render/image/default_wrap_size'        => '',
+    'render/image/default_wrap_autosize'    => false,
+    'render/image/default_wrap_class'       => 'image_wrapper',
 
     // Max width for responsive srcset images.
-    'render/image/srcset_sizes'         => '(max-width: 2400px) 100vw, 2400px',
+    'render/image/srcset_sizes'             => '(max-width: 2400px) 100vw, 2400px',
 
     // Output customizations when using the `lazysizes` library.
-    'render/image/lazysizes'            => false,
+    'render/image/lazysizes'                => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -89,7 +99,7 @@ CONFIG()->set([
 
     // Add custom CSS to login page.
     // Path relative to `asset/` directory in _framework directory.
-    'dashboard/login/css'               => '',
+    'dashboard/login/css'                   => '',
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
