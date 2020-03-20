@@ -198,13 +198,12 @@ Each configuation rule has it's own require input type, refer to the default val
 > JPG quality level for generated images.
 > 
 > **Default:** 90
-> **Input Type:** int
 
 ##### `image/thumbnail/w`
 > Generated thumbnail width.
 > 
 > **Default:** 170
-> **Input Type:** int
+
 
 ##### `image/thumbnail/h`
 > Generated thumbnail height.
@@ -247,13 +246,11 @@ Each configuation rule has it's own require input type, refer to the default val
 >  Should 'New User' notifications to admin be sent?
 > 
 >  - **Default:** false
->  - **Input Type:** bool
 
 ##### `email/new_user`
 >  Should 'Notice of Password Change' email to admin be sent?
 > 
 >  - **Default:** false
->  - **Input Type:** bool
 
 <br/>
 
