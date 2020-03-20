@@ -223,15 +223,21 @@ CONFIG()->set('render/image/default_wrap_autosize' , false);
 In most cases you will be interfacing with this by adding parameters to your call to the Image Render library. The examples below go through some common use cases, they all use DIV render method but wrapping can also be useful for IMG render.
 ```php
 // Enable wrapping and output an image. Pretty simple.
-// <div class="image_wrapper"><div style="background-image: url(foo.png);"></div></div>
+// <div class="image_wrapper">
+//      <div style="background-image: url(foo.png);"></div>
+// </div>
 echo IMAGE()->wrap(true)->div(get_field('image'));
 
 // Enable wrapping, setting a size class to be added and output an image. 
-// <div class="image_wrapper square"><div style="background-image: url(foo.png);"></div></div>
+// <div class="image_wrapper square">
+//      <div style="background-image: url(foo.png);"></div>
+// </div>
 echo IMAGE()->wrap('square')->div(get_field('image'));
 
 // Enable wrapping with the 'autosize' functionality turned on and output an image. In this example the image is a square.
-// <div class="image_wrapper" style="padding-bottom: 100%;"><div style="background-image: url(foo.png);"></div></div>
+// <div class="image_wrapper" style="padding-bottom: 100%;">
+//      <div style="background-image: url(foo.png);"></div>
+// </div>
 echo IMAGE()->wrap('auto')->div(get_field('image'));
 
 // If desired, you also can pass in autosize as it's own parameter in the render request:
@@ -265,18 +271,24 @@ In most cases you will be interfacing with this by adding parameters to your cal
 echo IMAGE()->caption->(true)->img(get_field('image'));
 
 // Enable caption display and change the display location from default 'after-image' to 'last'. I'm also enabling the 'wrap' functionality here and outputting as a div to get a better idea of how this could be useful.
-// <div class="image_wrapper"><div style="background-image: url(foo.png);"></div></div><div class="caption">This is my caption.</div>
+// <div class="image_wrapper">
+//      <div style="background-image: url(foo.png);"></div>
+// </div>
+// <div class="caption">This is my caption.</div>
 echo IMAGE()->caption('last')->wrap(true)->div(get_field('image'));
 
 // For reference, here is what that markup would look like with default caption positioning.
-// <div class="image_wrapper"><div style="background-image: url(foo.png);"></div><div class="caption">This is my caption.</div></div>
+// <div class="image_wrapper">
+//      <div style="background-image: url(foo.png);"></div>
+//      <div class="caption">This is my caption.</div>
+// </div>
 echo IMAGE()->caption(true)->wrap(true)->div(get_field('image'));
 ```
 
 And that's not it! If you'd like more control over where the caption for your image appears, you can fetch it yourself. This helper function returns an image caption (either formatted or not) for you do to as you like.
 ```php
 // Fetch the last image's caption, as formatted HTML. The system remembers which image was last rendered so no parameters required.
-// '<div class="caption">This is my caption.</div></div>'
+// '<div class="caption">This is my caption.</div>'
 $caption = IMAGE()->get_caption();
 
 // Fetch a specific image's caption as plain text.
