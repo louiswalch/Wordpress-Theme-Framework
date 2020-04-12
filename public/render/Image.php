@@ -256,8 +256,7 @@ class ImageRender extends HelloFramework\Singleton {
 
             $wrapper_attrubutes = [
                 'class' => $this->_wrap_class .' '. $this->_wrap_size,
-                'style' => $this->_getImageAutosizePaddingRatio($image),
-                'data-width' => 
+                'style' => $this->_getImageAutosizePaddingRatio($image)
             ];
 
             $sizes      = $this->_getOrSize($image);
@@ -266,7 +265,7 @@ class ImageRender extends HelloFramework\Singleton {
             $image_embed .= $this->_getCaptionElement($image_data, 'after-image');
 
             // Wrap the image in our wrapper element.
-            $image_embed = '<div ' . $this->_getAttributes($wrapper_attrubutes) . ' data-width="' . $size[0] . '" data-height="' . $size[1] . '" >' . $image_embed .'</div>';
+            $image_embed = '<div ' . $this->_getAttributes($wrapper_attrubutes) . ' data-width="' . $sizes[0] . '" data-height="' . $sizes[1] . '" >' . $image_embed .'</div>';
 
             // If the caption is set to appear after the wrappe, now we add it.
             $image_embed .= $this->_getCaptionElement($image_data, 'last');
