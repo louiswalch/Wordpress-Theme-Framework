@@ -194,6 +194,15 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
+    private function _getOrSize($image) {
+
+        $props  = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
+        $h      = $props[2];
+        $w      = $props[1];
+
+        return  [$w,$h];
+
+    }
 
     // ------------------------------------------------------------
     // Generate Pinterest image. Used when drawing as a background image.
@@ -248,13 +257,16 @@ class ImageRender extends HelloFramework\Singleton {
             $wrapper_attrubutes = [
                 'class' => $this->_wrap_class .' '. $this->_wrap_size,
                 'style' => $this->_getImageAutosizePaddingRatio($image),
+                'data-width' => 
             ];
+
+            $sizes      = $this->_getOrSize($image);
 
             // If the caption is set to appear right after the image, add it to the HTML before we wrap it.
             $image_embed .= $this->_getCaptionElement($image_data, 'after-image');
 
             // Wrap the image in our wrapper element.
-            $image_embed = '<div ' . $this->_getAttributes($wrapper_attrubutes) . '>' . $image_embed .'</div>';
+            $image_embed = '<div ' . $this->_getAttributes($wrapper_attrubutes) . ' data-width="' . $size[0] . '" data-height="' . $size[1] . '" >' . $image_embed .'</div>';
 
             // If the caption is set to appear after the wrappe, now we add it.
             $image_embed .= $this->_getCaptionElement($image_data, 'last');
