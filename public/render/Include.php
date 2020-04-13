@@ -28,7 +28,8 @@ class Includes extends HelloFramework\Singleton {
     protected $_cache_key       = false;
     protected $_data            = array();
     protected $_debug           = false;
-    protected $_dir             = '_includes/';
+    protected $_dir_config_key  = 'framework/includes_dir';
+    protected $_dir             = false;
     protected $_key             = false;
     protected $_type            = 'INCLUDE';
     protected $_from            = false;
@@ -39,6 +40,9 @@ class Includes extends HelloFramework\Singleton {
     public function __construct() {
 
         parent::__construct();
+
+        // Load custom settings from the framework config file.
+        $this->_dir         = CONFIG($this->_dir_config_key);
 
         // Default settings based on current environment.
         $this->_cache_on    = !detect_environment('development');
@@ -209,15 +213,20 @@ class Includes extends HelloFramework\Singleton {
 
     protected function _getIncludePath() {
 
-        $path = $this->_getIncludeFile();
+        $file_path = $this->_getIncludeFile();
 
         // Make sure that the file name ends with .php
-        if (!strpos('.php', $path)) $path .= '.php';
+        if (!strpos('.php', $file_path)) $file_path .= '.php';
 
         // Prepend name of the directory we store all our includes in.
-        $path = $this->_dir . $path;
+        $server_path = get_template_directory() . '/' . $this->_dir;
 
-        return get_template_directory() . '/' . $path;
+        // Confirm the directory exists, we don't care so much about the file.
+        if (!file_exists($server_path)) {
+            exit( 'We apologise. The webite is currently expereincing some problems. Try again later, if the problem persists please contact a system administrator. [Reference: Framework Include Path]' );
+        }
+        
+        return $server_path . $file_path;
 
     }
 

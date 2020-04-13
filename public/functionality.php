@@ -9,7 +9,7 @@ namespace {
     function asset($file='', $echo=false, $server=false, $directory='') {
 
         $root = ($server) ? (get_template_directory()) : (get_stylesheet_directory_uri());
-        $path = $root . $directory . '/assets/' . $file;
+        $path = $root . $directory . '/' . CONFIG('framework/assets_dir') . $file;
 
         if ($echo) echo $path;
             
@@ -19,7 +19,7 @@ namespace {
 
     function framework_asset($file='', $echo=false, $server=false) {
         
-        return asset($file, $echo, $server, '/_framework');
+        return asset($file, $echo, $server, '/' . CONFIG('framework/framework_dir'));
 
     }
 

@@ -284,7 +284,7 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
-    private function _formatCaption($caption ) {
+    private function _formatCaption($caption) {
         return '<'. $this->_caption_element .' class="'. $this->_caption_class .'">' . $caption . '</'. $this->_caption_element .'>';
     }
 
@@ -292,10 +292,10 @@ class ImageRender extends HelloFramework\Singleton {
         return wp_get_attachment_caption($image_id);
     }
 
-    public function get_caption($image=false, $format = true) {
+    public function get_caption($image=false, $format = false) {
 
-        $image_id   = $image ?: $this->_last_id;
-        $caption    = $this->_getImageCaption($image);
+        $image_id   = $this->_getImageId($image) ?: $this->_last_id;
+        $caption    = $this->_getImageCaption($image_id);
     
         if ($format) {
             return $this->_formatCaption($caption);
@@ -338,10 +338,10 @@ class ImageRender extends HelloFramework\Singleton {
     }
     public function caption($one=null) {
         if (is_string($one)) {
-            $this->_caption = true;
-            $this->_caption_location = $one;
+            $this->_showcaption         = true;
+            $this->_caption_location    = $one;
         } else if (is_bool($one)) {
-            $this->_caption = $one;
+            $this->_showcaption         = $one;
         }
         return $this;
     }

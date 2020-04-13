@@ -2,15 +2,6 @@
 
 namespace {
 
-
-    // ---------------------------------------------------------------------------
-    // Include SVG or HTML into current page, loaded asynchronously. See article for explaination of this approach.
-    // https://www.filamentgroup.com/lab/html-includes/
-
-    function async_embed($path = false) {
-        if ($path) return '<iframe src="'. $path .'" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>';    
-    }
-
     
     // ---------------------------------------------------------------------------
     // Protect email addresses from bots.

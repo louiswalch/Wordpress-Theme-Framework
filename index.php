@@ -61,6 +61,7 @@ require_once HELLO_DIR . '/app/Dashboard.php';
 require_once HELLO_DIR . '/app/DashboardNavigationBar.php';
 require_once HELLO_DIR . '/app/Frontend.php';
 require_once HELLO_DIR . '/app/FrontendAssets.php';
+require_once HELLO_DIR . '/app/FrontendAuthentication.php';
 
 // Public misc custom output and functionality.
 require_once HELLO_DIR . '/public/output.php';

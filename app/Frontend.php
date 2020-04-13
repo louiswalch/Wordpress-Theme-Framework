@@ -7,7 +7,6 @@ class Frontend {
 	public function __construct() {
 
         // Public render helper classes, must be called from global instance functions.
-        // require_all_files(HELLO_DIR . '/public/render/');
         require_once HELLO_DIR . '/public/render/Image.php';
         require_once HELLO_DIR . '/public/render/ImageInstance.php';
         require_once HELLO_DIR . '/public/render/SVG.php';
@@ -19,6 +18,9 @@ class Frontend {
 
         // Add theme specified CSS and JS assets.
         new FrontendAssets();
+
+        // Add ability to force login from visitors to view the website.
+        new FrontendAuthentication();
 
         // Add custom query params.
         $this->_addQueryParams();
