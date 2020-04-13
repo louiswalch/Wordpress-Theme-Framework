@@ -73,6 +73,7 @@ CONFIG()->set([
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Frontend Authentication
+    /*
     // Require all visitors to login in order to view the site. Authentication is done through standard wp-login.
 
     // Enable or disable this functionality.
@@ -89,6 +90,7 @@ CONFIG()->set([
     'frontend/authentication/ignore_development'        => true,
     // You may also want to not require a password on your staging environment.
     'frontend/authentication/ignore_staging'            => false,
+    */
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Render Render Library
