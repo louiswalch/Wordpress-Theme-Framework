@@ -8,12 +8,12 @@ class Dashboard  {
         
         // Remove desingnated items from the Top Navigation Bar.
         if (CONFIG('dashboard/admin_bar/remove')) {
-            DashboardNavigationBar::get_instance()->remove(CONFIG('dashboard/admin_bar/remove'));
+            DashboardNavigationBar::get_instance()->removeTopMenus(CONFIG('dashboard/admin_bar/remove'));
         }
 
         // Move designited items from the Sidebar to Top Navigation Bar.
         if (CONFIG('dashboard/admin_bar/relocate')) {
-            DashboardNavigationBar::get_instance()->relocate(CONFIG('dashboard/admin_bar/relocate'));
+            DashboardNavigationBar::get_instance()->relocateSideMenus(CONFIG('dashboard/admin_bar/relocate'));
         }
 
         // Custom Admin Dashboard CSS
