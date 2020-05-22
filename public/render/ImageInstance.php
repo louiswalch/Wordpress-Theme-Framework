@@ -10,6 +10,6 @@ namespace {
         $instance = HelloFramework\Render\ImageRender::get_instance();
         return $instance;
 
-    }    
+    }
 
 }

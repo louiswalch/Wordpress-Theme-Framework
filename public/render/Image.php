@@ -21,7 +21,9 @@ class ImageRender extends HelloFramework\Singleton {
     // Keep track of the last image we rendered.
     private $_last_id;
 
-    // All of these get reset after each request because they can be set for each emebed,
+
+    // All of these get reset after each request because they can be set for each embed,
+    private $_defaults = [];
     private $_alpha;
     private $_attr;
     private $_classes;
@@ -47,33 +49,62 @@ class ImageRender extends HelloFramework\Singleton {
         parent::__construct();
 
         // Reset all the request settings.
-        $this->_reset();
+        $this->_reset(true);
 
     }
 
     // ------------------------------------------------------------
     // Default options, these will get reset to original values once a request has completed.
-    private function _reset() {
 
-        $this->_alpha               = false;
-        $this->_attr                = array();
-        $this->_classes             = array();
-        $this->_draggable           = CONFIG('render/image/default_draggable');
-        $this->_pinnable            = CONFIG('render/image/default_pinnable');
-        $this->_low                 = false;
-        $this->_low_size            = '400';
-        $this->_size                = CONFIG('render/image/default_size');
-        $this->_srcset              = true;
+    private function _reset($first = false) {
 
-        $this->_showcaption         = CONFIG('render/image/default_caption');
-        $this->_caption_location    = CONFIG('render/image/default_caption_location');
-        $this->_caption_element     = CONFIG('render/image/caption_element');
-        $this->_caption_class       = CONFIG('render/image/caption_class');
+        if ($first) {
 
-        $this->_wrap                = CONFIG('render/image/default_wrap');
-        $this->_wrap_size           = CONFIG('render/image/default_wrap_size');
-        $this->_wrap_autosize       = CONFIG('render/image/default_wrap_autosize');
-        $this->_wrap_class          = CONFIG('render/image/default_wrap_class');
+            $this->_defaults['_alpha']               = false;
+            $this->_defaults['_attr']                = array();
+            $this->_defaults['_classes']             = array();
+            $this->_defaults['_draggable']           = CONFIG('render/image/default_draggable');
+            $this->_defaults['_pinnable']            = CONFIG('render/image/default_pinnable');
+            $this->_defaults['_low']                 = false;
+            $this->_defaults['_low_size']            = '400';
+            $this->_defaults['_size']                = CONFIG('render/image/default_size');
+            $this->_defaults['_srcset']              = true;
+
+            $this->_defaults['_showcaption']         = CONFIG('render/image/default_caption');
+            $this->_defaults['_caption_location']    = CONFIG('render/image/default_caption_location');
+            $this->_defaults['_caption_element']     = CONFIG('render/image/caption_element');
+            $this->_defaults['_caption_class']       = CONFIG('render/image/caption_class');
+
+            $this->_defaults['_wrap']                = CONFIG('render/image/default_wrap');
+            $this->_defaults['_wrap_size']           = CONFIG('render/image/default_wrap_size');
+            $this->_defaults['_wrap_autosize']       = CONFIG('render/image/default_wrap_autosize');
+            $this->_defaults['_wrap_class']          = CONFIG('render/image/default_wrap_class');
+
+            // $this->_defaults['_alpha']               = false;
+            // $this->_defaults['_attr']                = array();
+            // $this->_defaults['_classes']             = array();
+            // $this->_defaults['_draggable']           = CONFIG('render/image/default_draggable');
+            // $this->_defaults['_pinnable']            = CONFIG('render/image/default_pinnable');
+            // $this->_defaults['_low']                 = false;
+            // $this->_defaults['_low_size']            = '400';
+            // $this->_defaults['_size']                = CONFIG('render/image/default_size');
+            // $this->_defaults['_srcset']              = true;
+
+            // $this->_defaults['_showcaption']         = CONFIG('render/image/default_caption');
+            // $this->_defaults['_caption_location']    = CONFIG('render/image/default_caption_location');
+            // $this->_defaults['_caption_element']     = CONFIG('render/image/caption_element');
+            // $this->_defaults['_caption_class']       = CONFIG('render/image/caption_class');
+
+            // $this->_defaults['_wrap']                = CONFIG('render/image/default_wrap');
+            // $this->_defaults['_wrap_size']           = CONFIG('render/image/default_wrap_size');
+            // $this->_defaults['_wrap_autosize']       = CONFIG('render/image/default_wrap_autosize');
+            // $this->_defaults['_wrap_class']          = CONFIG('render/image/default_wrap_class');
+
+        }
+
+        foreach ($this->_defaults as $key => $value) {
+            $this->$key = $value;
+        }
 
     }
 
@@ -161,7 +192,6 @@ class ImageRender extends HelloFramework\Singleton {
         $attributes     = array(
             'alt'       => $strip_tags ? strip_tags($image_alt) : $image_alt,
             'caption'   => $strip_tags ? strip_tags($image_caption) : $image_caption,
-            //'data-caption' => $strip_tags ? strip_tags($image_caption) : $image_caption,
             'class'     => $image_align .' '. implode(' ', $this->_classes),
             'src'       => $image_src,
             'src_low'   => $image_srclow,
@@ -238,12 +268,13 @@ class ImageRender extends HelloFramework\Singleton {
             unset( $array[ 'sizes' ] );
         }
 
-        $array = array_merge( $array, $this->_attr );
-
-        return implode(' ', array_map(
+        $array      = array_merge( $array, $this->_attr );
+        $assembled  = implode(' ', array_map(
             function ($k, $v) { return $k .'="'.  htmlspecialchars($v) .'"'; },
-            array_keys($array), $array));
-        
+            array_keys($array), $array)
+        );
+
+        return $assembled;
     }
 
 

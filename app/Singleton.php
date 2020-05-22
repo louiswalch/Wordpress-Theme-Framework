@@ -16,7 +16,6 @@ class Singleton {
 
     }
 
-
     // ------------------------------------------------------------
     // This will return the class singlton, makes it easier for this to be a global class.
 
@@ -31,7 +30,6 @@ class Singleton {
         return self::$instances[$called];
 
     }
-
 
     // ------------------------------------------------------------
     // Prevent cloning of Singleton classes.

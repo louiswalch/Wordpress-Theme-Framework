@@ -116,7 +116,7 @@ CONFIG()->set([
     'render/image/default_wrap_class'                   => 'image_wrapper',
 
     // Max width for responsive srcset images.
-    'render/image/srcset_sizes'                         => '(max-width: 2400px) 100vw, 2400px',
+    'render/image/srcset_sizes'                         => 'auto',
 
     // Output customizations when using the `lazysizes` library.
     'render/image/lazysizes'                            => false,

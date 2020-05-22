@@ -95,7 +95,7 @@ For a list of all available options that be configured through your theme's `con
 
 ### Directory Structure
 
-By default, the framework is configured for the following organization. Most are optional based on what aspects of the system you are using. Paths relative to your theme root.
+By default, the framework is configured for the following organization. Paths relative to your theme root and can be changed through the framework `config.php` file.
 
 - `_framework/`
     - `assets/` *Login, Dashboard & Editor CSS files.*
@@ -114,13 +114,13 @@ By default, the framework is configured for the following organization. Most are
 
 ### Environment Detection
 
-Based on the site url, the framework will detect the current environment (development, staging, production). This information is used for loading the appropriate configuration file and adding a CSS class to the BODY. The domain match string is defined in the base configuration file if you need to update it to match your infrastructure.
+Based on the website domain, the framework will detect the current environment (development, staging, production) and if an environment-specific `config.php` file is present also load this to override the default values. This is very useful for having an unminficed and source mapped CSS file appear when viewing on your development servers. The default match logic is outlined below, but this can also be customized through the framework `config.php` file.
 
-| Environment | Domain Match |
-|--|--|
-| Development | .local |
-| Staging | staging. |
-| Producton | * |
+> **Development** Domain contains ".local"
+> 
+> **Staging** Domain contains "staging."
+
+> **Production**  If the above two fail.
 
 
 ---
@@ -130,6 +130,16 @@ Based on the site url, the framework will detect the current environment (develo
 Not Yes.
 
 <br/>
+
+------
+
+
+### Contributors
+
+• [Filippo Della Casa](https://github.com/ferdydurque)
+
+
+
 
 ------
 

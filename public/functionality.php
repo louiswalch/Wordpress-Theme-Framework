@@ -146,4 +146,35 @@ namespace {
 
     }
 
+
+    // ---------------------------------------------------------------------------
+    // Custom `get_template_part` function, but allow support for passing variables.
+    // https://stackoverflow.com/a/60293525/107763
+
+    function include_template_part($slug, $name = null, $data = []) {
+
+        $templates = [];
+        $name = (string) $name;
+
+        if ('' !== $name) {
+            $templates[] = "{$slug}-{$name}.php";
+        }
+
+        $templates[] = "{$slug}.php";
+
+        $template = locate_template($templates, false);
+
+        if (!$template) {
+            return;
+        }
+
+        if ($data) {
+            extract($data);
+        }
+
+        include($template);
+        
+    }
+
+
 }
