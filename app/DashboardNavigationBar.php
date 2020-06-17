@@ -7,9 +7,11 @@ class DashboardNavigationBar extends Singleton {
     public $_action_priority   = 9999;
     public $_menu_priority     = 10;
 
-    public $_config_relocate   = array();
-    public $_wordpress_menu    = array();
+    public $_relocate          = array();
 
+    private $_icon_replace     = array(
+        'wpseo_dashboard'      => 'dashicons-rest-api',
+        );
 
     // ------------------------------------------------------------
     // Remove desingnated items from the Top Navigation Bar.
@@ -32,16 +34,19 @@ class DashboardNavigationBar extends Singleton {
     // ------------------------------------------------------------
     // Move designited items from the Sidebar to Top Navigation Bar.
 
-    public function relocateSideMenus($slugs=array()) {
+    public function relocateSideMenus($relocations = array()) {
 
         // Not told to move anything.
-        if (!$slugs || !count($slugs)) return false;
+        if (!$relocations || !count($relocations)) return false;
 
-        // Store the slugs to use later.
-        $this->_config_relocate = $slugs;
+        // Prepare a keyed version of the menu relations.
+        foreach ($relocations as $item) {
+            $key                    = (is_array($item)) ? $item[0] : $item;
+            $this->_relocate[$key]  = ((is_array($item)) ? $item[1] : []);
+        } 
 
-        // Fetch and store a reference to the current Wordpress menu for later reference.
-        add_action('admin_menu', array($this, 'preloadMainMenus'), $this->_action_priority);
+        // Process sidebar menu, removing those specified and store their configuration.
+        add_action('admin_menu', array($this, 'processMainMenus'), $this->_action_priority);
 
         // Loop over the config items, remove them from the sidebar menu and add them up top.
         add_action('admin_bar_menu', array($this, 'addTopMenus'), $this->_action_priority);
@@ -51,22 +56,36 @@ class DashboardNavigationBar extends Singleton {
 
     }
 
-    public function preloadMainMenus() {
+    public function processMainMenus() {
 
         global $menu; 
 
         foreach ($menu as $key => $value) {
-            $this->_wordpress_menu[$value[2]] = array_merge($value, ['key'=>$key]);
+
+            $slug = $value[2];
+
+            if (!array_key_exists($slug, $this->_relocate)) continue;
+
+            // Check for custom icon being set from the theme config file. 
+            if (is_string($this->_relocate[$slug])) {
+                $value[6] = $this->_relocate[$slug];
+            }
+
+            // Add all menu values to be used in later action to add.
+            $this->_relocate[$slug] = $value;
+
+            // Remove item from side menu.
+            unset($menu[$key]);
+            remove_menu_page($slug);
+
         }
 
     }
 
     public function addTopMenus() {
 
-        global $menu;
-
         // Loop over all the items we need to move and relocate them.
-        foreach ($this->_config_relocate as $item) {
+        foreach ($this->_relocate as $item) {
             $this->_addTopMenu($item);
         }
 
@@ -77,18 +96,15 @@ class DashboardNavigationBar extends Singleton {
         global $wp_admin_bar;
         global $submenu;
 
-        $menu_slug   = (is_array($item)) ? $item[0] : $item;
-        $menu_icon   = (is_array($item) && count($item) > 1) ? $item[1] : false;
+        if (!is_array($item) || !count($item)) return;
+
+        $title  = $item[0];
+        $slug   = $item[2];
+        $id     = 'top-' . $item[5];
+        $icon   = (array_key_exists($slug, $this->_icon_replace)) ? $this->_icon_replace[$slug] : $item[6];
 
         // Make sure we have submenus for this, there won't be if the user is not allowed to use this.
-        if (!array_key_exists($menu_slug, $submenu)) return false;
-
-        $menu   = $this->_wordpress_menu[$menu_slug];
-
-        $title  = $menu[0];
-        $slug   = $menu[2];
-        $id     = 'top-' . $menu[5];
-        $icon   = $menu_icon ? $menu_icon : $menu[6];
+        if (!array_key_exists($slug, $submenu)) return false;
 
         // Sometimes the names end with a number, like Plugins. 
         $title  = preg_replace('/[0-9]+/', '', $title);
@@ -102,12 +118,9 @@ class DashboardNavigationBar extends Singleton {
             ),
         ), $this->_menu_priority);
 
-
         foreach ($submenu[$slug] as $key => $sub) {
             $this->_addTopSubMenus($sub, $key, $id);
         }
-
-        $this->_removeMenuMenu($slug, $menu['key']);
 
     }
 
@@ -115,25 +128,16 @@ class DashboardNavigationBar extends Singleton {
 
         global $wp_admin_bar;
 
-        $title  = $item[0];
-        $id     = $parent.'-'.$key;
-        $href   = (strpos($item[2], '.php') && ($item[2] != 'redirection.php')) ? $item[2] : ('admin.php?page='.$item[2]);
-        //$href   = 'admin.php?page='.$item[2];
-        $href   = admin_url($href);
+        $special_paths  = array('redirection.php', 'users-user-role-editor.php');
+
+        $title          = $item[0];
+        $id             = $parent.'-'.$key;
+        $path           = $item[2];
+
+        $href           = (strpos($path, '.php') && !in_array($path, $special_paths)) ? $path : ('admin.php?page='.$path);
+        $href           = admin_url($href);
 
         $wp_admin_bar->add_menu(array('parent' => $parent, 'title' => $title, 'id' => $id, 'href' => $href ));
-
-    }
-
-    private function _removeMenuMenu($slug, $key) {
-
-        global $menu;
-
-        if (in_array($slug, $this->_wordpress_menu)) {
-            // Remove it from the sidebar.
-            unset($menu[$key]);
-            remove_menu_page($slug);
-        }
 
     }
 
