@@ -4,7 +4,7 @@ namespace HelloFramework;
 
 class Cache extends Singleton {
 
-    protected $_enabled         = true;
+    protected $_enabled         = true; // Master control over all caching. Only use for development & testing.
 
     protected $_life;
     protected $_prefix;
