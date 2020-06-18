@@ -7,6 +7,12 @@
 CONFIG()->set([
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Config Settings
+
+    'config/cache'                                      => false,
+    'config/cache/life'                                 => HOUR_IN_SECONDS,
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Framework Settings
 
     'framework/framework_dir'                           => '_framework/',
@@ -17,6 +23,7 @@ CONFIG()->set([
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Wordpress Functionality
 
+    'support/author_pages'                              => false,
     'support/categories'                                => true,
     'support/comments'                                  => false,
     'support/customizer'                                => false,
@@ -73,31 +80,31 @@ CONFIG()->set([
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Frontend Authentication
-    /*
     // Require all visitors to login in order to view the site. Authentication is done through standard wp-login.
 
     // Enable or disable this functionality.
-    'frontend/authentication'                           => false,
+    'frontend/login_required'                           => false,
+    // Display message to users on the login screen.
+    'frontend/login_required/message'                   => 'Access to this site is currently limited. Please login.',
+    // Save yourself a lot of headache and disable for your development environment.
+    'frontend/login_required/ignore_development'        => true,
+    // You may also want to not require a password on your staging environment.
+    'frontend/login_required/ignore_staging'            => false,
     // Which roles are allowed to view the site after logging in? Leave empty for all roles.
-    'frontend/authentication/allow_roles'               => [],
-    // Add in your own logic to determine if login is required. This will by pass all internal checks. 
-    // Returning `true` will grant permission and `false` will require them to login.
-    // Return value is cast to a boolean, so it's required to return a correct value.
+    // 'frontend/login_required/allow_roles'               => [],
+    // Add in your own logic to determine if this user is allowed to enter without a password.
+    // Returning `true` will grant permission, returning 'false' or any other value will be skipped.
     // For examples of using this, check the documentation.
     'frontend/login_required/custom'                    => false,
     'frontend/login_required/custom/allow_callback'     => function(){ return false; },
-    // Save yourself a lot of headache and disable for your development environment.
-    'frontend/authentication/ignore_development'        => true,
-    // You may also want to not require a password on your staging environment.
-    'frontend/authentication/ignore_staging'            => false,
-    */
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Render Render Library
 
     // Attribute control for the Image Render library.
     'render/image/div_src'                              => 'data-src',
-    'render/image/div_srcset'                           => 'data-srcset',
+    'render/image/div_srcset'                           => 'data-bgset',
     'render/image/default_size'                         => '1600',
     'render/image/default_draggable'                    => false,
     'render/image/default_pinnable'                     => true,
@@ -127,8 +134,7 @@ CONFIG()->set([
 
     // Add custom CSS to login page.
     // Path relative to `asset/` directory in _framework directory.
-    'dashboard/login/css'                                => '',
-
+    'login/css'                                         => '',
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : General Settings
@@ -144,7 +150,7 @@ CONFIG()->set([
     'dashboard/delete_lock'                             => [],
 
     // Remove some default user roles, we don't need so many.
-    'dashboard/remove_roles'                            => ['subscriber', 'contributor'],
+    'dashboard/remove_roles'                            => [],
 
     // Display 'Howdy' from the top bar?
     'dashboard/admin_bar/howdy'                         => false,
@@ -169,6 +175,7 @@ CONFIG()->set([
         'yoast_db_widget',                  // Yoast's SEO Plugin Widget
         'rg_forms_dashboard',               // Gravity Forms Plugin Widget
         'bbp-dashboard-right-now',          // bbPress Plugin Widget
+        'dashboard_site_health',            // Wordpress Site Health
     ],
     'dashboard/metabox/remove/side'         => [
         'dashboard_quick_press',            // Quick Press Widget

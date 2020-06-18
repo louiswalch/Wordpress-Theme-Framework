@@ -59,7 +59,7 @@ namespace {
 
         if (is_null($result)) {
 
-            if ($_SERVER['PHP_SELF'] === '/wp-login.php'){
+            if ($_SERVER['PHP_SELF'] === '/wp-login.php' || $GLOBALS['pagenow'] === 'wp-login.php'){
                 $result = 'login';
             } else if (is_admin()) {
                 $result = 'admin';

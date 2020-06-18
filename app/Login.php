@@ -13,9 +13,18 @@ class Login  {
             }, 99 );
         }
 
+        // Add ability to force login from visitors to view the website.
+        new FrontendAuthentication();
+
+        // Add custom HTML to the footer of login page.
+        if (CONFIG('dashboard/footer_credit')) {
+            add_action('login_footer', function() {
+                echo CONFIG('dashboard/footer_credit');
+            });
+        }
+
         // Misc login stuff.
         add_filter( 'login_headerurl', function() { return home_url(); });
-        // add_filter( 'login_headertitle', function() { return get_option( 'blogname' ); });
 
     }
 

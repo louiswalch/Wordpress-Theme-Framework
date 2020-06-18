@@ -4,9 +4,15 @@ namespace HelloFramework;
 
 class Config extends Singleton {
 
-    private $_data           = [];
-
+    private $_data          = [];
     private $_config_file   = '/config';
+
+    private $_cache_key     = 'Framework:Config';
+
+    // private $_migrations    = [
+    //     'dashboard/login/css'       =>  'login/css',
+    // ];
+
 
     // ------------------------------------------------------------
 
@@ -14,22 +20,67 @@ class Config extends Singleton {
 
         parent::__construct();
 
+        // First check if we have a cached version of the config.
+        if (CONFIG('config/cache') && ($cached = CACHE()->getArray($this->_cache_key))) {
+            $this->_data = $cached;
+            return true;      
+        }
+    
         // Load framework default configuration values.
         $this->_load(HELLO_DIR . $this->_config_file);
 
         // Load theme-specific configuration overrides.
-        $this->_load(FRAMEWORK_DIR . $this->_config_file);
+        $this->_load(FRAMEWORK_ROOT . $this->_config_file);
 
         // Load environment-specific configuration overrides if they exist.
-        $this->_load(FRAMEWORK_DIR . $this->_config_file .'_'. detect_environment());
+        $this->_load(FRAMEWORK_ROOT . $this->_config_file .'_'. detect_environment());
+
+        // Migrate any legacy configuration keys, this allows older themes to still work if the framework is upgraded.
+        // $this->migrate($this->_migrations);
+
+        // Cache the config to speed up subsequent requests.
+        if (CONFIG('config/cache')) {
+            CACHE()->life(CONFIG('config/cache/life'))->setArray($this->_cache_key, $this->_data);
+        }
 
     }
+
+    // ------------------------------------------------------------
+    // If configuration keys are ever changed, this can be used to allow old integrations to work after upgrading.
+
+    // public function migrate($param_1 = false, $param_2 = false, $delete = true) {
+
+    //     if (is_string($param_1) && is_string($param_2)) {
+    //         $this->_migrate($param_1, $param_2, $delete);
+    //     } else {
+    //         foreach ($param_1 as $old => $new) {
+    //             $this->_migrate($old, $new, $delete);
+    //         }
+    //     }
+
+    // }
+
+    // private function _migrate($old, $new, $delete) {
+
+    //     // Confirm if the legacy key is in the config.
+    //     if (!array_key_exists($old, $this->_data)) return false;
+
+    //     // Update current config key with value from legacy key.
+    //     $this->_data[$new] = $this->_data[$old];
+
+    //     // Should the legacy key be removed from config data?
+    //     if ($delete) unset($this->_data[$old]);
+
+    // } 
+
 
     // ------------------------------------------------------------
 
     private function _load($path) {
 
-        if (file_exists($path.'.php')) include $path.'.php';
+        if (file_exists($path.'.php')) { 
+            include $path.'.php';
+        }
 
     }
 

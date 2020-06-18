@@ -213,7 +213,7 @@ class Dashboard  {
 
     private function _toggleUserRoles() {
 
-        if (!count(CONFIG('dashboard/remove_roles'))) return;
+        if (!CONFIG('dashboard/remove_roles')) return;
 
         foreach (CONFIG('dashboard/remove_roles') as $role) {
             if (get_role($role)) remove_role($role);
@@ -280,7 +280,7 @@ class Dashboard  {
 
                 $id         = 'custom_' . $key;
                 $name       = $box[0];
-                $path       = FRAMEWORK_DIR .'/metabox/' . $box[1];
+                $path       = FRAMEWORK_ROOT .'/metabox/' . $box[1];
                 $context    = (!empty($box[2])) ? $box[2] : 'normal';
                 $priority   = (!empty($box[3])) ? $box[3] : 'default';
 

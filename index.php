@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Wordpress Theme Framework
  *
@@ -37,7 +38,8 @@ define('HELLO_DIR', __DIR__);
 define('HELLO_FILE', __FILE__);
 
 // Store reference to theme framework customizations
-define('FRAMEWORK_DIR', get_template_directory() . '/_framework');
+define('FRAMEWORK_DIR', '_framework');
+define('FRAMEWORK_ROOT', get_template_directory() . '/' . FRAMEWORK_DIR);
 
 // Confirm we're not running super old PHP.
 if (version_compare(PHP_VERSION, '5.3', '<')) {
@@ -53,9 +55,12 @@ if (version_compare(PHP_VERSION, '5.3', '<')) {
 
 // Framework classes, eventually add autoloading.
 require_once HELLO_DIR . '/app/Singleton.php';
+require_once HELLO_DIR . '/app/Cache.php';
+require_once HELLO_DIR . '/app/CacheInstance.php';
 require_once HELLO_DIR . '/app/Config.php';
 require_once HELLO_DIR . '/app/ConfigInstance.php';
 require_once HELLO_DIR . '/app/Framework.php';
+require_once HELLO_DIR . '/app/FrameworkEmail.php';
 require_once HELLO_DIR . '/app/Login.php';
 require_once HELLO_DIR . '/app/Dashboard.php';
 require_once HELLO_DIR . '/app/DashboardNavigationBar.php';
@@ -68,4 +73,6 @@ require_once HELLO_DIR . '/public/output.php';
 require_once HELLO_DIR . '/public/functionality.php';
 
 // Ok, let's get going!
-new Framework;
+add_action( 'after_setup_theme', function() {
+    new Framework;
+});

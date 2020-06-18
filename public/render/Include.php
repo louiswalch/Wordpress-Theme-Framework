@@ -78,35 +78,12 @@ class Includes extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Cache Helpers
 
-    protected function _cacheName() {
-
-        $key    = apply_filters('fragment_cache_prefix', $this->_cache_prefix) . $this->_cache_key;
-
-        if (!$this->_cache_global) {
-            $key .= '_page-'.get_the_ID();
-        }
-
-        if (is_user_logged_in()) {
-            $key .= '_loggedin';
-        }
-
-        return $key;
-
-    }
-
     protected function _cacheFetch() {
 
         // Mke sure caching is for the entire site as well as this request.
         if (!$this->_cache_on || !$this->_cache_this) return false;
 
-        $name    = $this->_cacheName();
-        $data   = get_transient($name);
-
-        if (!empty($data)) {
-            return $data;
-        } else {
-            return false;
-        }
+        return CACHE()->global($this->_cache_global)->get($this->_cache_key);
 
     }
 
@@ -115,12 +92,7 @@ class Includes extends HelloFramework\Singleton {
         // Mke sure caching is for the entire site as well as this request.
         if (!$this->_cache_on || !$this->_cache_this) return false;
 
-        // Make sure we have data to cache.
-        if (!strlen($data)) return false;
-
-        $name = $this->_cacheName();
-
-        set_transient($name, $data, $this->_cache_life);
+        return CACHE()->global($this->_cache_global)->life($this->_cache_life)->get($this->_cache_key, $data);
 
     }
 

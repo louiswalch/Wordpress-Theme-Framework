@@ -77,7 +77,7 @@ Each configuation rule has it's own require input type, refer to the default val
 
 ### Login Page Settings
 
-##### `dashboard/login/css`
+##### `login/css`
 > CSS file. Paths relative to `asset/` directory.
 >
 > **Default:** <i>empty</i>

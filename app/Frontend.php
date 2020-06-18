@@ -20,7 +20,7 @@ class Frontend {
         new FrontendAssets();
 
         // Add ability to force login from visitors to view the website.
-        // new FrontendAuthentication();
+        new FrontendAuthentication();
 
         // Add custom query params.
         $this->_addQueryParams();
