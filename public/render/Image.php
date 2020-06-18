@@ -80,26 +80,6 @@ class ImageRender extends HelloFramework\Singleton {
             $this->_defaults['_wrap_autosize']       = CONFIG('render/image/default_wrap_autosize');
             $this->_defaults['_wrap_class']          = CONFIG('render/image/default_wrap_class');
 
-            // $this->_defaults['_alpha']               = false;
-            // $this->_defaults['_attr']                = array();
-            // $this->_defaults['_classes']             = array();
-            // $this->_defaults['_draggable']           = CONFIG('render/image/default_draggable');
-            // $this->_defaults['_pinnable']            = CONFIG('render/image/default_pinnable');
-            // $this->_defaults['_low']                 = false;
-            // $this->_defaults['_low_size']            = '400';
-            // $this->_defaults['_size']                = CONFIG('render/image/default_size');
-            // $this->_defaults['_srcset']              = true;
-
-            // $this->_defaults['_showcaption']         = CONFIG('render/image/default_caption');
-            // $this->_defaults['_caption_location']    = CONFIG('render/image/default_caption_location');
-            // $this->_defaults['_caption_element']     = CONFIG('render/image/caption_element');
-            // $this->_defaults['_caption_class']       = CONFIG('render/image/caption_class');
-
-            // $this->_defaults['_wrap']                = CONFIG('render/image/default_wrap');
-            // $this->_defaults['_wrap_size']           = CONFIG('render/image/default_wrap_size');
-            // $this->_defaults['_wrap_autosize']       = CONFIG('render/image/default_wrap_autosize');
-            // $this->_defaults['_wrap_class']          = CONFIG('render/image/default_wrap_class');
-
         }
 
         foreach ($this->_defaults as $key => $value) {
