@@ -52,8 +52,8 @@ CONFIG()->set([
     // Remove specified default Wordpress image sizes.
     'image/remove_default'                              => ['medium', 'medium_large', 'large'],
 
-    // Max width for responsive srcset images.
-    'image/srcset_max'                                  => 2400,
+    // Max width for uploaded images.
+    'image/max/w'                                       => 2400,
     
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -103,16 +103,14 @@ CONFIG()->set([
     // Image Render Render Library
 
     // Attribute control for the Image Render library.
-    'render/image/div_src'                              => 'data-src',
-    'render/image/div_srcset'                           => 'data-bgset',
     'render/image/default_size'                         => '1600',
     'render/image/default_draggable'                    => false,
-    'render/image/default_pinnable'                     => true,
+    'render/image/default_pinnable'                     => false,
     'render/image/alt_fallback'                         => true,
 
     // Image caption control for the Image Render library.
     'render/image/default_caption'                      => true,
-    'render/image/default_caption_location'             => 'after-image', // Two options: after-image & last
+    'render/image/default_caption_location'             => 'inside', // Two options: inside or outside.
     'render/image/caption_element'                      => 'div',
     'render/image/caption_class'                        => 'caption',
 
@@ -120,13 +118,14 @@ CONFIG()->set([
     'render/image/default_wrap'                         => false,
     'render/image/default_wrap_size'                    => '',
     'render/image/default_wrap_autosize'                => false,
-    'render/image/default_wrap_class'                   => 'image_wrapper',
+    'render/image/default_wrap_class'                   => 'image-wrapper',
 
-    // Max width for responsive srcset images.
-    'render/image/srcset_sizes'                         => 'auto',
-
-    // Output customizations when using the `lazysizes` library.
-    'render/image/lazysizes'                            => false,
+    // Lazy loading controls for image output.
+    'render/image/default_lazy'                         => true,
+    'render/image/lazy_class'                           => 'lazyload lazyload-persist',
+    'render/image/lazy_img_srcset'                      => 'data-srcset',
+    'render/image/lazy_div_srcset'                      => 'data-bgset',
+    'render/image/lazy_sizes'                           => 'data-sizes',
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -

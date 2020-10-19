@@ -202,7 +202,9 @@ echo IMAGE()->src(get_post_thumbnail_id(), 800);
 
 ##### Image Render Library - Wrapper Functionality
 
-Placing your image embed inside another element (e.g wrapping it) most notably for working with responsive images. You can either enable this functionality across all IMAGE renders on your site through your framework `config.php` file, or you can set it up globally each time you call the library.
+Wrapping your image embed with another element is handy when working with responsive images as well as allow for a placeholder while the image is being loaded. Default behavior can be defined in your site's framework `config.php` file, or pass custom parameters in when calling making a call to the library.
+
+- [Image Render Library Config Options ↗](configuration_options)
 
 The framework configuration settings appropriate to Image Render wrapping are (along with their default values):
 ```php
@@ -246,53 +248,41 @@ echo IMAGE()->wrap(true)->autosize(true)->div(get_field('image'));
 
 ##### Image Render Library - Working with captions.
 
+All images in Wordpress have the capability to store a caption, this information can then be displayed throught the Image Render Library. Default behavior can be defined in your site's framework `config.php` file, or pass custom parameters in when calling making a call to the library.
 
-All images in Wordpress have the capability to store a caption. This information can also be displayed easily when you are calling the Image Render Library. You can either enable this functionality across all IMAGE renders on your site through your framework `config.php` file, or you can set it up globally each time you call the library.
+###### Caption Configuration:
 
-The framework configuration settings appropriate to Image Render wrapping are (along with their default values):
 ```php
-// Enable or disable including the image caption all renders.
+// Automatically display image caption by default whenever rendering an image.
+CONFIG('render/image/default_caption', true);
+
+// Control where the caption is displayed when an image is being wrapped.
+// 'inside' : inside the wrapper, following the image
+// 'outside' : outside the wrapper
+CONFIG('render/image/default_caption_location', 'inside');
+
+// Enable or disable default behavior for image captions.
 CONFIG()->set('render/image/default_caption' , true);
-
-// Control where the caption is included. This is most important for when you are using the wrap functionality.
-// Possible values are 'after-image' or 'end'. Examples will be provided below.
-CONFIG()->set('render/image/default_caption_location', 'after-image');
-
-// Included you also have the ability to change the caption element to something other then a DIV and also change it's class.
-CONFIG()->set('render/image/caption_element' , 'div');
-CONFIG()->set('render/image/caption_class' , 'caption');
 ```
+- [View All Image Library Config Options ↗](configuration_options.md#image-settings)
 
-In most cases you will be interfacing with this by adding parameters to your call to the Image Render library. 
+
+###### Caption Rendering Examples:
+
 ```php
-// Enable caption display for single render (e.g. if it's disabled by default) Pretty simple.
-// <img src="foo.png" ... /><div class="caption">This is my caption.</div>
+// Output simple IMG with caption.
+// <img src="...." /><div class="caption">This is my caption.</div>
 echo IMAGE()->caption(true)->img(get_field('image'));
 
-// Enable caption display and change the display location from default 'after-image' to 'last'. I'm also enabling the 'wrap' functionality here and outputting as a div to get a better idea of how this could be useful.
-// <div class="image_wrapper">
-//      <div style="background-image: url(foo.png);"></div>
-// </div>
-// <div class="caption">This is my caption.</div>
-echo IMAGE()->caption('last')->wrap(true)->div(get_field('image'));
-
-// For reference, here is what that markup would look like with default caption positioning.
-// <div class="image_wrapper">
-//      <div style="background-image: url(foo.png);"></div>
-//      <div class="caption">This is my caption.</div>
-// </div>
-echo IMAGE()->caption(true)->wrap(true)->div(get_field('image'));
+// Output a wrapper IMG with caption and assign location.
+// <div class="image-wrapper"><img src="...." /><div class="caption">This is my caption.</div></div>
+echo IMAGE()->wrap(true)->caption('inside')->img(get_field('image'));
 ```
 
-And that's not it! If you'd like more control over where the caption for your image appears, you can fetch it yourself. This helper function returns an image caption (either formatted or not) for you do to as you like.
-```php
-// Fetch the last image's caption, as formatted HTML. The system remembers which image was last rendered so no parameters required.
-// '<div class="caption">This is my caption.</div>'
-$caption = IMAGE()->get_caption();
+If you'd like more control over where the caption for your image appears, you can fetch it yourself. This helper function returns an image caption (either formatted or not) for you do to as you like.
 
-// Fetch a specific image's caption as plain text.
-// 'This is some other caption.'
-$caption = IMAGE()->get_caption(1244, false);
+```php
+$caption = IMAGE()->get_caption(get_field('image'));
 ```
 
 <br/>
