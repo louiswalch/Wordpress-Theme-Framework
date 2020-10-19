@@ -146,7 +146,6 @@ class Modules extends Includes {
 
     }
 
-
     // ------------------------------------------------------------
     // Public setters.
     // Allow for updating of options when generating an image. Meant to be used as a chained method.
