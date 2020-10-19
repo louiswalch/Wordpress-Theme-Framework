@@ -16,7 +16,8 @@ https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/librari
 
 class ImageRender extends HelloFramework\Singleton {
 
-    private $_alphadata = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    private $_alphadata             = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    private $_strip_caption_tags    = true;
 
     // Keep track of the last image we rendered.
     private $_last_id;
@@ -24,15 +25,15 @@ class ImageRender extends HelloFramework\Singleton {
 
     // All of these get reset after each request because they can be set for each embed,
     private $_defaults = [];
-    private $_alpha;
     private $_attr;
     private $_classes;
     private $_pinnable;
     private $_showcaption;
-    private $_low;
-    private $_low_size;
+    private $_lazy;
+    // private $_low;
+    // private $_low_size;
     private $_size;
-    private $_srcset;
+    // private $_srcset;
     private $_wrap;
     private $_wrap_class;
     private $_wrap_size;
@@ -60,16 +61,17 @@ class ImageRender extends HelloFramework\Singleton {
 
         if ($first) {
 
-            $this->_defaults['_alpha']               = false;
             $this->_defaults['_attr']                = array();
             $this->_defaults['_classes']             = array();
             $this->_defaults['_draggable']           = CONFIG('render/image/default_draggable');
             $this->_defaults['_pinnable']            = CONFIG('render/image/default_pinnable');
-            $this->_defaults['_low']                 = false;
-            $this->_defaults['_low_size']            = '400';
+            // $this->_defaults['_low']                 = false;
+            // $this->_defaults['_low_size']            = '400';
             $this->_defaults['_size']                = CONFIG('render/image/default_size');
-            $this->_defaults['_srcset']              = true;
+            // $this->_defaults['_srcset']              = true;
 
+            $this->_defaults['_lazy']                = CONFIG('render/image/default_lazy');
+            
             $this->_defaults['_showcaption']         = CONFIG('render/image/default_caption');
             $this->_defaults['_caption_location']    = CONFIG('render/image/default_caption_location');
             $this->_defaults['_caption_element']     = CONFIG('render/image/caption_element');
@@ -141,6 +143,10 @@ class ImageRender extends HelloFramework\Singleton {
 
         $alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
 
+        if ($this->_strip_caption_tags) {
+            $alt = strip_tags($alt);
+        }
+
         if (strlen($alt)) {
             return character_limiter($alt, 95, '...');
         }
@@ -153,85 +159,60 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
-    private function _getImageData($image, $strip_tags=true) {
+    private function _getImageData($image, $mode='img') {
 
-        $image_id       = $this->_getImageId($image);
+        $attributes                     = array();
 
-        $image_caption  = $this->_getImageCaption($image_id);
+        $image_id                       = $this->_getImageId($image);
+        $image_dims                     = wp_get_attachment_image_src( $this->_getImageId($image), 'full');
 
-        $image_alt      = $this->_getImageAlt($image_id);
+        $image_caption                  = $this->_getImageCaption($image_id);
 
-        $image_src      = wp_get_attachment_image_url($image_id, $this->_size);
-        $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
+        $image_src                      = ($this->_lazy) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
+        $image_srcset                   = wp_get_attachment_image_srcset($image_id, $this->_size);
 
-        $image_srcset   = $this->_srcset ? wp_get_attachment_image_srcset( $image_id, $this->_size ) : '';
-        $image_sizes    = $this->_srcset ? CONFIG('render/image/srcset_sizes') : '';
+        // ---
 
-        $image_align    =  (class_exists('acf')) ? get_field('crop_alignment', $image_id) : '';
+        $attribute_src                  = ($this->_lazy && $mode == 'div') ? false : 'src';
+        $attribute_srcset               = ($this->_lazy) ? CONFIG('render/image/lazy_'. $mode .'_srcset') : 'srcset';
+        $attribute_sizes                = ($this->_lazy) ? CONFIG('render/image/lazy_sizes') : 'sizes';
 
-        $attributes     = array(
-            'alt'       => $strip_tags ? strip_tags($image_alt) : $image_alt,
-            'caption'   => $strip_tags ? strip_tags($image_caption) : $image_caption,
-            'class'     => $image_align .' '. implode(' ', $this->_classes),
-            'src'       => $image_src,
-            'src_low'   => $image_srclow,
-            'srcset'    => $image_srcset,
-            'sizes'     => $image_sizes
+        if ($attribute_src)             $attributes[$attribute_src]     = $image_src;
+        if ($attribute_srcset)          $attributes[$attribute_srcset]  = $image_srcset;
+        if ($attribute_sizes)           $attributes[$attribute_sizes]   = 'auto';
+
+        // ---
+
+        if ($this->_lazy) {
+            $this->classes(CONFIG('render/image/lazy_class'));
+        }
+        if (class_exists('acf')) {
+            $this->classes(get_field('crop_alignment', $image_id));
+        }
+
+        // ---
+
+        if ($mode == 'img') {
+            $image_alt                 = $this->_getImageAlt($image_id);
+            $attributes['alt']         = $image_alt; 
+        }
+
+        // ---
+
+        // $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
+        // $attributes['src_low']      = $image_srclow;
+
+        $attributes['class']            = implode(' ', $this->_classes); 
+
+        $attributes['meta']             = array(
+            'id'                        => $image_id,
+            'width'                     => $image_dims[1],
+            'height'                    => $image_dims[2],
+            'caption'                   => $image_caption,
             );
 
-        if (CONFIG('render/image/lazysizes')) {
-            $attributes['src']           = $this->_alphadata;
-            $attributes['srcset']        = $this->_alphadata;
-            $attributes['data-src']      = $image_src;
-            $attributes['data-srcset']   = $image_srcset;
-            $attributes['data-sizes']    = 'auto';
-            unset($attributes['sizes']);
-        }
-        
         return $attributes;
 
-    }
-
-    private function _getImageAutosizePaddingRatio($image) {
-
-        if (!$this->_wrap_autosize) return '';
-
-        $props  = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
-        $h      = $props[2];
-        $w      = $props[1];
-        
-        return 'padding-bottom:' . ($h/$w*100) . '%;';
-
-    }
-
-    private function _getOrSize($image) {
-
-        $props  = wp_get_attachment_image_src( $this->_getImageId($image), 'full' );
-        $h      = $props[2];
-        $w      = $props[1];
-
-        return  [$w,$h];
-
-    }
-
-    // ------------------------------------------------------------
-    // Generate Pinterest image. Used when drawing as a background image.
-
-    private function _getPinterestForDiv($image=false, $alt='') {    
-
-        // if ($this->_pinnable) {
-
-        //     $image_id       = $this->_getImageId($image);
-        //     $image_src      = wp_get_attachment_image_url($image_id, 1200);
-
-        //     if ($image_src) {
-        //         return '<img class="pinterest" src="'. $image_src .'" alt="'. $alt .'" style="display: none;" />';                    
-        //     }
-
-        // }
-
-        return '';
-        
     }
 
 
@@ -239,52 +220,46 @@ class ImageRender extends HelloFramework\Singleton {
     // Build HTML attributes from an array.
     // https://stackoverflow.com/a/34063755/107763       
 
-    private function _getAttributes($array=array(),$forImg=true) {
-
-        // caption is not a valid HTML5 Attribute for img/div (WC3 Standards)
-        unset( $array[ 'caption' ] ); 
-        if ( !$forImg ){
-             // sizes is not a valid HTML5 Attribute for DIV (WC3 Standards)
-            unset( $array[ 'sizes' ] );
-        }
-
+    private function _generateAttributes($array=array()) {
         $array      = array_merge( $array, $this->_attr );
-        $assembled  = implode(' ', array_map(
-            function ($k, $v) { return $k .'="'.  htmlspecialchars($v) .'"'; },
-            array_keys($array), $array)
-        );
-
-        return $assembled;
+        return format_attributes($array, ['meta']);
     }
 
 
     // ------------------------------------------------------------
     // Sometimes we wrap the output in another div.
 
-    private function _getWrap($image_embed, $image, $image_data) {
+    private function _generateWrap($image_embed, $image, $image_data) {
 
         if ($this->_wrap) {
 
-            $wrapper_attrubutes = [
-                'class' => $this->_wrap_class .' '. $this->_wrap_size,
-                'style' => $this->_getImageAutosizePaddingRatio($image)
+            $wrapper_attributes = [
+                'class'         => $this->_wrap_class .' '. $this->_wrap_size,
+                'data-width'    => $image_data['meta']['width'],
+                'data-height'   => $image_data['meta']['height'],
             ];
 
-            $sizes      = $this->_getOrSize($image);
+            // 
+            if ($this->_wrap_autosize) {
+                $wrapper_attributes['style'] = $this->_generateWrapAutosizeDimensions($image_data);
+            }
+              
+            // Wrap the image in our wrapper element.
+            $image_embed = '<div ' . $this->_generateAttributes($wrapper_attributes) . '>' . $image_embed;
 
             // If the caption is set to appear right after the image, add it to the HTML before we wrap it.
-            $image_embed .= $this->_getCaptionElement($image_data, 'after-image');
+            $image_embed .= $this->_generateCaptionElement($image_data, 'inside');
 
-            // Wrap the image in our wrapper element.
-            $image_embed = '<div ' . $this->_getAttributes($wrapper_attrubutes) . ' data-width="' . $sizes[0] . '" data-height="' . $sizes[1] . '" >' . $image_embed .'</div>';
+            // Close the wrapper element.
+            $image_embed .= '</div>';
 
-            // If the caption is set to appear after the wrappe, now we add it.
-            $image_embed .= $this->_getCaptionElement($image_data, 'last');
+            // If the caption is set to appear after the wrapper, now we add it.
+            $image_embed .= $this->_generateCaptionElement($image_data, 'outside');
 
         } else {
 
             // If we aren't wrapping the image, still need to add the caption,
-            $image_embed .= $this->_getCaptionElement($image_data, '*');
+            $image_embed .= $this->_generateCaptionElement($image_data, '*');
 
         }
 
@@ -292,26 +267,39 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
+    private function _generateWrapAutosizeDimensions($image_data) {
+
+        $w      = $image_data['meta']['width'];
+        $h      = $image_data['meta']['height'];        
+        return 'padding-bottom:' . ($h/$w*100) . '%;';
+
+    }
+
 
     // ------------------------------------------------------------
     // Caption output helper
 
-    private function _getCaptionElement($image_data, $location = null) {
+    private function _generateCaptionElement($image_data, $location = null) {
 
-        if (empty($image_data['caption']) || !$this->_showcaption) return '';
+        if (empty($image_data['meta']['caption']) || !$this->_showcaption) return '';
 
         if ($location == '*' || $this->_caption_location != $location) return '';
 
-        return $this->_formatCaption($image_data['caption']);
+        return $this->_formatCaptionOutput($image_data['meta']['caption']);
 
     }
 
-    private function _formatCaption($caption) {
+    private function _formatCaptionOutput($caption) {
         return '<'. $this->_caption_element .' class="'. $this->_caption_class .'">' . $caption . '</'. $this->_caption_element .'>';
     }
 
     private function _getImageCaption($image_id, $format = true) {
-        return wp_get_attachment_caption($image_id);
+        if (!$this->_showcaption) return '';
+        if ($this->_strip_caption_tags) {
+            return strip_tags(wp_get_attachment_caption($image_id));
+        } else {
+            return wp_get_attachment_caption($image_id);
+        }
     }
 
     public function get_caption($image=false, $format = false) {
@@ -320,7 +308,7 @@ class ImageRender extends HelloFramework\Singleton {
         $caption    = $this->_getImageCaption($image_id);
     
         if ($format) {
-            return $this->_formatCaption($caption);
+            return $this->_formatCaptionOutput($caption);
         } else {
             return $caption;
         }
@@ -328,34 +316,61 @@ class ImageRender extends HelloFramework\Singleton {
     }
 
     // ------------------------------------------------------------
+
+    public function get_orientation($image=false) {
+
+        $image_id   = $this->_getImageId($image) ?: $this->_last_id;
+        $attr       = wp_get_attachment_image_src($image_id);
+
+        $width      = $attr[1];
+        $height     = $attr[2];
+
+        if ($width == $height) {
+            return 'square';
+        } else if ($height > $width) {
+            return 'vertical';
+        } else {
+            return 'horizontal';
+        }
+
+    }
+
+
+    // ------------------------------------------------------------
     // Allow for updating of options when generating an image. Meant to be used as a chained method.
 
-    public function low($incoming=true) {
-        if (isset($incoming)) $this->_low = $incoming;
-        return $this;
-    }
-    public function srcset($incoming=true) {
-        if (isset($incoming)) $this->_srcset = $incoming;
-        return $this;
-    }
-    public function wrap($one=false) {
+    // public function low($incoming=true) {
+    //     if (isset($incoming)) $this->_low = $incoming;
+    //     return $this;
+    // }
+    // public function srcset($incoming=true) {
+    //     if (isset($incoming)) $this->_srcset = $incoming;
+    //     return $this;
+    // }
+    public function wrap($one=true) {
         // - Passing in a boolean will allow you to enable/disable the wrap feature.
         // - Passing in a string will treat that value as a class name denoting size and add it to the wrap element.
         // - There is a special cause where passing in 'autosize' will enable the autosize calculation.
         if (is_string($one)) {
-            $this->_wrap = true;
-            $this->_wrap_size = $one;
+            $this->_wrap        = true;
+            $this->_wrap_size   = $one;
         } else if (is_bool($one)) {
-            $this->_wrap = $one;
+            $this->_wrap        = $one;
         }
-        if (in_array($this->_wrap_size, ['autosize', 'auto'])) {
-            $this->_wrap_autosize = true;
+        if (strpos($this->_wrap_size, 'auto')) {
+            // TEMP!!!
+            $this->autosize(true);
         }
         return $this;
 
     }
     public function autosize($incoming=null) {
-        if (!is_null($incoming)) $this->_wrap_autosize = $incoming;
+        if ($incoming === true) {
+            $this->_wrap_autosize       = $incoming;
+            $this->_wrap                = true;
+        } else if (!is_null($incoming)) {
+            $this->_wrap_autosize       = $incoming;
+        }
         return $this;
     }
     public function caption($one=null) {
@@ -368,29 +383,25 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;
     }
     public function classes($incoming=false) {
-        if ($incoming){
-            if ( strrpos($incoming, 'lazyload') !== false ){
-                $incoming .= ' lazyload-persist';
-            }
-        }
-        if ($incoming) $this->_classes[] = $incoming;
+        // if ($incoming){
+        //     if ( strrpos($incoming, 'lazyload') !== false ){
+        //         $incoming .= ' lazyload-persist';
+        //     }
+        // }
+        if ($incoming && strlen($incoming)) $this->_classes[] = $incoming;
         return $this;
     }
-    public function lazy(){
-        $this->_alpha               = true;
-        $this->_classes[]           = 'lazyload lazyload-persist';
-        $this->_attr['data-sizes']  = 'auto';
+    public function lazy($incoming=false){
+        if (isset($incoming)) $this->_lazy = $incoming;
+        // $this->_classes[]           = 'lazyload lazyload-persist';
+        // $this->_attr['data-sizes']  = 'auto';
         return $this;            
     }
     public function size($incoming=false) {
         if ($incoming) {
             $this->_size = $incoming;
-            // CONFIG()->set('image/srcset_max', (int) $incoming);
+            // CONFIG()->set('image/max/w', (int) $incoming);
         }
-        return $this;
-    }
-    public function alpha($incoming=false) {
-        if (isset($incoming)) $this->_alpha = $incoming;
         return $this;
     }
     public function attributes($incoming=false) {
@@ -413,34 +424,35 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Image Generator: Return a DIV element with this image as it's data-src for lazy loading. 
 
-    public function div($image=false, $size=false) {
+    public function div($image=false, $size=false, $inside='') {
 
         $this->size($size);
 
-        $data           = $this->_getImageData($image);
+        $data           = $this->_getImageData($image, 'div');
 
-        $pinterest      = $this->_getPinterestForDiv($image, $data['caption']);
+        // if (CONFIG('render/image/lazysizes')) {
+        //     $data[CONFIG('render/image/div_src')]       = $data['data-src'];
+        //     $data[CONFIG('render/image/div_srcset')]    = $data['data-srcset'];
+        // } else {
+        //     $data[CONFIG('render/image/div_src')]       = $data['src'];
+        //     $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
+        // }
 
-        if (CONFIG('render/image/lazysizes')) {
-            $data[CONFIG('render/image/div_src')]       = $data['data-src'];
-            $data[CONFIG('render/image/div_srcset')]    = $data['data-srcset'];
-        } else {
-            $data[CONFIG('render/image/div_src')]       = $data['src'];
-            $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
-        }
+        // if ($this->_low) {
+        //     $data['style'] = 'background-image: url(' . $data['src_low'] . ');';
+        // }
 
-        if ($this->_low) {
-            $data['style'] = 'background-image: url(' . $data['src_low'] . ');';
-        }
+        // if (isset($data['alt'])) unset($data['alt']);
 
-        unset($data['alt']);
-        // unset($data['caption']);
-        unset($data['src_low']);
-        unset($data['src']);
-        unset($data['srcset']);
 
-        $attributes     = $this->_getAttributes($data, false);
-        $output         = $this->_getWrap('<div '.$attributes.'>'. $pinterest .'</div>', $image, $data);
+        // unset($data['alt']);
+        // // unset($data['caption']);
+        // // unset($data['src_low']);
+        // unset($data['src']);
+        // unset($data['srcset']);
+
+        $attributes     = $this->_generateAttributes($data);
+        $output         = $this->_generateWrap('<div '.$attributes.'>'. $inside .'</div>', $image, $data);
 
         // Reset all the request settings.
         $this->_reset();
@@ -456,31 +468,20 @@ class ImageRender extends HelloFramework\Singleton {
 
         $this->size($size);
 
-        $data                   = $this->_getImageData($image);
+        $data                   = $this->_getImageData($image, 'img');
 
-        if ($this->_alpha) {
-            $data['data-src']   = $data['src'];
-            $data['src']        = $this->_alphadata;
-        }
+        if (!$this->_pinnable)      $data['data-pin-nopin'] = 'true';
+        if (!$this->_draggable)     $data['draggable']      = 'false';
 
-        if (!$this->_pinnable) {
-            $data['data-pin-nopin'] = 'true';
-        }
+        // if ($this->_low)        $data['src'] = $data['src_low'];
 
-        if (!$this->_draggable) {
-            $data['draggable'] = 'false';
-        }
+        // unset($data['src_low']);
+        // if (isset($data['sizes']))  unset($data['sizes']);
 
-        if ($this->_low) {
-            $data['src'] = $data['src_low'];
-        }
-
-        unset($data['src_low']);
-
-        $attributes             = $this->_getAttributes($data);
+        $attributes             = $this->_generateAttributes($data);
         $output                 = '<img '. $attributes .' />';
 
-        $output                 = $this->_getWrap($output, $image, $data);
+        $output                 = $this->_generateWrap($output, $image, $data);
 
         // Reset all the request settings.
         $this->_reset();
