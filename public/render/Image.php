@@ -357,7 +357,7 @@ class ImageRender extends HelloFramework\Singleton {
         } else if (is_bool($one)) {
             $this->_wrap        = $one;
         }
-        if (strpos($this->_wrap_size, 'auto')) {
+        if (strpos($this->_wrap_size, 'autosize')) {
             // TEMP!!!
             $this->autosize(true);
         }
@@ -368,6 +368,9 @@ class ImageRender extends HelloFramework\Singleton {
         if ($incoming === true) {
             $this->_wrap_autosize       = $incoming;
             $this->_wrap                = true;
+            if (!strpos($this->_wrap_size, 'autosize')) {
+                $this->_wrap_size       .= ' autosize';
+            }
         } else if (!is_null($incoming)) {
             $this->_wrap_autosize       = $incoming;
         }
