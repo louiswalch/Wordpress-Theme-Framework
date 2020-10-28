@@ -118,7 +118,7 @@ CONFIG()->set([
     'render/image/default_wrap'                         => false,
     'render/image/default_wrap_size'                    => '',
     'render/image/default_wrap_autosize'                => false,
-    'render/image/default_wrap_class'                   => 'image-wrapper',
+    'render/image/default_wrap_class'                   => 'img-wrapper',
 
     // Lazy loading controls for image output.
     'render/image/default_lazy'                         => true,
