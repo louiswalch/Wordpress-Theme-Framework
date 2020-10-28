@@ -357,7 +357,7 @@ class ImageRender extends HelloFramework\Singleton {
         } else if (is_bool($one)) {
             $this->_wrap        = $one;
         }
-        if (strpos($this->_wrap_size, 'autosize')) {
+        if (strpos($this->_wrap_size, 'autosize') !== false) {
             // TEMP!!!
             $this->autosize(true);
         }
