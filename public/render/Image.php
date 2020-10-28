@@ -166,7 +166,7 @@ class ImageRender extends HelloFramework\Singleton {
         $image_id                       = $this->_getImageId($image);
         $image_dims                     = wp_get_attachment_image_src( $this->_getImageId($image), 'full');
 
-        $image_caption                  = $this->_getImageCaption($image_id);
+        $image_caption                  = ($this->_showcaption) ? $this->_getImageCaption($image_id) : '';
 
         $image_src                      = ($this->_lazy) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
         $image_srcset                   = wp_get_attachment_image_srcset($image_id, $this->_size);
@@ -294,7 +294,6 @@ class ImageRender extends HelloFramework\Singleton {
     }
 
     private function _getImageCaption($image_id, $format = true) {
-        if (!$this->_showcaption) return '';
         if ($this->_strip_caption_tags) {
             return strip_tags(wp_get_attachment_caption($image_id));
         } else {
