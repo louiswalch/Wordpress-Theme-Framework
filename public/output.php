@@ -206,7 +206,7 @@ namespace {
 
         $tag    = 'pre';
         $title  = ($title ? '<strong>'.$title.' =</strong> ' : '');
-        $start  = '<'.$tag.' style="text-align: left; font-size: 10px; background-color: white; color: black;">' . $title;
+        $start  = '<'.$tag.' style="text-align: left; font-size: 10px; line-height: 12px; font-family: fixed; font-family: Courier, fixed; background-color: white; color: black;">' . $title;
         $end    = '</'.$tag.'>';
         $value  = '';
 

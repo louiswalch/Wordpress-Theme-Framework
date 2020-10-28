@@ -165,8 +165,8 @@ class Includes extends HelloFramework\Singleton {
 
         } else {
 
-            if (WP_DEBUG) {
-                $output = '<section style="padding:10px; border: 1px solid #ff00ff; color: #ff00ff;">Include not found ('  .$this->_key.  '/ '.$path. ' )</section>';
+            if (WP_DEBUG || detect_environment('development')) {
+                $output = '<section style="padding:10px; border: 1px solid #ff00ff; color: #ff00ff; text-align: left; font-size: 10px; line-height: 12px; font-family: Courier, fixed;">Include not found ('  .$this->_key.  ' | '.$path. ' )</section>';
             } else {
                 $output = '<!--  ERROR: Include not found ('  .$this->_key. ') -->';
             }
