@@ -318,13 +318,8 @@ class ImageRender extends HelloFramework\Singleton {
 
     public function get_orientation($image=false) {
 
-pr($image, '$image');
-
         $image_id   = $this->_getImageId($image) ?: $this->_last_id;
         $attr       = wp_get_attachment_image_src($image_id, 'full');
-
-pr($image_id, '$image_id');
-pr($attr, '$attr');
 
         $width      = $attr[1];
         $height     = $attr[2];
