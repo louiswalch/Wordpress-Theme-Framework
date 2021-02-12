@@ -24,7 +24,8 @@ class ImageRender extends HelloFramework\Singleton {
 
 
     // All of these get reset after each request because they can be set for each embed,
-    private $_defaults = [];
+    private $_defaults  = [];
+    private $_debug     = false;
     private $_attr;
     private $_classes;
     private $_pinnable;
@@ -61,6 +62,7 @@ class ImageRender extends HelloFramework\Singleton {
 
         if ($first) {
 
+            $this->_defaults['_debug']               = false;
             $this->_defaults['_attr']                = array();
             $this->_defaults['_classes']             = array();
             $this->_defaults['_draggable']           = CONFIG('render/image/default_draggable');
@@ -211,6 +213,8 @@ class ImageRender extends HelloFramework\Singleton {
             'caption'                   => $image_caption,
             );
 
+        if ($this->_debug) pr($attributes, 'attributes');
+
         return $attributes;
 
     }
@@ -241,7 +245,7 @@ class ImageRender extends HelloFramework\Singleton {
 
             // 
             if ($this->_wrap_autosize) {
-                $wrapper_attributes['style'] = $this->_generateWrapAutosizeDimensions($image_data);
+                $wrapper_attributes['style'] = $this->_generateWrapAutosizeDimensions($image_data['meta']);
             }
               
             // Wrap the image in our wrapper element.
@@ -267,13 +271,27 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
-    private function _generateWrapAutosizeDimensions($image_data) {
+    private function _generateWrapAutosizeDimensions($image_meta) {
 
-        $w      = $image_data['meta']['width'];
-        $h      = $image_data['meta']['height'];        
+        $w      = $image_meta['width'];
+        $h      = $image_meta['height'];        
         return 'padding-bottom:' . ($h/$w*100) . '%;';
 
     }
+
+    public function get_autosize($image=false) {
+
+        $image_id   = $this->_getImageId($image) ?: $this->_last_id;
+        $image_dims = wp_get_attachment_image_src( $image_id, 'full');
+
+        return $this->_generateWrapAutosizeDimensions([
+            'width'     => $image_dims[1],
+            'height'    => $image_dims[2],
+        ]);
+
+    }
+
+
 
 
     // ------------------------------------------------------------
@@ -420,6 +438,10 @@ class ImageRender extends HelloFramework\Singleton {
     public function pinnable($incoming=false) {
         if (isset($incoming) && is_bool($incoming)) $this->_pinnable = $incoming;
         return $this;
+    }
+    public function debug($incoming=false){
+        if (isset($incoming)) $this->_debug = $incoming;
+        return $this;            
     }
 
 
