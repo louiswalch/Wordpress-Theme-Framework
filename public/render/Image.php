@@ -291,6 +291,17 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
+    public function get_dimensions($image=false) {
+
+        $image_id   = $this->_getImageId($image) ?: $this->_last_id;
+        $image_dims = wp_get_attachment_image_src( $image_id, 'full');
+
+        return [
+            'width'     => $image_dims[1],
+            'height'    => $image_dims[2],
+        ];
+
+    }
 
 
 
