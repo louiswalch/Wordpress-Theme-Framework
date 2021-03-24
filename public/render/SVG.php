@@ -17,7 +17,7 @@ https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/librari
 
 class SVG extends HelloFramework\Singleton {
 
-    protected $_dir    = '/img/';
+    protected $_dir    = 'img/';
 
     // ------------------------------------------------------------
     // Build HTML attributes from an array.
@@ -36,7 +36,7 @@ class SVG extends HelloFramework\Singleton {
 
     private function _buildServerPath($key) {
 
-        $key = '/assets' . $this->_dir . $key;
+        $key = '/assets/' . $this->_dir . $key;
 
         if (!strpos('.svg', $key)) {
             $key .= '.svg';
