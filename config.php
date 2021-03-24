@@ -129,6 +129,10 @@ CONFIG()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // SVG Render Render Library
+    'render/svg/svg_inject'                             => false,
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Login Settings
 
     // Add custom CSS to login page.
