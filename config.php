@@ -100,6 +100,13 @@ CONFIG()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Frontend Edit Link
+    // Display a link to edit current page for logged in users. CSS styling in your theme reccommended.
+    'frontend/edit_link'                                => false,
+    'frontend/edit_link/text'                           => 'Edit',
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Render Render Library
 
     // Attribute control for the Image Render library.

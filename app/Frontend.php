@@ -33,6 +33,9 @@ class Frontend {
         // Add the current environment as class on BODY.
         $this->_addEnvironmentClass();
 
+        // Add quick-link to edit page.
+        $this->_addEditLink();
+
         // THIRD-PARTY - Clean up the Yoast SEO fields added to user profile
         // add_filter( 'user_contactmethods', 'clean_user_contactmethods', 10, 1 );
 
@@ -190,6 +193,17 @@ class Frontend {
         add_filter('body_class', function($classes) {
             $classes[] = 'is-' . detect_environment();
             return $classes; 
+        });
+
+    }
+
+
+    private function _addEditLink() {
+
+        if (!CONFIG('frontend/edit_link') || !is_user_logged_in()) return;
+
+        add_action('wp_footer', function() {
+            echo edit_post_link(CONFIG('frontend/edit_link/text'), '<div class="wordpress-edit-button">', '</div>', null, 'no-barba' );
         });
 
     }
