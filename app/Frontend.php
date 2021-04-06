@@ -200,7 +200,7 @@ class Frontend {
 
     private function _addEditLink() {
 
-        if (!CONFIG('frontend/edit_link') || !is_user_logged_in()) return;
+        if (!CONFIG('frontend/edit_link') || !current_user_can('edit_pages')) return;
 
         add_action('wp_footer', function() {
             echo edit_post_link(CONFIG('frontend/edit_link/text'), '<div class="wordpress-edit-button">', '</div>', null, 'no-barba' );
