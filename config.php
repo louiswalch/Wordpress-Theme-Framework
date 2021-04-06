@@ -239,9 +239,10 @@ CONFIG()->set([
 
     // Send 'Password Change' notifications?
     'email/send/change_password'                        => false,
-
-    // // Send 'Notice of Password Change' email?
-    // 'email/send/new_user'                            => false,
+    // Send 'Email Change' notifications?
+    'email/send/change_email'                           => false,
+    // Send 'New User' email?
+    'email/send/new_user'                               => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -

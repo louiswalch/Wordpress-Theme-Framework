@@ -18,12 +18,15 @@ class FrameworkEmail {
         });
 
         // Disable 'Notice of Password Change' email.
-        if (!CONFIG('email/change_password')) {
+        if (!CONFIG('email/send/change_password')) {
+            add_filter('send_password_change_email', '__return_false' );
+        }
+        // Disable 'Notice of Email Change' email.
+        if (!CONFIG('email/send/change_email')) {
             add_filter('send_email_change_email', '__return_false' );
         }
-
         // Disable 'New User' notification sent to Admin.
-        if (!CONFIG('email/new_user')) {    
+        if (!CONFIG('email/send/new_user')) {    
             add_filter('wp_new_user_notification_email_admin', '__return_false');
         }
 
