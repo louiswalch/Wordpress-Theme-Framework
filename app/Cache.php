@@ -109,7 +109,7 @@ class Cache extends Singleton {
     protected function _reset() {
 
         $this->_life    = DAY_IN_SECONDS;
-        $this->_prefix  = 'Framework' . $this->_prefix_sep;
+        $this->_prefix  = 'FW' . $this->_prefix_sep;
         $this->_global  = true;
 
     }
@@ -119,10 +119,10 @@ class Cache extends Singleton {
         $name    = apply_filters('fragment_cache_prefix', $this->_prefix) . $name;
 
         if (!$this->_global) {
-            $name .= '['.get_the_ID().']';
+            $name .= '['.get_queried_object_id().']';
         }
 
-        if (\is_user_logged_in()) {
+        if (is_user_logged_in()) {
             $name .= '[loggedin]';
         }
 
