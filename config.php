@@ -121,6 +121,12 @@ CONFIG()->set([
     'render/image/caption_element'                      => 'div',
     'render/image/caption_class'                        => 'caption',
 
+    // Image description control for the Image Render library.
+    'render/image/default_description'                  => false,
+    'render/image/default_description_location'         => 'inside', // Two options: inside or outside.
+    'render/image/description_element'                  => 'div',
+    'render/image/description_class'                    => 'description',
+
     // Wrapper element control for the Image Render library.
     'render/image/default_wrap'                         => false,
     'render/image/default_wrap_size'                    => '',

@@ -30,6 +30,7 @@ class ImageRender extends HelloFramework\Singleton {
     private $_classes;
     private $_pinnable;
     private $_showcaption;
+    private $_showdescription;
     private $_lazy;
     // private $_low;
     // private $_low_size;
@@ -42,6 +43,9 @@ class ImageRender extends HelloFramework\Singleton {
     private $_caption_location;
     private $_caption_element;
     private $_caption_class;
+    private $_description_location;
+    private $_description_element;
+    private $_description_class;
 
 
     // ------------------------------------------------------------
@@ -62,27 +66,32 @@ class ImageRender extends HelloFramework\Singleton {
 
         if ($first) {
 
-            $this->_defaults['_debug']               = false;
-            $this->_defaults['_attr']                = array();
-            $this->_defaults['_classes']             = array();
-            $this->_defaults['_draggable']           = CONFIG('render/image/default_draggable');
-            $this->_defaults['_pinnable']            = CONFIG('render/image/default_pinnable');
+            $this->_defaults['_debug']                  = false;
+            $this->_defaults['_attr']                   = array();
+            $this->_defaults['_classes']                = array();
+            $this->_defaults['_draggable']              = CONFIG('render/image/default_draggable');
+            $this->_defaults['_pinnable']               = CONFIG('render/image/default_pinnable');
             // $this->_defaults['_low']                 = false;
             // $this->_defaults['_low_size']            = '400';
-            $this->_defaults['_size']                = CONFIG('render/image/default_size');
+            $this->_defaults['_size']                   = CONFIG('render/image/default_size');
             // $this->_defaults['_srcset']              = true;
 
-            $this->_defaults['_lazy']                = CONFIG('render/image/default_lazy');
+            $this->_defaults['_lazy']                   = CONFIG('render/image/default_lazy');
             
-            $this->_defaults['_showcaption']         = CONFIG('render/image/default_caption');
-            $this->_defaults['_caption_location']    = CONFIG('render/image/default_caption_location');
-            $this->_defaults['_caption_element']     = CONFIG('render/image/caption_element');
-            $this->_defaults['_caption_class']       = CONFIG('render/image/caption_class');
+            $this->_defaults['_showcaption']            = CONFIG('render/image/default_caption');
+            $this->_defaults['_caption_location']       = CONFIG('render/image/default_caption_location');
+            $this->_defaults['_caption_element']        = CONFIG('render/image/caption_element');
+            $this->_defaults['_caption_class']          = CONFIG('render/image/caption_class');
 
-            $this->_defaults['_wrap']                = CONFIG('render/image/default_wrap');
-            $this->_defaults['_wrap_size']           = CONFIG('render/image/default_wrap_size');
-            $this->_defaults['_wrap_autosize']       = CONFIG('render/image/default_wrap_autosize');
-            $this->_defaults['_wrap_class']          = CONFIG('render/image/default_wrap_class');
+            $this->_defaults['_showdescription']        = CONFIG('render/image/default_description');
+            $this->_defaults['_description_location']   = CONFIG('render/image/default_description_location');
+            $this->_defaults['_description_element']    = CONFIG('render/image/description_element');
+            $this->_defaults['_description_class']      = CONFIG('render/image/description_class');
+
+            $this->_defaults['_wrap']                   = CONFIG('render/image/default_wrap');
+            $this->_defaults['_wrap_size']              = CONFIG('render/image/default_wrap_size');
+            $this->_defaults['_wrap_autosize']          = CONFIG('render/image/default_wrap_autosize');
+            $this->_defaults['_wrap_class']             = CONFIG('render/image/default_wrap_class');
 
         }
 
@@ -169,6 +178,7 @@ class ImageRender extends HelloFramework\Singleton {
         $image_dims                     = wp_get_attachment_image_src( $this->_getImageId($image), 'full');
 
         $image_caption                  = ($this->_showcaption) ? $this->_getImageCaption($image_id) : '';
+        $image_description              = ($this->_showdescription) ? $this->_getImageDescription($image_id) : '';
 
         $image_src                      = ($this->_lazy) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
         $image_srcset                   = wp_get_attachment_image_srcset($image_id, $this->_size);
@@ -211,6 +221,7 @@ class ImageRender extends HelloFramework\Singleton {
             'width'                     => $image_dims[1],
             'height'                    => $image_dims[2],
             'caption'                   => $image_caption,
+            'description'               => $image_description,
             );
 
         if ($this->_debug) pr($attributes, 'attributes');
@@ -251,6 +262,9 @@ class ImageRender extends HelloFramework\Singleton {
             // Wrap the image in our wrapper element.
             $image_embed = '<div ' . $this->_generateAttributes($wrapper_attributes) . '>' . $image_embed;
 
+            // If the description is set to appear right after the image, add it to the HTML before we wrap it.
+            $image_embed .= $this->_generateDescriptionElement($image_data, 'inside');
+
             // If the caption is set to appear right after the image, add it to the HTML before we wrap it.
             $image_embed .= $this->_generateCaptionElement($image_data, 'inside');
 
@@ -259,6 +273,9 @@ class ImageRender extends HelloFramework\Singleton {
 
             // If the caption is set to appear after the wrapper, now we add it.
             $image_embed .= $this->_generateCaptionElement($image_data, 'outside');
+
+            // If the description is set to appear after the wrapper, now we add it.
+            $image_embed .= $this->_generateDescriptionElement($image_data, 'outside');
 
         } else {
 
@@ -306,6 +323,40 @@ class ImageRender extends HelloFramework\Singleton {
 
 
     // ------------------------------------------------------------
+    // Description output helper
+
+    private function _generateDescriptionElement($image_data, $location = null) {
+
+        if (empty($image_data['meta']['description']) || !$this->_showdescription) return '';
+
+        if ($location == '*' || $this->_description_location != $location) return '';
+
+        return $this->_formatDescriptionOutput($image_data['meta']['description']);
+
+    }
+
+    private function _formatDescriptionOutput($content) {
+        return '<'. $this->_description_element .' class="'. $this->_description_class .'"><div>' . $content . '</div></'. $this->_description_element .'>';
+    }
+
+    private function _getImageDescription($image_id) {
+        return get_post_field('post_content', $image_id);
+    }
+
+    public function get_description($image=false, $format = false) {
+
+        $image_id   = $this->_getImageId($image) ?: $this->_last_id;
+        $caption    = $this->_getImageDescription($image_id);
+    
+        if ($format) {
+            return $this->_formatDescriptionOutput($caption);
+        } else {
+            return $caption;
+        }
+
+    }
+
+    // ------------------------------------------------------------
     // Caption output helper
 
     private function _generateCaptionElement($image_data, $location = null) {
@@ -322,7 +373,7 @@ class ImageRender extends HelloFramework\Singleton {
         return '<'. $this->_caption_element .' class="'. $this->_caption_class .'">' . $caption . '</'. $this->_caption_element .'>';
     }
 
-    private function _getImageCaption($image_id, $format = true) {
+    private function _getImageCaption($image_id) {
         if ($this->_strip_caption_tags) {
             return strip_tags(wp_get_attachment_caption($image_id));
         } else {
@@ -413,6 +464,15 @@ class ImageRender extends HelloFramework\Singleton {
         }
         return $this;
     }
+    public function description($one=null) {
+        if (is_string($one)) {
+            $this->_showdescription         = true;
+            $this->_description_location    = $one;
+        } else if (is_bool($one)) {
+            $this->_showdescription         = $one;
+        }
+        return $this;
+    }    
     public function classes($incoming=false) {
         // if ($incoming){
         //     if ( strrpos($incoming, 'lazyload') !== false ){
