@@ -203,7 +203,20 @@ class Frontend {
         if (!CONFIG('frontend/edit_link') || !current_user_can('edit_pages')) return;
 
         add_action('wp_footer', function() {
-            echo edit_post_link(CONFIG('frontend/edit_link/text'), '<div class="wordpress-edit-button">', '</div>', null, 'no-barba' );
+
+            $before         = '<div class="wordpress-edit-button">';
+            $after          = '</div>';
+            $queried_object = get_queried_object();
+
+            if (!empty($queried_object->post_type) && $queried_object->post_type == 'page') {
+                echo edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after, null, 'no-barba' );
+            } else if (!empty($queried_object->taxonomy)) {
+                $button = edit_term_link(CONFIG('frontend/edit_link/text'), $before, $after, $queried_object, false);
+                echo str_replace('href=', 'class="no-barba" href=', $button);
+            } else {
+                echo $before . $after;
+            }
+
         });
 
     }
