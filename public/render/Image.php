@@ -366,7 +366,7 @@ class ImageRender extends HelloFramework\Singleton {
 
         if (empty($image_data['meta']['caption']) || !$this->_showcaption) return '';
 
-        if ($location == '*' && $this->_caption_location != $location) return '';
+        if ($location != '*' && $this->_caption_location != $location) return '';
 
         return $this->_formatCaptionOutput($image_data['meta']['caption']);
 
