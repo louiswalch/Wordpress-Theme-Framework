@@ -279,8 +279,11 @@ class ImageRender extends HelloFramework\Singleton {
 
         } else {
 
-            // If we aren't wrapping the image, still need to add the caption,
+            // If we aren't wrapping the image, still need to add the description.
+            $image_embed .= $this->_generateDescriptionElement($image_data, '*');
+            // And caption.
             $image_embed .= $this->_generateCaptionElement($image_data, '*');
+
 
         }
 
@@ -329,7 +332,7 @@ class ImageRender extends HelloFramework\Singleton {
 
         if (empty($image_data['meta']['description']) || !$this->_showdescription) return '';
 
-        if ($location == '*' || $this->_description_location != $location) return '';
+        if ($location != '*' && $this->_description_location != $location) return '';
 
         return $this->_formatDescriptionOutput($image_data['meta']['description']);
 
@@ -363,7 +366,7 @@ class ImageRender extends HelloFramework\Singleton {
 
         if (empty($image_data['meta']['caption']) || !$this->_showcaption) return '';
 
-        if ($location == '*' || $this->_caption_location != $location) return '';
+        if ($location == '*' && $this->_caption_location != $location) return '';
 
         return $this->_formatCaptionOutput($image_data['meta']['caption']);
 
