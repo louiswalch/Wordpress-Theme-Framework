@@ -28,6 +28,8 @@ namespace {
 
     function require_all_files($directory = false) {
 
+        $files = [];
+
         if (!$directory) return false;
         if (!is_dir($directory)) {
             $directory = get_template_directory() . '/' . $directory;
@@ -41,10 +43,17 @@ namespace {
                 if (substr($file, 0, 3) === 'OFF') continue;
                 if (substr($file, -4) !== '.php') continue;
 
-                require($directory . $file);
+                $files[] = $directory . $file;
         
             }
             closedir($dh);
+        }
+
+        if (count($files)) {
+            sort($files);
+            foreach($files as $file) {
+                require($file);
+            }
         }
 
     }
