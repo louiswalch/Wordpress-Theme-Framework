@@ -120,6 +120,7 @@ CONFIG()->set([
     'render/image/default_caption_location'             => 'inside', // Two options: inside or outside.
     'render/image/caption_element'                      => 'div',
     'render/image/caption_class'                        => 'caption',
+    'render/image/caption_strip_html'                   => true,
 
     // Image description control for the Image Render library.
     'render/image/default_description'                  => false,

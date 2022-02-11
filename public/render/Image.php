@@ -17,7 +17,6 @@ https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/librari
 class ImageRender extends HelloFramework\Singleton {
 
     private $_alphadata             = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-    private $_strip_caption_tags    = true;
 
     // Keep track of the last image we rendered.
     private $_last_id;
@@ -43,6 +42,7 @@ class ImageRender extends HelloFramework\Singleton {
     private $_caption_location;
     private $_caption_element;
     private $_caption_class;
+    private $_caption_strip_html;
     private $_description_location;
     private $_description_element;
     private $_description_class;
@@ -82,6 +82,7 @@ class ImageRender extends HelloFramework\Singleton {
             $this->_defaults['_caption_location']       = CONFIG('render/image/default_caption_location');
             $this->_defaults['_caption_element']        = CONFIG('render/image/caption_element');
             $this->_defaults['_caption_class']          = CONFIG('render/image/caption_class');
+            $this->_defaults['_caption_strip_html']     = CONFIG('render/image/caption_strip_html');
 
             $this->_defaults['_showdescription']        = CONFIG('render/image/default_description');
             $this->_defaults['_description_location']   = CONFIG('render/image/default_description_location');
@@ -154,7 +155,7 @@ class ImageRender extends HelloFramework\Singleton {
 
         $alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
 
-        if ($this->_strip_caption_tags) {
+        if ($this->_caption_strip_html) {
             $alt = strip_tags($alt);
         }
 
@@ -377,7 +378,7 @@ class ImageRender extends HelloFramework\Singleton {
     }
 
     private function _getImageCaption($image_id) {
-        if ($this->_strip_caption_tags) {
+        if ($this->_caption_strip_html) {
             return strip_tags(wp_get_attachment_caption($image_id));
         } else {
             return wp_get_attachment_caption($image_id);
