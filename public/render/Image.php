@@ -178,11 +178,13 @@ class ImageRender extends HelloFramework\Singleton {
         $image_id                       = $this->_getImageId($image);
         $image_dims                     = wp_get_attachment_image_src( $this->_getImageId($image), 'full');
 
+        $image_mime                     = get_post_mime_type($image_id);
+
         $image_caption                  = ($this->_showcaption) ? $this->_getImageCaption($image_id) : '';
         $image_description              = ($this->_showdescription) ? $this->_getImageDescription($image_id) : '';
 
-        $image_src                      = ($this->_lazy) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
-        $image_srcset                   = wp_get_attachment_image_srcset($image_id, $this->_size);
+        $image_src                      = ($this->_lazy && ($image_mime != 'image/gif')) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
+        $image_srcset                   = ($image_mime == 'image/gif') ? wp_get_attachment_image_url($image_id, $this->_size) : wp_get_attachment_image_srcset($image_id, $this->_size);
 
         // ---
 
