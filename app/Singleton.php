@@ -34,7 +34,7 @@ class Singleton {
     // ------------------------------------------------------------
     // Prevent cloning of Singleton classes.
     
-    private final function __clone(){
+    protected final function __clone(){
    
     }
 

@@ -123,16 +123,14 @@ class Framework {
         }
 
         if (!CONFIG('support/categories')) {
-
-            // https://joshuadnelson.com/code/remove-default-wordpress-taxonomies/
             add_action( 'init', function(){
-                global $wp_taxonomies;
-                $taxonomies = array('category', 'post_tag');
-                foreach( $taxonomies as $taxonomy ) {
-                    if (taxonomy_exists($taxonomy)) unset($wp_taxonomies[$taxonomy]);
-                }
+                remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=category');
+                remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=post_tag');
             });
-
+            add_action('admin_menu', function() {
+                remove_meta_box('categorydiv', 'post', 'normal'); 
+                remove_meta_box('tagsdiv-post_tag', 'post', 'normal'); 
+            });
         }
 
     }
