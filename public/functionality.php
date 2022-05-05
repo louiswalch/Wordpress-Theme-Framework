@@ -26,9 +26,12 @@ namespace {
     // ---------------------------------------------------------------------------
     // Require all files in specified directory. 
 
-    function require_all_files($directory = false) {
+    function require_all_files($directory = false, $exclude = false) {
 
         $files = [];
+
+        // Allow exclude to be string for single file, but convert to array to standardize it
+        if ($exclude && !is_array($exclude)) $exclude = array($exclude);
 
         if (!$directory) return false;
         if (!is_dir($directory)) {
@@ -40,6 +43,7 @@ namespace {
             while (($file = readdir($dh)) !== false) {
 
                 // if (substr($file, 0, 1) === '.') continue;
+                if ($exclude && in_array($file, $exclude)) continue;
                 if (substr($file, 0, 3) === 'OFF') continue;
                 if (substr($file, -4) !== '.php') continue;
 
@@ -50,7 +54,7 @@ namespace {
         }
 
         if (count($files)) {
-            sort($files);
+            // sort($files);
             foreach($files as $file) {
                 require($file);
             }
