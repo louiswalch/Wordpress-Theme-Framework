@@ -70,6 +70,7 @@ require_once HELLO_DIR . '/app/FrontendAuthentication.php';
 
 // Public misc custom output and functionality.
 require_once HELLO_DIR . '/public/output.php';
+require_once HELLO_DIR . '/public/string.php';
 require_once HELLO_DIR . '/public/functionality.php';
 
 // Ok, let's get going!

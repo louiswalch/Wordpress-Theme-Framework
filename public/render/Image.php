@@ -176,6 +176,7 @@ class ImageRender extends HelloFramework\Singleton {
         $attributes                     = array();
 
         $image_id                       = $this->_getImageId($image);
+
         $image_dims                     = wp_get_attachment_image_src( $this->_getImageId($image), 'full');
 
         $image_mime                     = get_post_mime_type($image_id);

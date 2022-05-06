@@ -61,9 +61,11 @@ class Framework {
         }
 
         // Remove the built-in Wordpress image sizes.
-        foreach (CONFIG('image/remove_default') as $size) {
-            update_option($size . '_size_h', 0 );
-            update_option($size . '_size_w', 0 );
+        if (CONFIG('image/remove_default')) {
+            foreach (CONFIG('image/remove_default') as $size) {
+                update_option($size . '_size_h', 0 );
+                update_option($size . '_size_w', 0 );
+            }            
         }
         add_filter('intermediate_image_sizes_advanced', function($sizes) {
             foreach (CONFIG('image/remove_default') as $size) {
