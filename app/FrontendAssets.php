@@ -39,7 +39,7 @@ class FrontendAssets {
         // Replace version of jQuery embedded in head.
         if (( $js_jquery = HelloFrameworkConfig('frontend/assets/js_jquery'))) {
             wp_deregister_script( 'jquery' );
-            wp_enqueue_script('jquery', asset($js_jquery));
+            wp_enqueue_script('jquery', framework_theme_asset($js_jquery));
         }
 
         // Add JS file(s) to document header.
@@ -62,7 +62,7 @@ class FrontendAssets {
         foreach ($files as $key => $file) {
 
             $handle     = $type . '-' . $extra . '-' . $key;
-            $path       = asset($file);
+            $path       = framework_theme_asset($file);
             $version    = ($set_version) ? ($this->_addAssetVersion($file)) : 1;
 
             call_user_func_array($function, [$handle, $path, [], $version, $extra]);
@@ -73,7 +73,7 @@ class FrontendAssets {
 
     private function _addAssetVersion($file) {
 
-        $path = asset($file, false, true);
+        $path = framework_theme_asset($file, false, true);
         return (file_exists($path)) ? (filemtime($path)) : 404;
 
     }

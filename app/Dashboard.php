@@ -22,7 +22,7 @@ class Dashboard  {
         // Custom Admin Dashboard CSS
         if (HelloFrameworkConfig('dashboard/css')) {
             add_action('admin_enqueue_scripts', function() {
-                wp_enqueue_style('custom-admin-css', framework_asset(HelloFrameworkConfig('dashboard/css')));
+                wp_enqueue_style('custom-admin-css', framework_internal_asset(HelloFrameworkConfig('dashboard/css')));
             }, 99);
         }
 
@@ -381,7 +381,7 @@ class Dashboard  {
 
         if (HelloFrameworkConfig('dashboard/editor/css')) {
             add_action( 'admin_init', function() {
-                add_editor_style(framework_asset(HelloFrameworkConfig('dashboard/editor/css')));
+                add_editor_style(framework_internal_asset(HelloFrameworkConfig('dashboard/editor/css')));
             });
         }
 

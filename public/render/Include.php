@@ -83,7 +83,7 @@ class Includes extends HelloFramework\Singleton {
         // Mke sure caching is for the entire site as well as this request.
         if (!$this->_cache_on || !$this->_cache_this) return false;
 
-        return CACHE()->global($this->_cache_global)->get($this->_cache_key);
+        return HelloFrameworkCache()->global($this->_cache_global)->get($this->_cache_key);
 
     }
 
@@ -92,7 +92,7 @@ class Includes extends HelloFramework\Singleton {
         // Mke sure caching is for the entire site as well as this request.
         if (!$this->_cache_on || !$this->_cache_this) return false;
 
-        return CACHE()->global($this->_cache_global)->life($this->_cache_life)->set($this->_cache_key, $data);
+        return HelloFrameworkCache()->global($this->_cache_global)->life($this->_cache_life)->set($this->_cache_key, $data);
 
     }
 

@@ -4,8 +4,8 @@ namespace {
 
     // ---------------------------------------------------------------------------
     // This library is only avilable to classes within the framework, not exposed to the theme.
-        
-    function CACHE($key = null) {
+    
+    function HelloFrameworkCache($key = null) {
 
         $instance = HelloFramework\Cache::get_instance();
 
@@ -16,6 +16,14 @@ namespace {
             return $instance;
         }
 
+    }
+
+    // Legacy support, but so it doesn't collide with Sage.
+
+    if (!function_exists('CACHE')) {
+        function CACHE($key = null) {
+            return HelloFrameworkCache($key);
+        }
     }
 
 }

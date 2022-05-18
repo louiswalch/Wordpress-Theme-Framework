@@ -6,7 +6,7 @@ namespace {
     // ---------------------------------------------------------------------------
     // Get path to item in theme asset directory (CSS, JS, Images, etc).
 
-    function asset($file='', $echo=false, $server=false, $directory='') {
+    function framework_theme_asset($file='', $echo=false, $server=false, $directory='') {
 
         $root = ($server) ? (get_template_directory()) : (get_stylesheet_directory_uri());
         $path = $root . $directory . '/' . HelloFrameworkConfig('framework/assets_dir') . $file;
@@ -17,11 +17,16 @@ namespace {
 
     }
 
-    function framework_asset($file='', $echo=false, $server=false) {
-        
+    function framework_internal_asset($file='', $echo=false, $server=false) {        
         return asset($file, $echo, $server, '/' . HelloFrameworkConfig('framework/framework_dir'));
-
     }
+
+    if (!function_exists('asset')) {
+        function asset($file='', $echo=false, $server=false, $directory='') {
+            return framework_theme_asset($file, $echo, $server, $directory);
+        }
+    }
+
 
     // ---------------------------------------------------------------------------
     // Require all files in specified directory. 

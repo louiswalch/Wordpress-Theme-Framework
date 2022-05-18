@@ -12,7 +12,7 @@ class Login  {
         // Add custom CSS to the login page.
         if (HelloFrameworkConfig('dashboard/login/css')) {
             add_action( 'login_enqueue_scripts', function() {
-                wp_enqueue_style( 'custom_login_css', framework_asset(HelloFrameworkConfig('dashboard/login/css')), false);
+                wp_enqueue_style( 'custom_login_css', framework_internal_asset(HelloFrameworkConfig('dashboard/login/css')), false);
             }, 99 );
         }
 

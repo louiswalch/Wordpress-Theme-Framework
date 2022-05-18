@@ -54,7 +54,7 @@ class SVG extends HelloFramework\Singleton {
             $key .= '.svg';
         }
 
-        return asset($key, false);
+        return framework_theme_asset($key, false);
 
     }
 
