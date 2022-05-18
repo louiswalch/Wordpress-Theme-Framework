@@ -23,7 +23,7 @@ class DashboardNavigationBar extends Singleton {
 
         add_action('wp_before_admin_bar_render', function() {
             global $wp_admin_bar;
-            foreach (CONFIG('dashboard/admin_bar/remove') as $slug) {
+            foreach (HelloFrameworkConfig('dashboard/admin_bar/remove') as $slug) {
                 $wp_admin_bar->remove_menu($slug);
             }        
         }, 999);

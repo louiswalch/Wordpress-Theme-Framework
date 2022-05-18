@@ -6,20 +6,23 @@ class Dashboard  {
 
 	public function __construct() {
         
+        // Has this been enabled?
+        if (!HelloFrameworkConfig('framework/enable/dashboard')) return false;
+
         // Remove desingnated items from the Top Navigation Bar.
-        if (CONFIG('dashboard/admin_bar/remove')) {
-            DashboardNavigationBar::get_instance()->removeTopMenus(CONFIG('dashboard/admin_bar/remove'));
+        if (HelloFrameworkConfig('dashboard/admin_bar/remove')) {
+            DashboardNavigationBar::get_instance()->removeTopMenus(HelloFrameworkConfig('dashboard/admin_bar/remove'));
         }
 
         // Move designited items from the Sidebar to Top Navigation Bar.
-        if (CONFIG('dashboard/admin_bar/relocate')) {
-            DashboardNavigationBar::get_instance()->relocateSideMenus(CONFIG('dashboard/admin_bar/relocate'));
+        if (HelloFrameworkConfig('dashboard/admin_bar/relocate')) {
+            DashboardNavigationBar::get_instance()->relocateSideMenus(HelloFrameworkConfig('dashboard/admin_bar/relocate'));
         }
 
         // Custom Admin Dashboard CSS
-        if (CONFIG('dashboard/css')) {
+        if (HelloFrameworkConfig('dashboard/css')) {
             add_action('admin_enqueue_scripts', function() {
-                wp_enqueue_style('custom-admin-css', framework_asset(CONFIG('dashboard/css')));
+                wp_enqueue_style('custom-admin-css', framework_asset(HelloFrameworkConfig('dashboard/css')));
             }, 99);
         }
 
@@ -71,7 +74,7 @@ class Dashboard  {
 
     private function _restrictDelete(){
 
-        if (!CONFIG('dashboard/delete_lock')) return;
+        if (!HelloFrameworkConfig('dashboard/delete_lock')) return;
 
         add_action('wp_trash_post', [$this, 'restrictDeleteCallback'], 10, 1);
         add_action('before_delete_post', [$this, 'restrictDeleteCallback'], 10, 1);
@@ -80,7 +83,7 @@ class Dashboard  {
 
     public function restrictDeleteCallback($post_id){
 
-        $restricted = CONFIG('dashboard/delete_lock');
+        $restricted = HelloFrameworkConfig('dashboard/delete_lock');
         if (in_array($post_id, $restricted)) {
             exit("You are not authorized to delete this page/item.");
         }
@@ -102,7 +105,7 @@ class Dashboard  {
 
     private function _toggleComments() {
 
-        if (CONFIG('support/comments')) return false;
+        if (HelloFrameworkConfig('support/comments')) return false;
 
         // Remove comment column from WP-Admin list pages.    
         add_filter('manage_pages_columns', function($defaults) {
@@ -156,7 +159,7 @@ class Dashboard  {
 
     private function _toggleTags() {
 
-        if (CONFIG('support/tags')) return;
+        if (HelloFrameworkConfig('support/tags')) return;
 
         add_action('admin_menu', function() {
             remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=post_tag');
@@ -180,7 +183,7 @@ class Dashboard  {
 
     private function _toggleCustomizer() {
 
-        if (CONFIG('support/customizer')) return;
+        if (HelloFrameworkConfig('support/customizer')) return;
 
         add_action( 'init', function() {
 
@@ -213,9 +216,9 @@ class Dashboard  {
 
     private function _toggleUserRoles() {
 
-        if (!CONFIG('dashboard/remove_roles')) return;
+        if (!HelloFrameworkConfig('dashboard/remove_roles')) return;
 
-        foreach (CONFIG('dashboard/remove_roles') as $role) {
+        foreach (HelloFrameworkConfig('dashboard/remove_roles') as $role) {
             if (get_role($role)) remove_role($role);
         }    
 
@@ -227,7 +230,7 @@ class Dashboard  {
 
     private function _togglePosts(){
 
-        if (CONFIG('support/posts')) return;
+        if (HelloFrameworkConfig('support/posts')) return;
 
         add_action('admin_menu', function() {
             remove_menu_page('edit.php');
@@ -241,16 +244,16 @@ class Dashboard  {
 
     private function _toggleMetaboxes() {
 
-        if (!CONFIG('dashboard/metabox/remove/normal') && !CONFIG('dashboard/metabox/remove/side')) return;
+        if (!HelloFrameworkConfig('dashboard/metabox/remove/normal') && !HelloFrameworkConfig('dashboard/metabox/remove/side')) return;
 
         add_action( 'wp_dashboard_setup', function() {
 
             global $wp_meta_boxes;
 
-            foreach (CONFIG('dashboard/metabox/remove/normal') as $box) {
+            foreach (HelloFrameworkConfig('dashboard/metabox/remove/normal') as $box) {
                 unset($wp_meta_boxes['dashboard']['normal']['core'][$box]);
             }
-            foreach (CONFIG('dashboard/metabox/remove/side') as $box) {
+            foreach (HelloFrameworkConfig('dashboard/metabox/remove/side') as $box) {
                 unset($wp_meta_boxes['dashboard']['side']['core'][$box]);
             }
 
@@ -270,13 +273,13 @@ class Dashboard  {
 
     private function _addMetaboxes() {
 
-        if (!CONFIG('dashboard/metabox')) return;
+        if (!HelloFrameworkConfig('dashboard/metabox')) return;
 
         add_action('wp_dashboard_setup', function() {
 
             global $wp_meta_boxes;
 
-            foreach (CONFIG('dashboard/metabox') as $key => $box) {
+            foreach (HelloFrameworkConfig('dashboard/metabox') as $key => $box) {
 
                 $id         = 'custom_' . $key;
                 $name       = $box[0];
@@ -305,12 +308,12 @@ class Dashboard  {
 
     private function _addFooterCredit() {
 
-        if (!CONFIG('dashboard/footer_credit')) return;
+        if (!HelloFrameworkConfig('dashboard/footer_credit')) return;
 
         add_action( 'admin_init', function() {
             remove_filter('admin_footer_text', 'fau_swap_footer_admin');
             add_filter( 'admin_footer_text', function() {
-                return CONFIG('dashboard/footer_credit');
+                return HelloFrameworkConfig('dashboard/footer_credit');
             }, 11 );
         });
 
@@ -374,25 +377,25 @@ class Dashboard  {
 
     private function _setContentEditor() {
 
-        if (!CONFIG('dashboard/editor/customize')) return;
+        if (!HelloFrameworkConfig('dashboard/editor/customize')) return;
 
-        if (CONFIG('dashboard/editor/css')) {
+        if (HelloFrameworkConfig('dashboard/editor/css')) {
             add_action( 'admin_init', function() {
-                add_editor_style(framework_asset(CONFIG('dashboard/editor/css')));
+                add_editor_style(framework_asset(HelloFrameworkConfig('dashboard/editor/css')));
             });
         }
 
         // Basic Content Editor settings.
         add_filter('tiny_mce_before_init', function($settings) {
-            $settings['height']                  = CONFIG('dashboard/editor/height');
-            $settings['wp_autoresize_on']        = CONFIG('dashboard/editor/resize');
-            $settings['resize']                  = CONFIG('dashboard/editor/resize');
+            $settings['height']                  = HelloFrameworkConfig('dashboard/editor/height');
+            $settings['wp_autoresize_on']        = HelloFrameworkConfig('dashboard/editor/resize');
+            $settings['resize']                  = HelloFrameworkConfig('dashboard/editor/resize');
             $settings['statusbar']               = true;
             return $settings; 
         }, 10);
 
         // Forcefully hide all the 'Add Media' buttons for Content Editor.
-        if (!CONFIG('dashboard/editor/media_buttons')) {
+        if (!HelloFrameworkConfig('dashboard/editor/media_buttons')) {
             add_action('admin_head', function(){
                 remove_action( 'media_buttons', 'media_buttons' );
             });
@@ -400,21 +403,21 @@ class Dashboard  {
         
         // Cut down the first row of editor icons to just what we need.
         add_filter('mce_buttons', function($buttons, $editor_id) {
-            return CONFIG('dashboard/editor/buttons_1') ?: [];
+            return HelloFrameworkConfig('dashboard/editor/buttons_1') ?: [];
         }, 10, 2 );
 
         // Also cut down the second row of editor icons to just what we need.
         add_filter('mce_buttons_2', function($buttons, $editor_id) {
-            return CONFIG('dashboard/editor/buttons_2') ?: [];
+            return HelloFrameworkConfig('dashboard/editor/buttons_2') ?: [];
         }, 10, 2 );
 
         // Change the options available in format dropdown.
         add_filter( 'tiny_mce_before_init', function($init) {  
-            $editor_formats = CONFIG('dashboard/editor/formats');
+            $editor_formats = HelloFrameworkConfig('dashboard/editor/formats');
             if (is_array($editor_formats)) {
                 // https://wordpress.stackexchange.com/a/128950/8642
                 // Make sure you are using the 'styleselect' button rather then 'formatselect'.
-                $init['style_formats'] = json_encode(CONFIG('dashboard/editor/formats'));  
+                $init['style_formats'] = json_encode(HelloFrameworkConfig('dashboard/editor/formats'));  
                 unset($init['preview_styles']);
             } else {
                 $init['block_formats'] = $editor_formats;
@@ -423,17 +426,17 @@ class Dashboard  {
         });   
 
         // ACF adds a 'Basic' button Toolbar option, also allow this to be controlled.
-        if (CONFIG('dashboard/editor/buttons_1_basic')) {
+        if (HelloFrameworkConfig('dashboard/editor/buttons_1_basic')) {
             add_filter('acf/fields/wysiwyg/toolbars', function($toolbars) {
                 if (isset($toolbars['Basic'])) {
-                    $toolbars['Basic'][1] = CONFIG('dashboard/editor/buttons_1_basic');
+                    $toolbars['Basic'][1] = HelloFrameworkConfig('dashboard/editor/buttons_1_basic');
                 }
                 return $toolbars;
             });
         }
     
         // Removing the Media Button causes Content Editor to appear too close to the permalink.
-        if (!CONFIG('dashboard/editor/media_buttons')) {
+        if (!HelloFrameworkConfig('dashboard/editor/media_buttons')) {
             add_action('admin_head', function() {
                 echo '<style>#postdivrich { padding-top: 25px; padding-bottom: 20px; }; </style>';
             });            

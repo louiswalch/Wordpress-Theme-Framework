@@ -91,7 +91,7 @@ class SVG extends HelloFramework\Singleton {
     function show($key) {
 
 
-        if (CONFIG('render/svg/svg_inject')) {
+        if (HelloFrameworkConfig('render/svg/svg_inject')) {
             return $this->img( $key, [ 'onload' => 'SVGInject(this)' ]);
         }
 

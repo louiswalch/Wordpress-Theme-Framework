@@ -6,6 +6,9 @@ class Frontend {
 
 	public function __construct() {
 
+        // Has this been enabled?
+        if (!HelloFrameworkConfig('framework/enable/frontend')) return false;
+
         // Public render helper classes, must be called from global instance functions.
         require_once HELLO_DIR . '/public/render/Image.php';
         require_once HELLO_DIR . '/public/render/ImageInstance.php';

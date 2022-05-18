@@ -9,7 +9,7 @@ namespace {
     function asset($file='', $echo=false, $server=false, $directory='') {
 
         $root = ($server) ? (get_template_directory()) : (get_stylesheet_directory_uri());
-        $path = $root . $directory . '/' . CONFIG('framework/assets_dir') . $file;
+        $path = $root . $directory . '/' . HelloFrameworkConfig('framework/assets_dir') . $file;
 
         if ($echo) echo $path;
             
@@ -19,47 +19,49 @@ namespace {
 
     function framework_asset($file='', $echo=false, $server=false) {
         
-        return asset($file, $echo, $server, '/' . CONFIG('framework/framework_dir'));
+        return asset($file, $echo, $server, '/' . HelloFrameworkConfig('framework/framework_dir'));
 
     }
 
     // ---------------------------------------------------------------------------
     // Require all files in specified directory. 
 
-    function require_all_files($directory = false, $exclude = false) {
+    if (!function_exists('require_all_files')) {
+        function require_all_files($directory = false, $exclude = false) {
 
-        $files = [];
+            $files = [];
 
-        // Allow exclude to be string for single file, but convert to array to standardize it
-        if ($exclude && !is_array($exclude)) $exclude = array($exclude);
+            // Allow exclude to be string for single file, but convert to array to standardize it
+            if ($exclude && !is_array($exclude)) $exclude = array($exclude);
 
-        if (!$directory) return false;
-        if (!is_dir($directory)) {
-            $directory = get_template_directory() . '/' . $directory;
-            if (!is_dir($directory)) return false;
-        }
-        
-        if ($dh = opendir($directory)){
-            while (($file = readdir($dh)) !== false) {
-
-                // if (substr($file, 0, 1) === '.') continue;
-                if ($exclude && in_array($file, $exclude)) continue;
-                if (substr($file, 0, 3) === 'OFF') continue;
-                if (substr($file, -4) !== '.php') continue;
-
-                $files[] = $directory . $file;
-        
+            if (!$directory) return false;
+            if (!is_dir($directory)) {
+                $directory = get_template_directory() . '/' . $directory;
+                if (!is_dir($directory)) return false;
             }
-            closedir($dh);
-        }
+            
+            if ($dh = opendir($directory)){
+                while (($file = readdir($dh)) !== false) {
 
-        if (count($files)) {
-            // sort($files);
-            foreach($files as $file) {
-                require($file);
+                    // if (substr($file, 0, 1) === '.') continue;
+                    if ($exclude && in_array($file, $exclude)) continue;
+                    if (substr($file, 0, 3) === 'OFF') continue;
+                    if (substr($file, -4) !== '.php') continue;
+
+                    $files[] = $directory . $file;
+            
+                }
+                closedir($dh);
             }
-        }
 
+            if (count($files)) {
+                // sort($files);
+                foreach($files as $file) {
+                    require($file);
+                }
+            }
+
+        }
     }
 
     
@@ -101,8 +103,8 @@ namespace {
         if (is_null($result)) {
 
             $domain                 = $_SERVER['SERVER_NAME'];
-            $development_matches    = CONFIG('environment/development');
-            $staging_matches        = CONFIG('environment/staging');
+            $development_matches    = HelloFrameworkConfig('environment/development');
+            $staging_matches        = HelloFrameworkConfig('environment/staging');
 
             foreach ($development_matches as $value) {
                 if (strpos($domain, $value) !== false) {

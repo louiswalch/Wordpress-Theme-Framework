@@ -6,6 +6,9 @@ class FrontendAssets {
 
 	public function __construct() {
 
+        // Has this been enabled?
+        if (!HelloFrameworkConfig('framework/enable/frontend_assets')) return false;
+
         // Don't do this on ajax requests
         if (isset($_REQUEST['ajaxify'])) return;
 
@@ -15,7 +18,7 @@ class FrontendAssets {
 
         add_action( 'wp_print_styles', [$this, 'removeDefaultStyle'], 100 );
 
-        if (!CONFIG('frontend/assets/version')) {
+        if (!HelloFrameworkConfig('frontend/assets/version')) {
             add_filter( 'style_loader_src', [$this, 'removeAssetVersion']);
             add_filter( 'script_loader_src', [$this, 'removeAssetVersion']);
         }
@@ -25,25 +28,25 @@ class FrontendAssets {
     public function addAssets() {
 
         // Should assets have cachebusting version numbers. 
-        $set_version = CONFIG('frontend/assets/version');
+        $set_version = HelloFrameworkConfig('frontend/assets/version');
 
         // Add CSS file(s) to document head.
-        $this->_addAsset('style', CONFIG('frontend/assets/css'), $set_version, 'all');
+        $this->_addAsset('style', HelloFrameworkConfig('frontend/assets/css'), $set_version, 'all');
 
         // Add CSS file(s) for print to document head.
-        $this->_addAsset('style', CONFIG('frontend/assets/css_print'), $set_version, 'print');
+        $this->_addAsset('style', HelloFrameworkConfig('frontend/assets/css_print'), $set_version, 'print');
 
         // Replace version of jQuery embedded in head.
-        if (( $js_jquery = CONFIG('frontend/assets/js_jquery'))) {
+        if (( $js_jquery = HelloFrameworkConfig('frontend/assets/js_jquery'))) {
             wp_deregister_script( 'jquery' );
             wp_enqueue_script('jquery', asset($js_jquery));
         }
 
         // Add JS file(s) to document header.
-        $this->_addAsset('script', CONFIG('frontend/assets/js_head'), $set_version);
+        $this->_addAsset('script', HelloFrameworkConfig('frontend/assets/js_head'), $set_version);
 
         // Add JS file(s) to document footer.
-        $this->_addAsset('script', CONFIG('frontend/assets/js'), $set_version, true);
+        $this->_addAsset('script', HelloFrameworkConfig('frontend/assets/js'), $set_version, true);
 
     }
 

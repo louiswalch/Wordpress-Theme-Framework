@@ -4,13 +4,26 @@
 // DEFAULT CONFIGURATION
 // Any value here can be customized/set within your theme's `_framework/config.php` file.
 
-CONFIG()->set([
+HelloFrameworkConfig()->set([
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Framework Zone/Componants
+    // Control what parts of the Framework are active for this site.
+
+    'framework/enable/login'                        => true,
+    'framework/enable/email'                        => true,
+    'framework/enable/dashboard'                    => true,
+    'framework/enable/frontend'                     => true,
+    'framework/enable/frontend_assets'              => true,
+    // 'framework/enable/frontend_authentication'      => true,
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Config Settings
 
     'config/cache'                                      => false,
     'config/cache/life'                                 => HOUR_IN_SECONDS,
+    
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Framework Settings
@@ -36,6 +49,9 @@ CONFIG()->set([
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Settings
+
+    // Enable or disable image functionality.
+    'image'                                             => true,
 
     // Add custom sizes.
     'image/sizes'                                       => ['400', '600', '800', '1200', '1600', '2400'],

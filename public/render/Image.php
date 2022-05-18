@@ -69,30 +69,30 @@ class ImageRender extends HelloFramework\Singleton {
             $this->_defaults['_debug']                  = false;
             $this->_defaults['_attr']                   = array();
             $this->_defaults['_classes']                = array();
-            $this->_defaults['_draggable']              = CONFIG('render/image/default_draggable');
-            $this->_defaults['_pinnable']               = CONFIG('render/image/default_pinnable');
+            $this->_defaults['_draggable']              = HelloFrameworkConfig('render/image/default_draggable');
+            $this->_defaults['_pinnable']               = HelloFrameworkConfig('render/image/default_pinnable');
             // $this->_defaults['_low']                 = false;
             // $this->_defaults['_low_size']            = '400';
-            $this->_defaults['_size']                   = CONFIG('render/image/default_size');
+            $this->_defaults['_size']                   = HelloFrameworkConfig('render/image/default_size');
             // $this->_defaults['_srcset']              = true;
 
-            $this->_defaults['_lazy']                   = CONFIG('render/image/default_lazy');
+            $this->_defaults['_lazy']                   = HelloFrameworkConfig('render/image/default_lazy');
             
-            $this->_defaults['_showcaption']            = CONFIG('render/image/default_caption');
-            $this->_defaults['_caption_location']       = CONFIG('render/image/default_caption_location');
-            $this->_defaults['_caption_element']        = CONFIG('render/image/caption_element');
-            $this->_defaults['_caption_class']          = CONFIG('render/image/caption_class');
-            $this->_defaults['_caption_strip_html']     = CONFIG('render/image/caption_strip_html');
+            $this->_defaults['_showcaption']            = HelloFrameworkConfig('render/image/default_caption');
+            $this->_defaults['_caption_location']       = HelloFrameworkConfig('render/image/default_caption_location');
+            $this->_defaults['_caption_element']        = HelloFrameworkConfig('render/image/caption_element');
+            $this->_defaults['_caption_class']          = HelloFrameworkConfig('render/image/caption_class');
+            $this->_defaults['_caption_strip_html']     = HelloFrameworkConfig('render/image/caption_strip_html');
 
-            $this->_defaults['_showdescription']        = CONFIG('render/image/default_description');
-            $this->_defaults['_description_location']   = CONFIG('render/image/default_description_location');
-            $this->_defaults['_description_element']    = CONFIG('render/image/description_element');
-            $this->_defaults['_description_class']      = CONFIG('render/image/description_class');
+            $this->_defaults['_showdescription']        = HelloFrameworkConfig('render/image/default_description');
+            $this->_defaults['_description_location']   = HelloFrameworkConfig('render/image/default_description_location');
+            $this->_defaults['_description_element']    = HelloFrameworkConfig('render/image/description_element');
+            $this->_defaults['_description_class']      = HelloFrameworkConfig('render/image/description_class');
 
-            $this->_defaults['_wrap']                   = CONFIG('render/image/default_wrap');
-            $this->_defaults['_wrap_size']              = CONFIG('render/image/default_wrap_size');
-            $this->_defaults['_wrap_autosize']          = CONFIG('render/image/default_wrap_autosize');
-            $this->_defaults['_wrap_class']             = CONFIG('render/image/default_wrap_class');
+            $this->_defaults['_wrap']                   = HelloFrameworkConfig('render/image/default_wrap');
+            $this->_defaults['_wrap_size']              = HelloFrameworkConfig('render/image/default_wrap_size');
+            $this->_defaults['_wrap_autosize']          = HelloFrameworkConfig('render/image/default_wrap_autosize');
+            $this->_defaults['_wrap_class']             = HelloFrameworkConfig('render/image/default_wrap_class');
 
         }
 
@@ -163,7 +163,7 @@ class ImageRender extends HelloFramework\Singleton {
             return character_limiter($alt, 95, '...');
         }
 
-        if (CONFIG('render/image/alt_fallback')) {
+        if (HelloFrameworkConfig('render/image/alt_fallback')) {
             return get_the_title($image_id);
         }
 
@@ -190,8 +190,8 @@ class ImageRender extends HelloFramework\Singleton {
         // ---
 
         $attribute_src                  = ($this->_lazy && $mode == 'div') ? false : 'src';
-        $attribute_srcset               = ($this->_lazy) ? CONFIG('render/image/lazy_'. $mode .'_srcset') : 'srcset';
-        $attribute_sizes                = ($this->_lazy) ? CONFIG('render/image/lazy_sizes') : 'sizes';
+        $attribute_srcset               = ($this->_lazy) ? HelloFrameworkConfig('render/image/lazy_'. $mode .'_srcset') : 'srcset';
+        $attribute_sizes                = ($this->_lazy) ? HelloFrameworkConfig('render/image/lazy_sizes') : 'sizes';
 
         if ($attribute_src)             $attributes[$attribute_src]     = $image_src;
         if ($attribute_srcset)          $attributes[$attribute_srcset]  = $image_srcset;
@@ -200,7 +200,7 @@ class ImageRender extends HelloFramework\Singleton {
         // ---
 
         if ($this->_lazy) {
-            $this->classes(CONFIG('render/image/lazy_class'));
+            $this->classes(HelloFrameworkConfig('render/image/lazy_class'));
         }
         if (class_exists('acf')) {
             $this->classes(get_field('crop_alignment', $image_id));
@@ -498,7 +498,7 @@ class ImageRender extends HelloFramework\Singleton {
     public function size($incoming=false) {
         if ($incoming) {
             $this->_size = $incoming;
-            // CONFIG()->set('image/max/w', (int) $incoming);
+            // HelloFrameworkConfig()->set('image/max/w', (int) $incoming);
         }
         return $this;
     }
@@ -532,12 +532,12 @@ class ImageRender extends HelloFramework\Singleton {
 
         $data           = $this->_getImageData($image, 'div');
 
-        // if (CONFIG('render/image/lazysizes')) {
-        //     $data[CONFIG('render/image/div_src')]       = $data['data-src'];
-        //     $data[CONFIG('render/image/div_srcset')]    = $data['data-srcset'];
+        // if (HelloFrameworkConfig('render/image/lazysizes')) {
+        //     $data[HelloFrameworkConfig('render/image/div_src')]       = $data['data-src'];
+        //     $data[HelloFrameworkConfig('render/image/div_srcset')]    = $data['data-srcset'];
         // } else {
-        //     $data[CONFIG('render/image/div_src')]       = $data['src'];
-        //     $data[CONFIG('render/image/div_srcset')]    = $data['srcset'];
+        //     $data[HelloFrameworkConfig('render/image/div_src')]       = $data['src'];
+        //     $data[HelloFrameworkConfig('render/image/div_srcset')]    = $data['srcset'];
         // }
 
         // if ($this->_low) {

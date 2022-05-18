@@ -42,16 +42,19 @@ class Framework {
 
     protected function setImageParameters() {
 
+        // Has this been enabled?
+        if (!HelloFrameworkConfig('image')) return;
+
         // Assign JPG quality for generated thumbnails/images.
         add_filter( 'jpeg_quality', function($current) {
-            return CONFIG('image/jpg_quality');
+            return HelloFrameworkConfig('image/jpg_quality');
         }, 10, 2);
 
         // Define custom thumbnail size.
-        set_post_thumbnail_size(CONFIG('image/thumbnail/w'), CONFIG('image/thumbnail/h'), CONFIG('image/thumbnail/crop'));
+        set_post_thumbnail_size(HelloFrameworkConfig('image/thumbnail/w'), HelloFrameworkConfig('image/thumbnail/h'), HelloFrameworkConfig('image/thumbnail/crop'));
 
         // Add custom image sizes that work better with 'srcset'.
-        foreach (CONFIG('image/sizes') as $size) {
+        foreach (HelloFrameworkConfig('image/sizes') as $size) {
             $complex    = (is_array($size));
             $width      = ($complex && !empty($size[0])) ? $size[0] : $size;
             $height     = ($complex && !empty($size[1])) ? $size[1] : $size;
@@ -61,14 +64,14 @@ class Framework {
         }
 
         // Remove the built-in Wordpress image sizes.
-        if (CONFIG('image/remove_default')) {
-            foreach (CONFIG('image/remove_default') as $size) {
+        if (HelloFrameworkConfig('image/remove_default')) {
+            foreach (HelloFrameworkConfig('image/remove_default') as $size) {
                 update_option($size . '_size_h', 0 );
                 update_option($size . '_size_w', 0 );
             }            
         }
         add_filter('intermediate_image_sizes_advanced', function($sizes) {
-            foreach (CONFIG('image/remove_default') as $size) {
+            foreach (HelloFrameworkConfig('image/remove_default') as $size) {
                 unset($sizes[$size]);
             }
             return $sizes;
@@ -77,7 +80,7 @@ class Framework {
         // Increase the Wordpress Max 'srcset' Size 
         // http://aaronrutley.com/responsive-images-in-wordpress-with-acf/
         add_filter( 'max_srcset_image_width', function() {
-            return CONFIG('image/max/w');
+            return HelloFrameworkConfig('image/max/w');
         }, 10 , 2 );
 
     }
@@ -87,22 +90,22 @@ class Framework {
 
     protected function autoLoadCustomTypes() {
 
-        if (!CONFIG('custom_types/autoload')) return;
+        if (!HelloFrameworkConfig('custom_types/autoload')) return;
 
-        require_all_files(FRAMEWORK_ROOT . '/' . CONFIG('custom_types/directory').'/');
+        require_all_files(FRAMEWORK_ROOT . '/' . HelloFrameworkConfig('custom_types/directory').'/');
 
     }   
 
     protected function toggleSupports() {
 
         // Remove comments support.
-        if (!CONFIG('support/comments')) {
+        if (!HelloFrameworkConfig('support/comments')) {
             remove_post_type_support('post', 'comments');
             remove_post_type_support('page', 'comments');
         }
 
         // Author pages are usually not needed. Redirect away from author permalinks.
-        if (!CONFIG('support/author_pages')) {
+        if (!HelloFrameworkConfig('support/author_pages')) {
             add_action('template_redirect', function() {
                 global $wp_query;
                 if (is_author()) {
@@ -112,19 +115,19 @@ class Framework {
             });
         }
 
-        if (CONFIG('support/thumbnails')) {
+        if (HelloFrameworkConfig('support/thumbnails')) {
             add_theme_support('post-thumbnails');
         }
 
-        if (CONFIG('support/menus')) {
+        if (HelloFrameworkConfig('support/menus')) {
             add_theme_support('menus');
         }
 
-        if (CONFIG('support/widgets')) {
+        if (HelloFrameworkConfig('support/widgets')) {
             add_theme_support('widgets');
         }
 
-        if (!CONFIG('support/categories')) {
+        if (!HelloFrameworkConfig('support/categories')) {
             add_action( 'init', function(){
                 remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=category');
                 remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=post_tag');

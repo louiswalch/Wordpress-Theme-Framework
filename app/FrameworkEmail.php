@@ -6,27 +6,30 @@ class FrameworkEmail {
 
 	public function __construct() {
 
+        // Has this been enabled?
+        if (!HelloFrameworkConfig('framework/enable/email')) return false;
+
         // General settings for all outgoing emails.
         add_filter('wp_mail_content_type', function() {
-            return CONFIG('email/mime');
+            return HelloFrameworkConfig('email/mime');
         });
         add_filter('wp_mail_from', function( $original ) {
-            return CONFIG('email/address');
+            return HelloFrameworkConfig('email/address');
         });
         add_filter('wp_mail_from_name', function( $original ) {
-            return CONFIG('email/name');
+            return HelloFrameworkConfig('email/name');
         });
 
         // Disable 'Notice of Password Change' email.
-        if (!CONFIG('email/send/change_password')) {
+        if (!HelloFrameworkConfig('email/send/change_password')) {
             add_filter('send_password_change_email', '__return_false' );
         }
         // Disable 'Notice of Email Change' email.
-        if (!CONFIG('email/send/change_email')) {
+        if (!HelloFrameworkConfig('email/send/change_email')) {
             add_filter('send_email_change_email', '__return_false' );
         }
         // Disable 'New User' notification sent to Admin.
-        if (!CONFIG('email/send/new_user')) {    
+        if (!HelloFrameworkConfig('email/send/new_user')) {    
             add_filter('wp_new_user_notification_email_admin', '__return_false');
         }
 
@@ -69,12 +72,12 @@ class FrameworkEmail {
         $email['subject'] = str_replace("[".$blogname."]", "", $email['subject']);
 
         // Wrap all outgoing email from Wordpress.
-        if (CONFIG('email/skin')) {
+        if (HelloFrameworkConfig('email/skin')) {
 
             $header_output      = '';
-            $header_file        = get_template_directory() . '/_includes/' . CONFIG('email/skin/header') .'.php';
+            $header_file        = get_template_directory() . '/_includes/' . HelloFrameworkConfig('email/skin/header') .'.php';
             $footer_output      = '';
-            $footer_file        = get_template_directory() . '/_includes/' . CONFIG('email/skin/footer') .'.php';
+            $footer_file        = get_template_directory() . '/_includes/' . HelloFrameworkConfig('email/skin/footer') .'.php';
 
             if (file_exists($header_file)) {
 
@@ -95,7 +98,7 @@ class FrameworkEmail {
             }
 
             // Force all links (<a href="...">) in the email body to have the following color.
-            if (($link_color = CONFIG('email/skin/link_color'))) {
+            if (($link_color = HelloFrameworkConfig('email/skin/link_color'))) {
 
                 // No style: Adds color
                 // Yes style: 2 attributes

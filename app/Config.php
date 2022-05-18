@@ -21,7 +21,7 @@ class Config extends Singleton {
         parent::__construct();
 
         // First check if we have a cached version of the config.
-        if (CONFIG('config/cache') && ($cached = CACHE()->getArray($this->_cache_key))) {
+        if (HelloFrameworkConfig('config/cache') && ($cached = CACHE()->getArray($this->_cache_key))) {
             $this->_data = $cached;
             return true;      
         }
@@ -39,8 +39,8 @@ class Config extends Singleton {
         // $this->migrate($this->_migrations);
 
         // Cache the config to speed up subsequent requests.
-        if (CONFIG('config/cache')) {
-            CACHE()->life(CONFIG('config/cache/life'))->setArray($this->_cache_key, $this->_data);
+        if (HelloFrameworkConfig('config/cache')) {
+            CACHE()->life(HelloFrameworkConfig('config/cache/life'))->setArray($this->_cache_key, $this->_data);
         }
 
     }

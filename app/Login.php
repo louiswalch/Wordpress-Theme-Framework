@@ -5,11 +5,14 @@ namespace HelloFramework;
 class Login  {
 
 	public function __construct() {
+        
+        // Has this been enabled?
+        if (!HelloFrameworkConfig('framework/enable/login')) return false;
 
         // Add custom CSS to the login page.
-        if (CONFIG('dashboard/login/css')) {
+        if (HelloFrameworkConfig('dashboard/login/css')) {
             add_action( 'login_enqueue_scripts', function() {
-                wp_enqueue_style( 'custom_login_css', framework_asset(CONFIG('dashboard/login/css')), false);
+                wp_enqueue_style( 'custom_login_css', framework_asset(HelloFrameworkConfig('dashboard/login/css')), false);
             }, 99 );
         }
 
@@ -17,9 +20,9 @@ class Login  {
         new FrontendAuthentication();
 
         // Add custom HTML to the footer of login page.
-        if (CONFIG('dashboard/footer_credit')) {
+        if (HelloFrameworkConfig('dashboard/footer_credit')) {
             add_action('login_footer', function() {
-                echo CONFIG('dashboard/footer_credit');
+                echo HelloFrameworkConfig('dashboard/footer_credit');
             });
         }
 

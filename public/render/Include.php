@@ -42,7 +42,7 @@ class Includes extends HelloFramework\Singleton {
         parent::__construct();
 
         // Load custom settings from the framework config file.
-        $this->_dir         = CONFIG($this->_dir_config_key);
+        $this->_dir         = HelloFrameworkConfig($this->_dir_config_key);
 
         // Default settings based on current environment.
         $this->_cache_on    = !detect_environment('development');
