@@ -60,7 +60,7 @@ namespace {
             }
 
             if (count($files)) {
-                // sort($files);
+                sort($files);
                 foreach($files as $file) {
                     require($file);
                 }

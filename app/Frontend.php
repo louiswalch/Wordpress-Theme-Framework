@@ -215,7 +215,7 @@ class Frontend {
                 echo edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after, null, 'no-barba' );
             } else if (!empty($queried_object->taxonomy)) {
                 $button = edit_term_link(CONFIG('frontend/edit_link/text'), $before, $after, $queried_object, false);
-                echo str_replace('href=', 'class="no-barba" href=', $button);
+                echo str_replace('href=', 'class="no-barba" data-barba-prevent="self" href=', $button);
             } else {
                 echo $before . $after;
             }
