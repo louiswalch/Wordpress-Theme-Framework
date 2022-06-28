@@ -205,6 +205,10 @@ class Frontend {
 
         if (!CONFIG('frontend/edit_link') || !current_user_can('edit_pages')) return;
 
+        add_filter('edit_post_link', function($link) {
+            return str_replace('href=', 'data-barba-prevent="self" href=', $link);
+        });
+
         add_action('wp_footer', function() {
 
             $before         = '<div class="wordpress-edit-button">';
@@ -212,7 +216,7 @@ class Frontend {
             $queried_object = get_queried_object();
 
             if (!empty($queried_object->post_type)) {
-                echo edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after, null, 'no-barba' );
+                edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after, null, 'no-barba' );
             } else if (!empty($queried_object->taxonomy)) {
                 $button = edit_term_link(CONFIG('frontend/edit_link/text'), $before, $after, $queried_object, false);
                 echo str_replace('href=', 'class="no-barba" data-barba-prevent="self" href=', $button);
