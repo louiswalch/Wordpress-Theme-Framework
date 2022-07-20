@@ -9,8 +9,8 @@ namespace {
     function framework_theme_asset($file='', $echo=false, $server=false, $directory='') {
 
         $root = ($server) ? (get_template_directory()) : (get_stylesheet_directory_uri());
-        $path = $root . $directory . '/' . HelloFrameworkConfig('framework/assets_dir') . $file;
-
+        $path = $root . $directory . HelloFrameworkConfig('framework/assets_dir') . $file;
+        
         if ($echo) echo $path;
             
         return $path;
