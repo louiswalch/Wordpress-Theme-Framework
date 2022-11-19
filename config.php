@@ -120,6 +120,7 @@ HelloFrameworkConfig()->set([
     // Display a link to edit current page for logged in users. CSS styling in your theme reccommended.
     'frontend/edit_link'                                => false,
     'frontend/edit_link/text'                           => 'Edit',
+    'frontend/edit_link/style'                          => 'position: fixed; top: 0; right: 0;',
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -255,6 +256,7 @@ HelloFrameworkConfig()->set([
     // Skin outgoing emails by wrapping the message in an HTML header & footer.
     // Values should be defined as paths inside the `_includes` directory.
     'email/skin'                                        => false,
+    'email/skin/directory'                              => '_includes/',
     'email/skin/header'                                 => '',
     'email/skin/footer'                                 => '',
     // Force all links (<a href="...">) in the email body to have the following color. Supply hex color value.
