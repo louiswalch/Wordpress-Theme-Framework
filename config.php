@@ -151,8 +151,9 @@ HelloFrameworkConfig()->set([
     'render/image/default_wrap_autosize'                => false,
     'render/image/default_wrap_class'                   => 'img-wrapper',
 
-    // Lazy loading controls for image output.
+    // Lazy loading & responsive controls for image output.
     'render/image/default_lazy'                         => true,
+    'render/image/default_responsive'                   => true,
     'render/image/lazy_class'                           => 'lazyload lazyload-persist',
     'render/image/lazy_img_srcset'                      => 'data-srcset',
     'render/image/lazy_div_srcset'                      => 'data-bgset',

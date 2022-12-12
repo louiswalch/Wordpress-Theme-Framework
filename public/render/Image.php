@@ -31,10 +31,8 @@ class ImageRender extends HelloFramework\Singleton {
     private $_showcaption;
     private $_showdescription;
     private $_lazy;
-    // private $_low;
-    // private $_low_size;
+    private $_responsive;
     private $_size;
-    // private $_srcset;
     private $_wrap;
     private $_wrap_class;
     private $_wrap_size;
@@ -71,12 +69,10 @@ class ImageRender extends HelloFramework\Singleton {
             $this->_defaults['_classes']                = array();
             $this->_defaults['_draggable']              = HelloFrameworkConfig('render/image/default_draggable');
             $this->_defaults['_pinnable']               = HelloFrameworkConfig('render/image/default_pinnable');
-            // $this->_defaults['_low']                 = false;
-            // $this->_defaults['_low_size']            = '400';
             $this->_defaults['_size']                   = HelloFrameworkConfig('render/image/default_size');
-            // $this->_defaults['_srcset']              = true;
 
             $this->_defaults['_lazy']                   = HelloFrameworkConfig('render/image/default_lazy');
+            $this->_defaults['_responsive']             = HelloFrameworkConfig('render/image/default_responsive');
             
             $this->_defaults['_showcaption']            = HelloFrameworkConfig('render/image/default_caption');
             $this->_defaults['_caption_location']       = HelloFrameworkConfig('render/image/default_caption_location');
@@ -193,9 +189,9 @@ class ImageRender extends HelloFramework\Singleton {
         $attribute_srcset               = ($this->_lazy) ? HelloFrameworkConfig('render/image/lazy_'. $mode .'_srcset') : 'srcset';
         $attribute_sizes                = ($this->_lazy) ? HelloFrameworkConfig('render/image/lazy_sizes') : 'sizes';
 
-        if ($attribute_src)             $attributes[$attribute_src]     = $image_src;
-        if ($attribute_srcset)          $attributes[$attribute_srcset]  = $image_srcset;
-        if ($attribute_sizes)           $attributes[$attribute_sizes]   = 'auto';
+        if ($attribute_src)                             $attributes[$attribute_src]     = $image_src;
+        if ($this->_responsive && $attribute_srcset)    $attributes[$attribute_srcset]  = $image_srcset;
+        if ($this->_responsive && $attribute_sizes)     $attributes[$attribute_sizes]   = 'auto';
 
         // ---
 
@@ -215,9 +211,6 @@ class ImageRender extends HelloFramework\Singleton {
 
         // ---
 
-        // $image_srclow   = $this->_low ? wp_get_attachment_image_url($image_id, $this->_low_size) : '';
-        // $attributes['src_low']      = $image_srclow;
-
         $attributes['class']            = implode(' ', $this->_classes); 
 
         $attributes['meta']             = array(
@@ -227,6 +220,10 @@ class ImageRender extends HelloFramework\Singleton {
             'caption'                   => $image_caption,
             'description'               => $image_description,
             );
+
+
+// $attributes['width'] = $image_dims[1];
+// $attributes['height'] = $image_dims[2];
 
         if ($this->_debug) pr($attributes, 'attributes');
 
@@ -425,14 +422,6 @@ class ImageRender extends HelloFramework\Singleton {
     // ------------------------------------------------------------
     // Allow for updating of options when generating an image. Meant to be used as a chained method.
 
-    // public function low($incoming=true) {
-    //     if (isset($incoming)) $this->_low = $incoming;
-    //     return $this;
-    // }
-    // public function srcset($incoming=true) {
-    //     if (isset($incoming)) $this->_srcset = $incoming;
-    //     return $this;
-    // }
     public function wrap($one=true) {
         // - Passing in a boolean will allow you to enable/disable the wrap feature.
         // - Passing in a string will treat that value as a class name denoting size and add it to the wrap element.
@@ -481,24 +470,20 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;
     }    
     public function classes($incoming=false) {
-        // if ($incoming){
-        //     if ( strrpos($incoming, 'lazyload') !== false ){
-        //         $incoming .= ' lazyload-persist';
-        //     }
-        // }
         if ($incoming && strlen($incoming)) $this->_classes[] = $incoming;
         return $this;
     }
     public function lazy($incoming=false){
         if (isset($incoming)) $this->_lazy = $incoming;
-        // $this->_classes[]           = 'lazyload lazyload-persist';
-        // $this->_attr['data-sizes']  = 'auto';
+        return $this;            
+    }
+    public function responsive($incoming=false){
+        if (isset($incoming)) $this->_responsive = $incoming;
         return $this;            
     }
     public function size($incoming=false) {
         if ($incoming) {
             $this->_size = $incoming;
-            // HelloFrameworkConfig()->set('image/max/w', (int) $incoming);
         }
         return $this;
     }
@@ -531,28 +516,6 @@ class ImageRender extends HelloFramework\Singleton {
         $this->size($size);
 
         $data           = $this->_getImageData($image, 'div');
-
-        // if (HelloFrameworkConfig('render/image/lazysizes')) {
-        //     $data[HelloFrameworkConfig('render/image/div_src')]       = $data['data-src'];
-        //     $data[HelloFrameworkConfig('render/image/div_srcset')]    = $data['data-srcset'];
-        // } else {
-        //     $data[HelloFrameworkConfig('render/image/div_src')]       = $data['src'];
-        //     $data[HelloFrameworkConfig('render/image/div_srcset')]    = $data['srcset'];
-        // }
-
-        // if ($this->_low) {
-        //     $data['style'] = 'background-image: url(' . $data['src_low'] . ');';
-        // }
-
-        // if (isset($data['alt'])) unset($data['alt']);
-
-
-        // unset($data['alt']);
-        // // unset($data['caption']);
-        // // unset($data['src_low']);
-        // unset($data['src']);
-        // unset($data['srcset']);
-
         $attributes     = $this->_generateAttributes($data);
         $output         = $this->_generateWrap('<div '.$attributes.'>'. $inside .'</div>', $image, $data);
 
@@ -575,14 +538,8 @@ class ImageRender extends HelloFramework\Singleton {
         if (!$this->_pinnable)      $data['data-pin-nopin'] = 'true';
         if (!$this->_draggable)     $data['draggable']      = 'false';
 
-        // if ($this->_low)        $data['src'] = $data['src_low'];
-
-        // unset($data['src_low']);
-        // if (isset($data['sizes']))  unset($data['sizes']);
-
         $attributes             = $this->_generateAttributes($data);
         $output                 = '<img '. $attributes .' />';
-
         $output                 = $this->_generateWrap($output, $image, $data);
 
         // Reset all the request settings.
