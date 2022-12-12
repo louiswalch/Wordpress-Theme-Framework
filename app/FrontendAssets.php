@@ -16,7 +16,7 @@ class FrontendAssets {
 
         add_action( 'wp_default_scripts', [$this, 'removeDefaultScript']);
 
-        add_action( 'wp_print_styles', [$this, 'removeDefaultStyle'], 100 );
+        add_action( 'wp_print_styles', [$this, 'removeDefaultStyle'], 9999);
 
         if (!HelloFrameworkConfig('frontend/assets/version')) {
             add_filter( 'style_loader_src', [$this, 'removeAssetVersion']);
@@ -98,6 +98,7 @@ class FrontendAssets {
 
         wp_dequeue_style('wp-block-library');
         wp_dequeue_style('global-styles');
+        wp_dequeue_style('classic-theme-styles');
 
     }
 

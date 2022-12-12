@@ -58,7 +58,7 @@ class FrameworkEmail {
         // Skin outgoing email.
         add_filter('wp_mail', function($email) {
             return $this->formatEmail($email);
-        }, 1000);
+        }, 1, 1000);
 
     }
 
@@ -75,9 +75,9 @@ class FrameworkEmail {
         if (HelloFrameworkConfig('email/skin')) {
 
             $header_output      = '';
-            $header_file        = get_template_directory() . '/_includes/' . HelloFrameworkConfig('email/skin/header') .'.php';
+            $header_file        = get_template_directory() . '/' . HelloFrameworkConfig('email/skin/directory') . HelloFrameworkConfig('email/skin/header') .'.php';
             $footer_output      = '';
-            $footer_file        = get_template_directory() . '/_includes/' . HelloFrameworkConfig('email/skin/footer') .'.php';
+            $footer_file        = get_template_directory() . '/' . HelloFrameworkConfig('email/skin/directory') . HelloFrameworkConfig('email/skin/footer') .'.php';
 
             if (file_exists($header_file)) {
 
