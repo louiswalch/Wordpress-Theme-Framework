@@ -4,12 +4,14 @@ namespace HelloFramework;
 
 class DashboardNavigationBar extends Singleton {
 
-    public $_action_priority   = 9999;
-    public $_menu_priority     = 10;
+    public $_action_priority        = 9999;
+    public $_menu_priority          = 10;
 
-    public $_relocate          = array();
+    public $_relocate               = array();
 
-    private $_icon_replace     = array(
+    private $_submenu_whitelist     = array();
+
+    private $_icon_replace          = array(
         'wpseo_dashboard'      => 'dashicons-rest-api',
         );
 
@@ -38,6 +40,9 @@ class DashboardNavigationBar extends Singleton {
 
         // Not told to move anything.
         if (!$relocations || !count($relocations)) return false;
+
+        // Top menu subpage whitelist, special url handling.
+        $this->_submenu_whitelist = HelloFrameworkConfig('dashboard/admin_bar/relocate/sub_menu_whitelist');
 
         // Prepare a keyed version of the menu relations.
         foreach ($relocations as $item) {
@@ -119,36 +124,35 @@ class DashboardNavigationBar extends Singleton {
         ), $this->_menu_priority);
 
         foreach ($submenu[$slug] as $key => $sub) {
-            $this->_addTopSubMenus($sub, $key, $id);
+            $this->_addTopSubMenus($sub, $key, $id, $slug);
         }
 
     }
 
-    private function _addTopSubMenus($item, $key, $parent) {
+    private function _addTopSubMenus($item, $key, $parent_id, $parent_slug) {
 
         global $wp_admin_bar;
 
-        $special_paths  = array('redirection.php', 'users-user-role-editor.php');
 
         $title          = $item[0];
-        $id             = $parent.'-'.$key;
+        $id             = $parent_id.'-'.$key;
         $path           = $item[2];
 
-        $href           = (strpos($path, '.php') && !in_array($path, $special_paths)) ? $path : ('admin.php?page='.$path);
+// if ($parent_id == 'top-menu-settings') {
+    // pr($parent_slug, '$parent_slug');
+    // pr($item, '$item');
+// }
+
+        $href           = (strpos($path, '.php') && !in_array($path, $this->_submenu_whitelist)) ? $path : ($parent_slug.'?page='.$path);
+
+        // $href           = (strpos($path, '.php')) ? $path : "$parent_slug?page=$path";
+
         $href           = admin_url($href);
 
-        $wp_admin_bar->add_menu(array('parent' => $parent, 'title' => $title, 'id' => $id, 'href' => $href ));
+        $wp_admin_bar->add_menu(array('parent' => $parent_id, 'title' => $title, 'id' => $id, 'href' => $href ));
 
     }
 
-    // private function _addTopSpacer() {
-    //     global $wp_admin_bar;
-    //     $wp_admin_bar->add_menu(array(
-    //         'id'    => 'top-spacer', 
-    //         'title' => '&nbsp;&nbsp;', 
-    //         'href'  => '',
-    //     ));
-    // }
 
     public function addCSS() {
         echo '<style>

@@ -195,6 +195,7 @@ HelloFrameworkConfig()->set([
 
     // Relocate items from the sidebar into top bar.
     'dashboard/admin_bar/relocate'                      => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group', 'profile.php', ['wpseo_dashboard', 'dashicons-share']],
+    'dashboard/admin_bar/relocate/sub_menu_whitelist'   => ['relevanssi-premium/relevanssi.php', 'redirection.php', 'users-user-role-editor.php'],
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
