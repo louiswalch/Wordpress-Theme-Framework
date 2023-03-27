@@ -211,6 +211,8 @@ class Frontend {
 
         add_action('wp_footer', function() {
 
+            wp_reset_postdata();
+
             $before         = '<div style="'. CONFIG('frontend/edit_link/style') .'" class="wordpress-edit-button">';
             $after          = '</div>';
             $queried_object = get_queried_object();
