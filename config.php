@@ -151,6 +151,9 @@ HelloFrameworkConfig()->set([
     'render/image/default_wrap_autosize'                => false,
     'render/image/default_wrap_class'                   => 'img-wrapper',
 
+    // Wrapper autosize configuration for the Image Render library.
+    'render/image/autosize_method'                      => 'padding-bottom',
+
     // Lazy loading & responsive controls for image output.
     'render/image/default_lazy'                         => true,
     'render/image/default_responsive'                   => true,

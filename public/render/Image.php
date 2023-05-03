@@ -294,9 +294,16 @@ class ImageRender extends HelloFramework\Singleton {
 
     private function _generateWrapAutosizeDimensions($image_meta) {
 
+        if (empty($image_meta['width']) || empty($image_meta['height'])) return '';
+
         $w      = $image_meta['width'];
         $h      = $image_meta['height'];        
-        return 'padding-bottom:' . ($h/$w*100) . '%;';
+
+        if (HelloFrameworkConfig('render/image/autosize_method') == 'aspect-ratio') {
+            return 'aspect-ratio:' . $w .'/' .$h. ';';
+        } else {
+            return 'padding-bottom:' . ($h/$w*100) . '%;';
+        }
 
     }
 
@@ -516,6 +523,12 @@ class ImageRender extends HelloFramework\Singleton {
         $this->size($size);
 
         $data           = $this->_getImageData($image, 'div');
+
+        if (!$this->_responsive) {
+            $data['style'] = 'background-image: url('.$data['src'].')';     
+            unset($data['src']);
+        }
+
         $attributes     = $this->_generateAttributes($data);
         $output         = $this->_generateWrap('<div '.$attributes.'>'. $inside .'</div>', $image, $data);
 
