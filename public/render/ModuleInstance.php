@@ -17,7 +17,7 @@ namespace {
 
     function get_module_var($key, $default = false, $group = null) {
 
-        return MODULES()->getData($key, $default = false, $group);
+        return MODULES()->getData($key, $default, $group);
     
     }
 
