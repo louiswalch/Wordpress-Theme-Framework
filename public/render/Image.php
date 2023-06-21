@@ -37,6 +37,7 @@ class ImageRender extends HelloFramework\Singleton {
     private $_wrap_class;
     private $_wrap_size;
     private $_wrap_autosize;
+    private $_wrap_fallback;
     private $_caption_location;
     private $_caption_element;
     private $_caption_class;
@@ -89,6 +90,7 @@ class ImageRender extends HelloFramework\Singleton {
             $this->_defaults['_wrap_size']              = HelloFrameworkConfig('render/image/default_wrap_size');
             $this->_defaults['_wrap_autosize']          = HelloFrameworkConfig('render/image/default_wrap_autosize');
             $this->_defaults['_wrap_class']             = HelloFrameworkConfig('render/image/default_wrap_class');
+            $this->_defaults['_wrap_fallback']          = HelloFrameworkConfig('render/image/default_wrap_fallback');
 
         }
 
@@ -176,6 +178,7 @@ class ImageRender extends HelloFramework\Singleton {
         $image_dims                     = wp_get_attachment_image_src( $this->_getImageId($image), 'full');
 
         $image_mime                     = get_post_mime_type($image_id);
+        if (!$image_mime) return false;
 
         $image_caption                  = ($this->_showcaption) ? $this->_getImageCaption($image_id) : '';
         $image_description              = ($this->_showdescription) ? $this->_getImageDescription($image_id) : '';
@@ -221,10 +224,6 @@ class ImageRender extends HelloFramework\Singleton {
             'description'               => $image_description,
             );
 
-
-// $attributes['width'] = $image_dims[1];
-// $attributes['height'] = $image_dims[2];
-
         if ($this->_debug) pr($attributes, 'attributes');
 
         return $attributes;
@@ -236,7 +235,7 @@ class ImageRender extends HelloFramework\Singleton {
     // Build HTML attributes from an array.
     // https://stackoverflow.com/a/34063755/107763       
 
-    private function _generateAttributes($array=array()) {
+    private function _generateAttributes($array=[]) {
         $array      = array_merge( $array, $this->_attr );
         return format_attributes($array, ['meta']);
     }
@@ -446,6 +445,10 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;
 
     }
+    public function fallback($incoming=false) {
+        if (isset($incoming) && is_bool($incoming)) $this->_wrap_fallback = $incoming;
+        return $this;
+    }
     public function autosize($incoming=null) {
         if ($incoming === true) {
             $this->_wrap_autosize       = $incoming;
@@ -514,6 +517,17 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;            
     }
 
+    // ------------------------------------------------------------
+    // When no image is specified do fallback behavior
+
+    private function _generateFallback() {
+
+        if ($this->_wrap_fallback) {
+            return '<div class="'. $this->_wrap_class .' fallback '. $this->_wrap_size .'"></div>';
+        } else {
+            return false;
+        }
+    }    
 
     // ------------------------------------------------------------
     // Image Generator: Return a DIV element with this image as it's data-src for lazy loading. 
@@ -523,6 +537,8 @@ class ImageRender extends HelloFramework\Singleton {
         $this->size($size);
 
         $data           = $this->_getImageData($image, 'div');
+
+        if (!$data) return $this->_generateFallback();
 
         if (!$this->_responsive) {
             $data['style'] = 'background-image: url('.$data['src'].')';     
@@ -544,9 +560,13 @@ class ImageRender extends HelloFramework\Singleton {
 
     public function img($image=false, $size=false) {
 
+        if (!$image) return $this->_generateFallback();
+
         $this->size($size);
 
         $data                   = $this->_getImageData($image, 'img');
+
+        if (!$data) return $this->_generateFallback();
 
         if (!$this->_pinnable)      $data['data-pin-nopin'] = 'true';
         if (!$this->_draggable)     $data['draggable']      = 'false';
@@ -567,7 +587,7 @@ class ImageRender extends HelloFramework\Singleton {
 
     public function src($image=false, $size=false) {
 
-        if (!$image) return false;
+        if (!$image) return $this->_generateFallback();
 
         $this->size($size);
 
