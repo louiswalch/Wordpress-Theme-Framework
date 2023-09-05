@@ -6,19 +6,19 @@ class FrontendAssets {
 
 	public function __construct() {
 
+        add_action( 'wp_default_scripts', [$this, 'removeDefaultScript']);
+
+        add_action( 'wp_print_styles', [$this, 'removeDefaultStyle'], 9999);
+
         // Has this been enabled?
-        if (!HelloFrameworkConfig('framework/enable/frontend_assets')) return false;
+        if (HelloFrameworkConfig('framework/enable/frontend_assets') === false) return false;
 
         // Don't do this on ajax requests
         if (isset($_REQUEST['ajaxify'])) return;
 
         add_action( 'wp_enqueue_scripts', [$this, 'addAssets']);
 
-        add_action( 'wp_default_scripts', [$this, 'removeDefaultScript']);
-
-        add_action( 'wp_print_styles', [$this, 'removeDefaultStyle'], 9999);
-
-        if (!HelloFrameworkConfig('frontend/assets/version')) {
+        if (HelloFrameworkConfig('frontend/assets/version') === false) {
             add_filter( 'style_loader_src', [$this, 'removeAssetVersion']);
             add_filter( 'script_loader_src', [$this, 'removeAssetVersion']);
         }
@@ -92,13 +92,16 @@ class FrontendAssets {
 
 
     // ------------------------------------------------------------
-    // Remove gutenburbg CSS.
+    // Remove native Wordpress CSS.
 
     public function removeDefaultStyle() {
 
-        wp_dequeue_style('wp-block-library');
-        wp_dequeue_style('global-styles');
-        wp_dequeue_style('classic-theme-styles');
+        $stylesheets = HelloFrameworkConfig('frontend/assets/remove_css');
+        if ($stylesheets && is_array($stylesheets)) {
+            foreach($stylesheets as $css) {
+                wp_dequeue_style($css);
+            }
+        }
 
     }
 

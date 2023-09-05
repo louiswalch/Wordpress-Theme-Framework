@@ -83,6 +83,9 @@ HelloFrameworkConfig()->set([
     'frontend/assets/js_head'                           => [],
     'frontend/assets/version'                           => false,
 
+    // Remove built-in Wordpress CSS stylesheets
+    'frontend/assets/remove_css'                        => ['wp-block-library', 'global-styles', 'classic-theme-styles'],
+
     // Replace version of jQuery.
     // Path is relative to `asset/` directory in theme root.
     'frontend/assets/js_jquery'                         => '',
