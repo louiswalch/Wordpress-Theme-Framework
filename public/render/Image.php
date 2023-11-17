@@ -40,6 +40,7 @@ class ImageRender extends HelloFramework\Singleton {
     private $_wrap_fallback;
     private $_caption_location;
     private $_caption_element;
+    private $_caption_placeholder;
     private $_caption_class;
     private $_caption_strip_html;
     private $_description_location;
@@ -78,6 +79,7 @@ class ImageRender extends HelloFramework\Singleton {
             $this->_defaults['_showcaption']            = HelloFrameworkConfig('render/image/default_caption');
             $this->_defaults['_caption_location']       = HelloFrameworkConfig('render/image/default_caption_location');
             $this->_defaults['_caption_element']        = HelloFrameworkConfig('render/image/caption_element');
+            $this->_defaults['_caption_placeholder']    = HelloFrameworkConfig('render/image/caption_placeholder');
             $this->_defaults['_caption_class']          = HelloFrameworkConfig('render/image/caption_class');
             $this->_defaults['_caption_strip_html']     = HelloFrameworkConfig('render/image/caption_strip_html');
 
@@ -153,9 +155,9 @@ class ImageRender extends HelloFramework\Singleton {
 
         $alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
 
-        if ($this->_caption_strip_html) {
+        // if ($this->_caption_strip_html) {
             $alt = strip_tags($alt);
-        }
+        // }
 
         if (strlen($alt)) {
             return character_limiter($alt, 95, '...');
@@ -371,15 +373,18 @@ class ImageRender extends HelloFramework\Singleton {
 
     private function _generateCaptionElement($image_data, $location = null) {
 
-        if (empty($image_data['meta']['caption']) || !$this->_showcaption) return '';
+        if (!$this->_showcaption) return '';
 
         if ($location != '*' && $this->_caption_location != $location) return '';
+
+        if (!$this->_caption_placeholder && empty($image_data['meta']['caption'])) return '';
 
         return $this->_formatCaptionOutput($image_data['meta']['caption']);
 
     }
 
     private function _formatCaptionOutput($caption) {
+        if (empty($caption)) $caption = '&nbsp;';
         return '<'. $this->_caption_element .' class="'. $this->_caption_class .'">' . $caption . '</'. $this->_caption_element .'>';
     }
 

@@ -141,6 +141,7 @@ HelloFrameworkConfig()->set([
     'render/image/caption_element'                      => 'div',
     'render/image/caption_class'                        => 'caption',
     'render/image/caption_strip_html'                   => true,
+    'render/image/caption_placeholder'                  => false,
 
     // Image description control for the Image Render library.
     'render/image/default_description'                  => false,
