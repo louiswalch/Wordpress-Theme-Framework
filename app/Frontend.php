@@ -39,6 +39,9 @@ class Frontend {
         // Add quick-link to edit page.
         $this->_addEditLink();
 
+        // Add output formatting
+        $this->_addOutputFormatting();
+
         // THIRD-PARTY - Clean up the Yoast SEO fields added to user profile
         // add_filter( 'user_contactmethods', 'clean_user_contactmethods', 10, 1 );
 
@@ -200,6 +203,7 @@ class Frontend {
 
     }
 
+    // ------------------------------------------------------------
 
     private function _addEditLink() {
 
@@ -227,6 +231,20 @@ class Frontend {
             }
 
         });
+
+    }
+
+
+    // ------------------------------------------------------------
+
+    private function _addOutputFormatting() {
+
+        // Filter the output of WYSIWYG field and wrap with some HTML/class:
+        if (HelloFrameworkConfig('frontend/output/wysiwyg/wrap')) {
+            add_filter('the_content', HelloFrameworkConfig('frontend/output/wysiwyg/function'), 20);
+            add_filter('acf/format_value/type=wysiwyg', HelloFrameworkConfig('frontend/output/wysiwyg/function'), 20);
+        }
+
 
     }
 

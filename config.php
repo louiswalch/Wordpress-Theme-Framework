@@ -127,6 +127,17 @@ HelloFrameworkConfig()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Frontend Output Formatting
+    
+    // WYSIWYG: Filter the output of field to wrap with some HTML/class.
+    'frontend/output/wysiwyg/wrap'                      => false,
+    'frontend/output/wysiwyg/class'                     => 'wysiwyg',
+    'frontend/output/wysiwyg/function'                  => function($content){
+        return '<div class="'. HelloFrameworkConfig('frontend/output/wysiwyg/class') .'">' . $content .'</div>';
+    },
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Render Render Library
 
     // Attribute control for the Image Render library.
@@ -237,7 +248,7 @@ HelloFrameworkConfig()->set([
 
     'dashboard/editor/customize'                        => false,
     'dashboard/editor/css'                              => '',
-    'dashboard/editor/height'                           => 150,
+    'dashboard/editor/height'                           => 300,
     'dashboard/editor/resize'                           => true,
     'dashboard/editor/media_buttons'                    => false,
     'dashboard/editor/buttons_1'                        => ['formatselect', 'bold','italic','bullist','numlist','blockquote','alignleft','aligncenter','alignright','link','unlink','pastetext','removeformat'],

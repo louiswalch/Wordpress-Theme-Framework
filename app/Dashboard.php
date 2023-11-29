@@ -379,20 +379,22 @@ class Dashboard  {
 
         if (!HelloFrameworkConfig('dashboard/editor/customize')) return;
 
+
         if (HelloFrameworkConfig('dashboard/editor/css')) {
             add_action( 'admin_init', function() {
                 add_editor_style(framework_internal_asset(HelloFrameworkConfig('dashboard/editor/css')));
             });
         }
 
+
         // Basic Content Editor settings.
         add_filter('tiny_mce_before_init', function($settings) {
-            $settings['height']                  = HelloFrameworkConfig('dashboard/editor/height');
             $settings['wp_autoresize_on']        = HelloFrameworkConfig('dashboard/editor/resize');
             $settings['resize']                  = HelloFrameworkConfig('dashboard/editor/resize');
             $settings['statusbar']               = true;
             return $settings; 
         }, 10);
+
 
         // Forcefully hide all the 'Add Media' buttons for Content Editor.
         if (!HelloFrameworkConfig('dashboard/editor/media_buttons')) {
@@ -401,15 +403,18 @@ class Dashboard  {
             });
         }
         
+
         // Cut down the first row of editor icons to just what we need.
         add_filter('mce_buttons', function($buttons, $editor_id) {
             return HelloFrameworkConfig('dashboard/editor/buttons_1') ?: [];
         }, 10, 2 );
 
+
         // Also cut down the second row of editor icons to just what we need.
         add_filter('mce_buttons_2', function($buttons, $editor_id) {
             return HelloFrameworkConfig('dashboard/editor/buttons_2') ?: [];
         }, 10, 2 );
+
 
         // Change the options available in format dropdown.
         add_filter( 'tiny_mce_before_init', function($init) {  
@@ -425,22 +430,65 @@ class Dashboard  {
             return $init;  
         });   
 
-        // ACF adds a 'Basic' button Toolbar option, also allow this to be controlled.
-        if (HelloFrameworkConfig('dashboard/editor/buttons_1_basic')) {
-            add_filter('acf/fields/wysiwyg/toolbars', function($toolbars) {
+
+        // Allow control over the "Basic" set of buttons added by ACF, and add a third "Very Simple" set.
+        add_filter('acf/fields/wysiwyg/toolbars', function($toolbars) {
+            if (HelloFrameworkConfig('dashboard/editor/buttons_1_basic')) {
                 if (isset($toolbars['Basic'])) {
                     $toolbars['Basic'][1] = HelloFrameworkConfig('dashboard/editor/buttons_1_basic');
                 }
-                return $toolbars;
-            });
-        }
+            }
+            if (HelloFrameworkConfig('dashboard/editor/buttons_1_simple')) {
+                $toolbars['Very Simple'] = array();
+                $toolbars['Very Simple'][1] = HelloFrameworkConfig('dashboard/editor/buttons_1_simple');
+            }
+            return $toolbars;
+        });
     
+
         // Removing the Media Button causes Content Editor to appear too close to the permalink.
         if (!HelloFrameworkConfig('dashboard/editor/media_buttons')) {
             add_action('admin_head', function() {
                 echo '<style>#postdivrich { padding-top: 25px; padding-bottom: 20px; }; </style>';
             });            
         }
+
+        
+        // Allow custom height to be set on WYSIWYG field
+        // https://gist.github.com/stianandreassen/6dc87c88c43b2bc43d0ea1a94bd5cd1e
+        add_action('acf/render_field_settings/type=wysiwyg', function($field){
+            acf_render_field_setting($field, [
+                'label'         => __('Height', 'acf'),
+                'instructions'  => __('', 'acf'),
+                'name'          => 'height',
+                'type'          => 'number',
+                'min'           => 25,
+                'max'           => 600,
+                'default_value' => HelloFrameworkConfig('dashboard/editor/height'),
+                'prepend'       => 'px',
+            ]);
+        }, 10, 1);
+        add_action('acf/render_field/type=wysiwyg', function ($field) {
+            if (isset($field['height'])) {
+                $height = $field['height'];
+                $field_class = '.acf-'.str_replace('_', '-', $field['key']); ?>
+                <style type="text/css">
+                <?php echo $field_class; ?> iframe {
+                    min-height: <?php echo $height; ?>px;
+                }
+                </style>
+                <script type="text/javascript">
+                jQuery(window).on('load', function() {
+                    jQuery('<?php echo $field_class; ?>').each(function() {
+                        setTimeout(() => {
+                            jQuery('#'+jQuery(this).find('iframe').attr('id')).height(<?php echo $height; ?>);
+                        });
+                    });
+                });
+                </script>
+                <?php
+            }
+        }, 10, 1);
 
 
     }
