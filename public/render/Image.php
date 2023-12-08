@@ -154,17 +154,17 @@ class ImageRender extends HelloFramework\Singleton {
         // pr($image, '_getImageAlt');
 
         $alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
-
-        // if ($this->_caption_strip_html) {
-            $alt = strip_tags($alt);
-        // }
+        $alt = strip_tags($alt);
 
         if (strlen($alt)) {
             return character_limiter($alt, 95, '...');
         }
 
         if (HelloFrameworkConfig('render/image/alt_fallback')) {
-            return get_the_title($image_id);
+            if (($title = get_the_title($image_id))) {
+                return $title;
+            }
+            return str_replace(['-', '.jpg', '.png'], ' ', basename(get_attached_file($image_id)));
         }
 
         return '';
