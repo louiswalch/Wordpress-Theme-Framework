@@ -10,6 +10,7 @@ class DashboardNavigationBar extends Singleton {
     public $_relocate               = array();
 
     private $_submenu_whitelist     = array();
+    private $_submenu_blacklist     = array();
 
     private $_icon_replace          = array(
         'wpseo_dashboard'      => 'dashicons-rest-api',
@@ -41,8 +42,9 @@ class DashboardNavigationBar extends Singleton {
         // Not told to move anything.
         if (!$relocations || !count($relocations)) return false;
 
-        // Top menu subpage whitelist, special url handling.
+        // Top menu subpage, special url handling.
         $this->_submenu_whitelist = HelloFrameworkConfig('dashboard/admin_bar/relocate/sub_menu_whitelist');
+        $this->_submenu_blacklist = HelloFrameworkConfig('dashboard/admin_bar/relocate/sub_menu_blacklist');
 
         // Prepare a keyed version of the menu relations.
         foreach ($relocations as $item) {
@@ -63,7 +65,7 @@ class DashboardNavigationBar extends Singleton {
 
     public function processMainMenus() {
 
-        global $menu; 
+        global $menu, $submenu; 
 
         foreach ($menu as $key => $value) {
 
@@ -108,6 +110,10 @@ class DashboardNavigationBar extends Singleton {
         $id     = 'top-' . $item[5];
         $icon   = (array_key_exists($slug, $this->_icon_replace)) ? $this->_icon_replace[$slug] : $item[6];
 
+        // if (!strpos($slug, '.php')) {
+        //     $slug = 'admin.php?page='.$slug;
+        // }
+
         // Make sure we have submenus for this, there won't be if the user is not allowed to use this.
         if (!array_key_exists($slug, $submenu)) return false;
 
@@ -133,21 +139,16 @@ class DashboardNavigationBar extends Singleton {
 
         global $wp_admin_bar;
 
-
         $title          = $item[0];
         $id             = $parent_id.'-'.$key;
         $path           = $item[2];
 
-// if ($parent_id == 'top-menu-settings') {
-    // pr($parent_slug, '$parent_slug');
-    // pr($item, '$item');
-// }
+        if (in_array($path, $this->_submenu_blacklist)) return;
 
-        $href           = (strpos($path, '.php') && !in_array($path, $this->_submenu_whitelist)) ? $path : ($parent_slug.'?page='.$path);
+        if (!strpos($parent_slug, '.php')) $parent_slug = 'admin.php';
+        if (in_array($path, $this->_submenu_whitelist) || !strpos($path, '.php')) $path = $parent_slug.'?page='.$path;
 
-        // $href           = (strpos($path, '.php')) ? $path : "$parent_slug?page=$path";
-
-        $href           = admin_url($href);
+        $href           = admin_url($path);
 
         $wp_admin_bar->add_menu(array('parent' => $parent_id, 'title' => $title, 'id' => $id, 'href' => $href ));
 
