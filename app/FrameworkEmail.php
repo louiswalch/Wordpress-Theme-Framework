@@ -13,10 +13,10 @@ class FrameworkEmail {
         add_filter('wp_mail_content_type', function() {
             return HelloFrameworkConfig('email/mime');
         });
-        add_filter('wp_mail_from', function( $original ) {
-            return HelloFrameworkConfig('email/address');
+        add_filter('wp_mail_from', function($original) {
+            return (HelloFrameworkConfig('email/address')) ? HelloFrameworkConfig('email/address') : $original;
         });
-        add_filter('wp_mail_from_name', function( $original ) {
+        add_filter('wp_mail_from_name', function($original) {
             return HelloFrameworkConfig('email/name');
         });
 
