@@ -49,9 +49,9 @@ class Includes extends HelloFramework\Singleton {
         $this->_debug       = !detect_environment('production');
 
         // Store default values to be used for each new instance.
-        foreach($this->_remember as $key) {
-            $this->_default[$key] = $this->{$key};
-        }
+        // foreach($this->_remember as $key) {
+        //     $this->_default[$key] = $this->{$key};
+        // }
 
     }
 
