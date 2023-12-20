@@ -164,7 +164,7 @@ class ImageRender extends HelloFramework\Singleton {
             if (($title = get_the_title($image_id))) {
                 return $title;
             }
-            return str_replace(['-', '.jpg', '.png'], ' ', basename(get_attached_file($image_id)));
+            return str_replace(['-', '_', '.jpg', '.jpeg', '.png'], ' ', basename(get_attached_file($image_id)));
         }
 
         return '';
