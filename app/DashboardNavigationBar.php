@@ -110,10 +110,6 @@ class DashboardNavigationBar extends Singleton {
         $id     = 'top-' . $item[5];
         $icon   = (array_key_exists($slug, $this->_icon_replace)) ? $this->_icon_replace[$slug] : $item[6];
 
-        // if (!strpos($slug, '.php')) {
-        //     $slug = 'admin.php?page='.$slug;
-        // }
-
         // Make sure we have submenus for this, there won't be if the user is not allowed to use this.
         if (!array_key_exists($slug, $submenu)) return false;
 
@@ -143,8 +139,10 @@ class DashboardNavigationBar extends Singleton {
         $id             = $parent_id.'-'.$key;
         $path           = $item[2];
 
+        // Remove items from submenu
         if (in_array($path, $this->_submenu_blacklist)) return;
 
+        // Path correction
         if (!strpos($parent_slug, '.php')) $parent_slug = 'admin.php';
         if (in_array($path, $this->_submenu_whitelist) || !strpos($path, '.php')) $path = $parent_slug.'?page='.$path;
 
