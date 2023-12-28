@@ -53,6 +53,8 @@ class Dashboard  {
 
         $this->_togglePosts();
 
+        $this->_toggleNotices();
+
         $this->_toggleMetaboxes();
  
         $this->_addMetaboxes();
@@ -148,9 +150,6 @@ class Dashboard  {
             remove_meta_box( 'trackbacksdiv', 'page', 'normal' );
         });
 
-
-
-
     }
 
 
@@ -237,6 +236,20 @@ class Dashboard  {
         });
 
     }
+
+
+    // ------------------------------------------------------------
+    // Remove all notices within the back-end:
+
+    private function _toggleNotices() {
+
+        if (HelloFrameworkConfig('dashboard/notices') === true) return;
+
+        add_action('admin_head', function() {
+            remove_all_actions('admin_notices');
+        }, 1);
+
+    }    
 
 
     // ------------------------------------------------------------

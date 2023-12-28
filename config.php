@@ -217,6 +217,9 @@ HelloFrameworkConfig()->set([
     'dashboard/admin_bar/relocate/sub_menu_whitelist'   => ['relevanssi-premium/relevanssi.php', 'redirection.php', 'users-user-role-editor.php'],
     'dashboard/admin_bar/relocate/sub_menu_blacklist'   => ['options-discussion.php', 'site-health.php', 'export-personal-data.php', 'erase-personal-data.php', 'tools.php', 'import.php', 'plugin-editor.php', 'acf-settings-updates', 'wpseo_page_academy', 'wpseo_licenses', 'wpseo_workouts', 'wpseo_redirects', 'wpseo_integrations', 'wpseo_tools', 'wpseo_page_support'],
 
+    // Remove all notices within the back-end
+    'dashboard/notices'                                 => true,
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Metabox Settings
