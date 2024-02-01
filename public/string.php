@@ -18,4 +18,23 @@ namespace {
         }
     }
 
+    if (!function_exists('bool_to_str')) {
+        function bool_to_str($bool = false) {
+            return ($bool === true) ? 'true' : 'false';
+        }
+    }
+    if (!function_exists('bool_to_int')) {
+        function bool_to_int($incoming = false) {
+            if (!is_bool($incoming)) return $incoming;
+            return ($incoming === true) ? 1 : 0;
+        }
+    }
+    if (!function_exists('str_to_bool')) {
+        function str_to_bool($incoming = '0') {
+            if (is_bool($incoming)) return $incoming;
+            return ($incoming === '1');
+        }
+    }
+
+
 }
