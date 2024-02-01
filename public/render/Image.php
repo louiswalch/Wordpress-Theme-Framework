@@ -27,6 +27,7 @@ class ImageRender extends HelloFramework\Singleton {
     private $_debug     = false;
     private $_attr;
     private $_classes;
+    private $_draggable;
     private $_pinnable;
     private $_showcaption;
     private $_showdescription;
