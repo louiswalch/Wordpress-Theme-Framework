@@ -74,6 +74,7 @@ class FrontendAssets {
     private function _addAssetVersion($file) {
 
         $path = framework_theme_asset($file, false, true);
+
         return (file_exists($path)) ? (filemtime($path)) : 404;
 
     }
