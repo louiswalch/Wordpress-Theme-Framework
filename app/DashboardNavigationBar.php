@@ -43,8 +43,8 @@ class DashboardNavigationBar extends Singleton {
         if (!$relocations || !count($relocations)) return false;
 
         // Top menu subpage, special url handling.
-        $this->_submenu_whitelist = HelloFrameworkConfig('dashboard/admin_bar/relocate/sub_menu_whitelist');
-        $this->_submenu_blacklist = HelloFrameworkConfig('dashboard/admin_bar/relocate/sub_menu_blacklist');
+        $this->_submenu_whitelist = HelloFrameworkConfig('dashboard/admin_bar/relocate/sub_menu_whitelist') ?: [];
+        $this->_submenu_blacklist = HelloFrameworkConfig('dashboard/admin_bar/relocate/sub_menu_blacklist') ?: [];
 
         // Prepare a keyed version of the menu relations.
         foreach ($relocations as $item) {
