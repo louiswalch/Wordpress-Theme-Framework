@@ -23,6 +23,7 @@ class FrameworkEmail {
         // Disable 'Notice of Password Change' email.
         if (!HelloFrameworkConfig('email/send/change_password')) {
             add_filter('send_password_change_email', '__return_false' );
+            remove_action( 'after_password_reset', 'wp_password_change_notification' );
         }
         // Disable 'Notice of Email Change' email.
         if (!HelloFrameworkConfig('email/send/change_email')) {
