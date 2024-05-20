@@ -45,7 +45,7 @@ class Dashboard  {
 
         $this->_toggleEmoji();
 
-        $this->_toggleComments();
+        $this->_toggleCommentsAdmin();
 
         $this->_toggleTags();
 
@@ -105,9 +105,37 @@ class Dashboard  {
     // ------------------------------------------------------------
     // Remove Comment functionality.
 
-    private function _toggleComments() {
+    private function _toggleCommentsAdmin() {
 
         if (HelloFrameworkConfig('support/comments')) return false;
+
+        add_action('admin_init', function () {
+ 
+            // Remove comments metabox from dashboard
+            remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
+
+        });
+
+        // Remove comments page in menu
+        add_action('admin_menu', function () {
+            remove_menu_page('edit-comments.php');
+            remove_submenu_page('options-general.php', 'options-discussion.php');
+        });
+
+        // Remove comments links from admin bar
+        add_action('init', function () {
+            if (is_admin_bar_showing()) {
+                remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
+            }
+        });
+
+        // Remove comments icon from admin bar
+        add_action('wp_before_admin_bar_render', function() {
+            global $wp_admin_bar;
+            $wp_admin_bar->remove_menu('comments');
+        });
+
+        /*
 
         // Remove comment column from WP-Admin list pages.    
         add_filter('manage_pages_columns', function($defaults) {
@@ -119,27 +147,6 @@ class Dashboard  {
             return $defaults;
         });
 
-        // Remove comment count from the WP-Admin toolbar.
-        add_action( 'wp_before_admin_bar_render', function() {
-            global $wp_admin_bar;
-            $wp_admin_bar->remove_menu('comments');
-        });
-
-        // Remove comments from the WP-Admin sidebar.
-        add_action('admin_menu', function() {
-            remove_menu_page('edit-comments.php');
-        });
-
-        // Remove comment count from the WP-Admin toolbar.    
-        add_action( 'wp_before_admin_bar_render', function() {
-            global $wp_admin_bar;
-            $wp_admin_bar->remove_menu('comments');
-        });
-
-        // Remove comments support.
-        remove_post_type_support('post', 'comments');
-        remove_post_type_support('page', 'comments');
-
         // Remove metabox from edit post page.
         add_action( 'admin_init', function() {
             remove_meta_box( 'commentsdiv', 'post', 'normal' );
@@ -149,6 +156,8 @@ class Dashboard  {
             remove_meta_box( 'trackbacksdiv', 'post', 'normal' );
             remove_meta_box( 'trackbacksdiv', 'page', 'normal' );
         });
+
+        */
 
     }
 

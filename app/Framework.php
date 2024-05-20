@@ -24,6 +24,12 @@ class Framework {
         // Toggle core Wordpress functionality.
         $this->toggleSupports();
 
+        // Toggle comment and pingback functionality.
+        $this->_toggleComments();
+
+        // Toggle core API functionality.
+        $this->toggleApi();
+
         // Assign custom image sizes and remove unneeded ones.
         $this->setImageParameters();
          
@@ -87,6 +93,45 @@ class Framework {
 
 
     // ------------------------------------------------------------
+    // Remove Comment functionality.
+
+    private function _toggleComments() {
+
+        if (HelloFrameworkConfig('support/comments')) return false;
+
+        add_action('admin_init', function () {
+
+            // Redirect any user trying to access comments page
+            global $pagenow;
+            if ($pagenow === 'edit-comments.php' || $pagenow === 'options-discussion.php') {
+                wp_redirect(admin_url());
+                exit;
+            }
+
+            // Disable support for comments and trackbacks in post types
+            foreach (get_post_types() as $post_type) {
+                if (post_type_supports($post_type, 'comments')) {
+                    remove_post_type_support($post_type, 'comments');
+                    remove_post_type_support($post_type, 'trackbacks');
+                }
+            }
+            
+        });
+
+        // Close comments on the front-end
+        add_filter('comments_open', '__return_false', 20, 2);
+        add_filter('pings_open', '__return_false', 20, 2);
+
+        // Hide existing comments
+        add_filter('comments_array', '__return_empty_array', 10, 2);
+
+        // Return a comment count of zero to hide existing comment entry link.
+        add_filter('get_comments_number', '__return_zero');
+
+    }
+
+
+    // ------------------------------------------------------------
 
     protected function autoLoadCustomTypes() {
 
@@ -96,13 +141,24 @@ class Framework {
 
     }   
 
-    protected function toggleSupports() {
+    protected function toggleApi() {
 
-        // Remove comments support.
-        if (!HelloFrameworkConfig('support/comments')) {
-            remove_post_type_support('post', 'comments');
-            remove_post_type_support('page', 'comments');
+        // Block the users API endpoint
+        if (!HelloFrameworkConfig('api/users')) {
+            add_filter('rest_endpoints', function($endpoints) {
+                if (isset($endpoints['/wp/v2/users'])) {
+                    unset($endpoints['/wp/v2/users']);
+                }
+                if (isset($endpoints['/wp/v2/users/(?P<id>[\d]+)'])) {
+                    unset($endpoints['/wp/v2/users/(?P<id>[\d]+)']);
+                }
+                return $endpoints;
+            });
         }
+
+    }
+
+    protected function toggleSupports() {
 
         // Author pages are usually not needed. Redirect away from author permalinks.
         if (!HelloFrameworkConfig('support/author_pages')) {

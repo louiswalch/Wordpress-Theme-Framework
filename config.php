@@ -33,6 +33,7 @@ HelloFrameworkConfig()->set([
     'framework/modules_dir'                             => '_modules/',
     'framework/assets_dir'                              => 'assets/',
 
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Wordpress Functionality
 
@@ -45,6 +46,12 @@ HelloFrameworkConfig()->set([
     'support/tags'                                      => false,
     'support/thumbnails'                                => true,
     'support/widgets'                                   => false,
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // API Functionality
+
+    'api/users'                                         => false,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
