@@ -157,9 +157,10 @@ class ImageRender extends HelloFramework\Singleton {
         $alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
         $alt = strip_tags($alt);
 
-        if (strlen($alt)) {
-            return character_limiter($alt, 95, '...');
-        }
+        if (HelloFrameworkConfig('render/image/alt_limit') && is_numeric(HelloFrameworkConfig('render/image/alt_limit'))) {
+            if (strlen($alt)) {
+                return character_limiter($alt, HelloFrameworkConfig('render/image/alt_limit'), '...');
+            }
 
         if (HelloFrameworkConfig('render/image/alt_fallback')) {
             if (($title = get_the_title($image_id))) {

@@ -42,6 +42,7 @@ HelloFrameworkConfig()->set([
     'support/comments'                                  => false,
     'support/customizer'                                => false,
     'support/menus'                                     => true,
+    'support/patterns'                                  => false,
     'support/posts'                                     => true,
     'support/tags'                                      => false,
     'support/thumbnails'                                => true,
@@ -152,6 +153,7 @@ HelloFrameworkConfig()->set([
     'render/image/default_draggable'                    => false,
     'render/image/default_pinnable'                     => false,
     'render/image/alt_fallback'                         => true,
+    'render/image/alt_limit'                            => 160,
 
     // Image caption control for the Image Render library.
     'render/image/default_caption'                      => true,
