@@ -161,6 +161,7 @@ class ImageRender extends HelloFramework\Singleton {
             if (strlen($alt)) {
                 return character_limiter($alt, HelloFrameworkConfig('render/image/alt_limit'), '...');
             }
+        }
 
         if (HelloFrameworkConfig('render/image/alt_fallback')) {
             if (($title = get_the_title($image_id))) {
