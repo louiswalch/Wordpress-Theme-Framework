@@ -146,6 +146,17 @@ class Modules extends Includes {
 
     }
 
+
+    public function show($key, $data=false) {
+
+        $this->data('_index', 0);
+        $this->data('_first', true);
+        $this->data('_last', false);
+
+        echo $this->fetch($key, $data);
+
+    }
+
     // ------------------------------------------------------------
     // Public setters.
     // Allow for updating of options when generating an image. Meant to be used as a chained method.
