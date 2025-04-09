@@ -12,9 +12,9 @@
  * Plugin Name:  Theme Framework
  * Description:  Collection of resources to aid in theme development, clean up the default Frontend output and streamline the Dashboard. 
  * Version:      0.1
- * Plugin URI:   http://www.louis.nyc
+ * Plugin URI:   http://www.hellolouis.com
  * Author:       Louis D Walch
- * Author URI:   http://www.louis.nyc
+ * Author URI:   http://www.hellolouis.com
  * Requires PHP: 5.3
  *
  * This program is free software; you can redistribute it and/or modify
