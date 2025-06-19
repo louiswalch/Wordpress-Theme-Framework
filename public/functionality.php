@@ -180,6 +180,9 @@ namespace {
             $templates[] = "{$slug}-{$name}.php";
         }
 
+// pr($templates);
+// exit();
+
         $templates[] = "{$slug}.php";
 
         $template = locate_template($templates, false);

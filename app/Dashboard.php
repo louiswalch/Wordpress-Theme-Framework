@@ -27,17 +27,17 @@ class Dashboard  {
         }
 
         // Remove 'Howdy' from the Admin Top Bar.
-        add_filter('admin_bar_menu', function($wp_admin_bar) {
-
-            $my_account = $wp_admin_bar->get_node('my-account');
-            $newtitle   = str_replace('Howdy,', '', $my_account->title );
-            $wp_admin_bar->add_node(array(
-                'id'    => 'my-account',
-                'title' => $newtitle,
-                )
-            );
-
-        }, 25);
+        // add_filter('admin_bar_menu', function($my_account) {
+            // $my_account = $wp_admin_bar->get_node('my-account');
+            // if ($my_account) {
+            //     $newtitle   = str_replace('Howdy,', '', $my_account->title );
+            //     $wp_admin_bar->add_node(array(
+            //         'id'    => 'my-account',
+            //         'title' => $newtitle,
+            //         )
+            //     );
+            // }
+        // }, 25);
 
         $this->_toggleUserRoles();
 
@@ -67,6 +67,8 @@ class Dashboard  {
 
         // Remove Gutenberg panel on Dashboard.
         remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
+        add_filter('use_block_editor_for_post_type', '__return_false');
+
 
     }
 

@@ -72,8 +72,9 @@ class Framework {
         // Remove the built-in Wordpress image sizes.
         if (HelloFrameworkConfig('image/remove_default')) {
             foreach (HelloFrameworkConfig('image/remove_default') as $size) {
-                update_option($size . '_size_h', 0 );
-                update_option($size . '_size_w', 0 );
+                remove_image_size($size);
+                // update_option($size . '_size_h', 0 );
+                // update_option($size . '_size_w', 0 );
             }            
         }
         add_filter('intermediate_image_sizes_advanced', function($sizes) {
@@ -171,6 +172,20 @@ class Framework {
             });
         }
 
+        if (!HelloFrameworkConfig('support/patterns')) {
+            // None of this seems to work
+            // remove_theme_support('core-block-patterns');
+            // unregister_post_type( 'wp_block' );
+            // add_filter( 'should_load_remote_block_patterns', '__return_false' );
+            add_action('init', function() {
+                remove_theme_support('core-block-patterns');
+            }, 9);
+            // add_action( 'after_setup_theme', function() {
+            //     remove_theme_support( 'core-block-patterns' );
+            //     add_filter( 'should_load_remote_block_patterns', '__return_false' );
+            // });
+        }
+        
         if (HelloFrameworkConfig('support/thumbnails')) {
             add_theme_support('post-thumbnails');
         }

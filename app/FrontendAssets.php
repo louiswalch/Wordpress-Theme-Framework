@@ -75,7 +75,7 @@ class FrontendAssets {
 
         $path = framework_theme_asset($file, false, true);
 
-        return (file_exists($path)) ? (filemtime($path)) : 404;
+        return (file_exists($path)) ? (filemtime($path)) : HelloFrameworkConfig('frontend/assets/version');
 
     }
 
