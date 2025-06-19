@@ -63,7 +63,7 @@ namespace {
             $attributes_str = ' ' . implode(' ', array_map( fn($k, $v) => sprintf('%s="%s"', esc_attr($k), esc_attr($v)), array_keys($attributes), $attributes) );
         }
 
-        return sprintf('<%1$s%2$s>%3$s</%1$s>', esc_html($tag), $attributes_str, esc_html($content));
+        return sprintf('<%1$s%2$s>%3$s</%1$s>', esc_html($tag), $attributes_str, $content);
 
     }
     if (!function_exists('element')) {
