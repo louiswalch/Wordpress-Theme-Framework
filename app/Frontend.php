@@ -110,6 +110,7 @@ class Frontend {
         // Other dumb stuff in the HEAD
         remove_action( 'wp_head', 'wp_oembed_add_discovery_links');
         remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
+        add_filter('wp_img_tag_add_auto_sizes', '__return_false', 10, 3);
 
         // Remove pesky injected css for recent comments widget
         add_filter( 'show_recent_comments_widget_style', '__return_false', 1 );
@@ -239,10 +240,14 @@ class Frontend {
 
     private function _addOutputFormatting() {
 
-        // Filter the output of WYSIWYG field and wrap with some HTML/class:
+        //  WYSIWYG: run through Wordpress filter:
+        if (HelloFrameworkConfig('frontend/output/wysiwyg/filter')) {
+            add_filter('acf/format_value/type=wysiwyg', HelloFrameworkConfig('frontend/output/wysiwyg/filter/function'), 20);
+        }
+        //  WYSIWYG: wrap with some HTML/class:
         if (HelloFrameworkConfig('frontend/output/wysiwyg/wrap')) {
-            add_filter('the_content', HelloFrameworkConfig('frontend/output/wysiwyg/function'), 20);
-            add_filter('acf/format_value/type=wysiwyg', HelloFrameworkConfig('frontend/output/wysiwyg/function'), 20);
+            add_filter('the_content', HelloFrameworkConfig('frontend/output/wysiwyg/wrap/function'), 21);
+            add_filter('acf/format_value/type=wysiwyg', HelloFrameworkConfig('frontend/output/wysiwyg/wrap/function'), 21);
         }
 
 

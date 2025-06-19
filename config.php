@@ -139,9 +139,13 @@ HelloFrameworkConfig()->set([
     
     // WYSIWYG: Filter the output of field to wrap with some HTML/class.
     'frontend/output/wysiwyg/wrap'                      => false,
-    'frontend/output/wysiwyg/class'                     => 'wysiwyg',
-    'frontend/output/wysiwyg/function'                  => function($content){
-        return '<div class="'. HelloFrameworkConfig('frontend/output/wysiwyg/class') .'">' . $content .'</div>';
+    'frontend/output/wysiwyg/wrap/class'                => 'wysiwyg',
+    'frontend/output/wysiwyg/wrap/function'             => function($content) {
+        return '<div class="'. HelloFrameworkConfig('frontend/output/wysiwyg/wrap/class') .'">' . $content .'</div>';
+    },
+    'frontend/output/wysiwyg/filter'                    => false,
+    'frontend/output/wysiwyg/filter/function'           => function($content) {
+        return apply_filters('the_content', $content);
     },
 
 
@@ -223,7 +227,7 @@ HelloFrameworkConfig()->set([
 
     // Relocate items from the sidebar into top bar.
     'dashboard/admin_bar/relocate'                      => ['options-general.php', 'tools.php', 'themes.php', 'plugins.php', 'edit.php?post_type=acf-field-group', 'profile.php', ['wpseo_dashboard', 'dashicons-share']],
-    'dashboard/admin_bar/relocate/sub_menu_whitelist'   => ['relevanssi-premium/relevanssi.php', 'redirection.php', 'users-user-role-editor.php'],
+    'dashboard/admin_bar/relocate/sub_menu_whitelist'   => ['relevanssi/relevanssi.php', 'relevanssi-premium/relevanssi.php', 'redirection.php', 'users-user-role-editor.php'],
     'dashboard/admin_bar/relocate/sub_menu_blacklist'   => ['options-discussion.php', 'site-health.php', 'export-personal-data.php', 'erase-personal-data.php', 'tools.php', 'import.php', 'plugin-editor.php', 'acf-settings-updates', 'wpseo_page_academy', 'wpseo_licenses', 'wpseo_workouts', 'wpseo_redirects', 'wpseo_integrations', 'wpseo_tools', 'wpseo_page_support'],
 
     // Remove all notices within the back-end
