@@ -115,6 +115,12 @@ class Frontend {
         // Remove pesky injected css for recent comments widget
         add_filter( 'show_recent_comments_widget_style', '__return_false', 1 );
 
+        // Titles: Strip "Protected"
+        if (CONFIG('frontend/title/strip_protected')) {
+            add_filter('protected_title_format', function() { return __('%s'); });
+        }
+
+
     }
 
 

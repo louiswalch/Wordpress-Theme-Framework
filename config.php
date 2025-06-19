@@ -150,6 +150,12 @@ HelloFrameworkConfig()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Frontend Misc
+
+    'frontend/title/strip_protected'                    => true,
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Render Render Library
 
     // Attribute control for the Image Render library.
