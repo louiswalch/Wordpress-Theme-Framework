@@ -157,6 +157,32 @@ class Modules extends Includes {
 
     }
 
+
+   // ------------------------------------------------------------
+
+    protected function _fetch($key, $data=false) {
+
+        $return = '';
+
+        // Automatically inject anchor links:
+        if (HelloFrameworkConfig('render/modules/anchors')) {
+            $fields = HelloFrameworkConfig('render/modules/anchors/fields');
+            $anchor = 'section-'.$data['_index'];
+            foreach($fields as $field) {
+                if (!empty($data[$field])) {
+                    $anchor = sanitize_title($data[$field]);
+                    continue;
+                }
+            }
+            $return .= chr(10) . '<a class="module-anchor" id="'. $anchor .'"></a>';
+        }
+
+        $return .= parent::_fetch($key, $data);
+
+        return $return;
+
+    }
+
     // ------------------------------------------------------------
     // Public setters.
     // Allow for updating of options when generating an image. Meant to be used as a chained method.

@@ -156,6 +156,13 @@ HelloFrameworkConfig()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Modules Render Render Library
+
+    'render/modules/anchors'                            => false,
+    'render/modules/anchors/fields'                     => [ 'headline', 'name', 'label' ],
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Image Render Render Library
 
     // Attribute control for the Image Render library.
