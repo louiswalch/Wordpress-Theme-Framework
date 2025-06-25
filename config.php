@@ -8,7 +8,7 @@ HelloFrameworkConfig()->set([
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Framework Zone/Componants
-    // Control what parts of the Framework are active for this site.
+    // Control what parts of the Framework are active for this site
 
     'framework/enable/login'                        => true,
     'framework/enable/email'                        => true,
@@ -19,10 +19,16 @@ HelloFrameworkConfig()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Global Cache Settings
+
+    'cache'                                             => true,
+    'cache/life'                                        => HOUR_IN_SECONDS,
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Config Settings
 
     'config/cache'                                      => false,
-    'config/cache/life'                                 => HOUR_IN_SECONDS,
     
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -

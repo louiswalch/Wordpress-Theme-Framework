@@ -4,12 +4,13 @@ namespace HelloFramework;
 
 class Cache extends Singleton {
 
-    protected $_enabled         = true; // Master control over all caching. Only use for development & testing.
-
+    // These all get assigned within `_reset` beliow:
+    protected $_enabled;
     protected $_life;
     protected $_prefix;
+    protected $_global;    
+
     protected $_prefix_sep      = ':';
-    protected $_global;
 
     // ------------------------------------------------------------
 
@@ -108,7 +109,8 @@ class Cache extends Singleton {
 
     protected function _reset() {
 
-        $this->_life    = DAY_IN_SECONDS;
+        $this->_enabled = HelloFrameworkConfig('cache');
+        $this->_life    = HelloFrameworkConfig('cache/life');
         $this->_prefix  = 'FW' . $this->_prefix_sep;
         $this->_global  = true;
 
