@@ -253,7 +253,7 @@ class Frontend {
         //  WYSIWYG: wrap with some HTML/class:
         if (HelloFrameworkConfig('frontend/output/wysiwyg/wrap')) {
             add_filter('the_content', HelloFrameworkConfig('frontend/output/wysiwyg/wrap/function'), 21);
-            add_filter('acf/format_value/type=wysiwyg', HelloFrameworkConfig('frontend/output/wysiwyg/wrap/function'), 21);
+            // add_filter('acf/format_value/type=wysiwyg', HelloFrameworkConfig('frontend/output/wysiwyg/wrap/function'), 21);
         }
 
 
