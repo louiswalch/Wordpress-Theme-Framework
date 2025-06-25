@@ -38,9 +38,9 @@ namespace {
 
     /*
 
-        echo element('div', [ 'class'=>'hello' ], 'Hello World');
-        echo element('div', 'Hello World', [ 'class'=>'hello' ]);
-        echo element('h1', get_the_title());
+        echo str_element('div', [ 'class'=>'hello' ], 'Hello World');
+        echo elstr_elementement('div', 'Hello World', [ 'class'=>'hello' ]);
+        echo str_element('h1', get_the_title());
 
     */
     function str_element($tag, $param2=null, $param3=null) {
@@ -70,6 +70,29 @@ namespace {
         function element($tag, $param2=null, $param3=null) {
             return str_element($tag, $param2, $param3);
         }
+ 
+    }
+
+
+    /*
+
+        echo str_template('<a href="{url}" target="{target}">{title}</a>', [ 'title'=>'Click Here!', 'url'=>'http://www.google.com', 'target'=>'_blank' ]);
+        echo str_template('<a href="{url}" target="{target}">{title}</a>', get_field('link'));
+
+    */
+    function str_template($template, array $vars, $strip_unused=true) {
+
+        // Create bracket vars from incoming:
+        $placeholders = [];
+        foreach ($vars as $key => $value) $placeholders['{' . $key . '}'] = (string) $value;
+
+        // Swap out bracket variables within template:
+        $result = strtr($template, $placeholders);
+
+        // Remove any remaining {placeholders}, this is optional:
+        if ($strip_unused) $result = preg_replace('/\{[a-zA-Z0-9_]+\}/', '', $result);
+
+        return $result;
     }
          
 
