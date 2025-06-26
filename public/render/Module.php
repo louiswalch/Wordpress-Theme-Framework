@@ -167,7 +167,8 @@ class Modules extends Includes {
         // Automatically inject anchor links:
         if (HelloFrameworkConfig('render/modules/anchors')) {
             $fields = HelloFrameworkConfig('render/modules/anchors/fields');
-            $anchor = 'section-'.$data['_index'];
+            $index  = ($data['_index'] ?? $this->_data['_index']) + 1; 
+            $anchor = 'section-'.$index;
             foreach($fields as $field) {
                 if (!empty($data[$field])) {
                     $anchor = sanitize_title($data[$field]);
