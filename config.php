@@ -151,7 +151,7 @@ HelloFrameworkConfig()->set([
     },
     'frontend/output/wysiwyg/filter'                    => false,
     'frontend/output/wysiwyg/filter/function'           => function($content) {
-        return apply_filters('the_content', $content);
+        if ($content) return apply_filters('the_content', $content);
     },
 
 
