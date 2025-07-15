@@ -530,7 +530,8 @@ class ImageRender extends HelloFramework\Singleton {
     private function _generateFallback() {
 
         if ($this->_wrap_fallback) {
-            return '<div class="'. $this->_wrap_class .' fallback '. $this->_wrap_size .'"></div>';
+            $fallback = '<div class="'. $this->_wrap_class .' fallback '. $this->_wrap_size .'"></div>';
+            return str_replace('autosize', '', $fallback);
         } else {
             return false;
         }
