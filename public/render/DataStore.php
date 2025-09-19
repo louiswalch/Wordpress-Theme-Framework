@@ -6,7 +6,7 @@ use HelloFramework;
 
 /*
 
-DATA CACHE
+DATA STORE
 Louis Walch / say@hellolouis.com
 
 For documentation and examples of how to use this, visit:
@@ -15,7 +15,7 @@ https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/librari
 */
 
 
-class DataCache extends HelloFramework\Singleton {
+class DataStore extends HelloFramework\Singleton {
 
     private $_upload_dir;
     private $_upload_url;

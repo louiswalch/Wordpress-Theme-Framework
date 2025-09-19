@@ -10,8 +10,8 @@ class Frontend {
         if (!HelloFrameworkConfig('framework/enable/frontend')) return false;
 
         // Public render helper classes, must be called from global instance functions.
-        require_once HELLO_DIR . '/public/render/DataCache.php';
-        require_once HELLO_DIR . '/public/render/DataCacheInstance.php';
+        require_once HELLO_DIR . '/public/render/DataStore.php';
+        require_once HELLO_DIR . '/public/render/DataStoreInstance.php';
         require_once HELLO_DIR . '/public/render/Image.php';
         require_once HELLO_DIR . '/public/render/ImageInstance.php';
         require_once HELLO_DIR . '/public/render/SVG.php';

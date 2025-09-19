@@ -10,8 +10,8 @@ class Dashboard  {
         if (!HelloFrameworkConfig('framework/enable/dashboard')) return false;
 
         // Render helper classes, must be called from global instance functions:
-        require_once HELLO_DIR . '/public/render/DataCache.php';
-        require_once HELLO_DIR . '/public/render/DataCacheInstance.php';
+        require_once HELLO_DIR . '/public/render/DataStore.php';
+        require_once HELLO_DIR . '/public/render/DataStoreInstance.php';
 
         // Remove desingnated items from the Top Navigation Bar.
         if (HelloFrameworkConfig('dashboard/admin_bar/remove')) {
