@@ -156,9 +156,45 @@ namespace {
     }
     */
 
-
     // ---------------------------------------------------------------------------
-    // Cycle through echo values
+    // Cycle through strings values:
+
+    /*
+
+    // Basic use, cycle through values:
+    cycle('one', 'two', 'three')
+    // Advanced use, named cycle when using multiple per sesssion
+    cycle('one', 'two', 'three', ':layout')
+    cycle('red', 'blue', 'green', 'yellow', :background')
+
+    */
+
+    function cycle(...$values) {
+        static $counts = [];
+
+        $name = 'default';
+        if (substr(end($values), 0, 1) === ':') {
+            $name = substr(array_pop($values), 1);
+        }
+
+        if (!isset($counts[$name])) {
+            $counts[$name] = 0;
+        }
+
+        $index = $counts[$name] % count($values);
+        $counts[$name]++;
+
+        return $values[$index];
+
+    }
+
+
+
+
+
+
+
+
     // http://baylorrae.com/creating-a-cycle-function-in-php
 
     /**
@@ -174,30 +210,31 @@ namespace {
      * @author Baylor Rae'
      */
     
-    function cycle($first_value, $values = '*') {
-      // keeps up with all counters
-      static $count = array();
-      // get all arguments passed
-      $values = func_get_args();
-      // set the default name to use
-      $name = 'default';
-      // check if last items begins with ":"
-      $last_item = end($values);
-      if( substr($last_item, 0, 1) === ':' ) {
-        // change the name to the new one
-        $name = substr($last_item, 1);
-        // remove the last item from the array
-        array_pop($values);
-      }
-      // make sure counter starts at zero for the name
-      if( !isset($count[$name]) )
-        $count[$name] = 0;
-      // get the current item for its index
-      $index = $count[$name] % count($values);
-      // update the count and return the value
-      $count[$name]++;
-      return $values[$index];  
-    }
+    // function cycle($first_value, $values = '*') {
+    //   // keeps up with all counters
+    //   static $count = array();
+    //   // get all arguments passed
+    //   $values = func_get_args();
+    //   // set the default name to use
+    //   $name = 'default';
+    //   // check if last items begins with ":"
+    //   $last_item = end($values);
+    //   if( substr($last_item, 0, 1) === ':' ) {
+    //     // change the name to the new one
+    //     $name = substr($last_item, 1);
+    //     // remove the last item from the array
+    //     array_pop($values);
+    //   }
+    //   // make sure counter starts at zero for the name
+    //   if( !isset($count[$name]) )
+    //     $count[$name] = 0;
+    //   // get the current item for its index
+    //   $index = $count[$name] % count($values);
+    //   // update the count and return the value
+    //   $count[$name]++;
+    //   return $values[$index];  
+    // }
+
 
     // ---------------------------------------------------------------------------
     // Super handy debugging shortcut.
