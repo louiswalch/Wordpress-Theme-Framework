@@ -29,6 +29,9 @@ class Modules extends Includes {
 
     protected $_from            = false; 
 
+    protected $_auto_blacklist  = [];
+    protected $_auto_whitelist  = [];
+
 
     // ------------------------------------------------------------
     // Nested Data Helpers
@@ -41,10 +44,12 @@ class Modules extends Includes {
         return false;
     }
     protected function _resetSession() {
-        $this->_dir         = '_modules/';
-        $this->_filename    = false;
-        $this->_from        = false;
-        $this->_data        = [];
+        $this->_dir             = '_modules/';
+        $this->_filename        = false;
+        $this->_from            = false;
+        $this->_auto_blacklist  = [];
+        $this->_auto_whitelist  = [];
+        $this->_data            = [];
         return false;
     }
 
@@ -85,6 +90,9 @@ class Modules extends Includes {
 
         if (!$modules || !$count) return false;
 
+        // Backwards compatibiliuty for blacklist logic:
+        if (!empty($skip)) $this->blacklist($skip);
+
         for ($i=0; $i<$count ; $i++) { 
 
             $first  = ($i == 0);
@@ -98,7 +106,8 @@ class Modules extends Includes {
             $data['_last']   = $last;
 
             // Sometimes we want to skip modules and load them manually in a different location.
-            if (in_array($type, $skip)) continue;
+            if (!$this->_auto_should_render($type)) continue;
+            // if (in_array($type, $skip)) continue;
 
             // $return .= '<a id="'.$field_group.'_'.$i.'" module="'.$type.'"></a>';
             $return .= $this->_fetch($type, array_merge($data, $data_global));
@@ -110,6 +119,16 @@ class Modules extends Includes {
         echo $return;
 
     }
+
+    private function _auto_should_render($check) {
+        if (!empty($this->_auto_whitelist) && !in_array($check, $this->_auto_whitelist)) {
+            return false;
+        }
+        if (in_array($check, $this->_auto_blacklist)) {
+            return false;
+        }
+        return true;
+    }    
 
 
     // Manually load just one module from a group into a location on current page.
@@ -187,6 +206,16 @@ class Modules extends Includes {
     // ------------------------------------------------------------
     // Public setters.
     // Allow for updating of options when generating an image. Meant to be used as a chained method.
+
+    public function whitelist($value=null) {
+        if (!is_null($value)) $this->_auto_whitelist = $value;
+        return $this;
+    }
+
+    public function blacklist($value=null) {
+        if (!is_null($value)) $this->_auto_blacklist = $value;
+        return $this;
+    }
 
     public function from($value=null) {
         if (!is_null($value)) $this->_from = $value;
