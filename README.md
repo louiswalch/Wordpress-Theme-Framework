@@ -8,7 +8,6 @@
 1. [Configuration](#configuration)
 1. [Configuration Options ↗](https://github.com/louiswalch/Wordpress-Theme-Framework/blob/master/docs/configuration_options.md) 
 1. [Environment Detection](#environment-detection)
-1. ~~[Custom Post Types & Taxonomy](#custom-post-types--taxonomy)~~
 
 
 <br/>
@@ -114,13 +113,6 @@ Based on the website domain, the framework will detect the current environment (
 > **Production**  If the above two fail.
 
 
----
-
-### ~~Custom Post Types & Taxonomy~~
-
-Not Yes.
-
-<br/>
 
 ------
 
