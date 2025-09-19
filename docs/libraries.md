@@ -10,6 +10,7 @@ Frontend Libraries are a collection of utilities meant to streamline your templa
 1. [Modules](#frontend-library--modules-render)
 1. [Image](#frontend-library---image-render)
 1. [SVG](#frontend-library--svg-render)
+1. [DataStore](#frontend-library--data-store)
 
 <br/>
 
@@ -19,13 +20,16 @@ Frontend Libraries are a collection of utilities meant to streamline your templa
 
 Includes allow you to separate some of your site's components and render then within a page when needed. The main advantage over the native `get_template_part()` is that you can pass data directly into the include while rendering it in addition an include can be cached either globally or page-specific. 
 
+
 ##### Example Usage - Display a simple include file:
 ```php
 INCLUDES()->show('share_icons');
 ```
-XXXXXXXXX
 
-> - TODO: Document
+##### Params:
+
+The library supports a variety of parameters to customize how the image should be rendered. These methods are designed to be chained and would be passed in prior to your final output call.
+
 > - cache($global=false, $set=true, $key=null)
 > - dir($dir=null)
 > - life($life=null)
@@ -150,9 +154,10 @@ echo IMAGE()->img(get_field('image'));
 
 ```
 
+##### Params:
+
 The library supports a variety of parameters to customize how the image should be rendered. These methods are designed to be chained and would be passed in prior to your final output call.
 
-> - TODO: Document
 > - srcset($incoming=true)
 > - wrap($incoming=false)
 > - autosize($incoming=false)
@@ -167,7 +172,6 @@ The library supports a variety of parameters to customize how the image should b
 
 Once you have defined any parameters, then you call your final output - either an IMG, DIV, or to retrieve the SRC.
 
-> - TODO: Document
 > - div($image=false, $size=false)
 > - img($image=false, $size=false, $showcaption=false)
 > - src($image=false, $size=false)
@@ -207,6 +211,7 @@ Wrapping your image embed with another element is handy when working with respon
 - [Image Render Library Config Options ↗](configuration_options)
 
 The framework configuration settings appropriate to Image Render wrapping are (along with their default values):
+
 ```php
 // Enable or disable the wrapping functionality across all renders.
 CONFIG()->set('render/image/default_wrap' , false);
@@ -222,6 +227,7 @@ CONFIG()->set('render/image/default_wrap_autosize' , false);
 ```
 
 In most cases you will be interfacing with this by adding parameters to your call to the Image Render library. The examples below go through some common use cases, they all use DIV render method but wrapping can also be useful for IMG render.
+
 ```php
 // Enable wrapping and output an image. Pretty simple.
 // <div class="image_wrapper">
@@ -305,7 +311,50 @@ echo SVG()->show('arrow');
 echo SVG()->img('arrow.svg', array('class'=>'testing', 'alt'=>'Name of the image'))
 ```
 
-> - TODO: Document
+##### Params:
+
 > - img($key, $attributes=array()) 
 > - div($key, $attributes=array())
 > - show($key)
+
+
+------
+
+### Frontend Library : Data Store
+
+This allows...
+
+##### Example Usage, Saving:
+
+```php
+DATASTORE()->save('example-feed', 'https://example.com/feed.json');
+```
+
+```php
+DATASTORE()->save('example-array', ['id' => 123, 'title' => 'Hello']);
+```
+
+```php
+DATASTORE()->save('example-callback', function() {
+    return ['foo' => 'bar'];
+});
+```
+
+```php
+DATASTORE()->save('example-html', '<div>Hello</div>', 'text');
+```
+
+##### Example Usage, Loading:
+
+```php
+$feed = DATASTORE()->load('example-feed');
+
+// $feed['cached_at']
+// $feed['data']
+```
+
+```php
+$data    = DATASTORE()->load_data('example-feed');
+$time    = DATASTORE()->load_time('example-feed');
+$url     = DATASTORE()->load_url('example-feed');
+```

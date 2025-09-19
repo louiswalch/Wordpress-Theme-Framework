@@ -13,15 +13,6 @@
 
 <br/>
 
-------
-   
-### TODO
-
-- [ ] Name framework? Something short - 3 to 4 characters.
-- [ ] Add ACF customizations.
-- [ ] Write Product introduction.
-
-<br/>
 
 ------   
 
