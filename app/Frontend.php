@@ -119,6 +119,10 @@ class Frontend {
 
         // Titles: Strip "Protected"
         if (CONFIG('frontend/title/strip_protected')) {
+            add_filter('private_title_format', function() { return __('%s'); });
+        }
+        // Titles: Strip "Private":
+        if (CONFIG('frontend/title/strip_private')) {
             add_filter('protected_title_format', function() { return __('%s'); });
         }
 

@@ -159,6 +159,7 @@ HelloFrameworkConfig()->set([
     // Frontend Misc
 
     'frontend/title/strip_protected'                    => true,
+    'frontend/title/strip_private'                      => true,
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
