@@ -163,9 +163,14 @@ class ImageRender extends HelloFramework\Singleton {
             }
             return $alt;
         } else if (HelloFrameworkConfig('render/image/alt_fallback')) {
-            if (($title = get_the_title($image_id))) {
-                return $title;
-            }
+
+            $callback = HelloFrameworkConfig('render/image/alt_fallback/function');
+            if (is_callable($callback)) {
+                if ($custom = $callback($image_id)) {
+                    return $custom;
+                }
+            }   
+
             return str_replace(['-', '_', '.jpg', '.jpeg', '.png'], ' ', basename(get_attached_file($image_id)));
         }
 

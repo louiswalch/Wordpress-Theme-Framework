@@ -177,6 +177,12 @@ HelloFrameworkConfig()->set([
     'render/image/default_draggable'                    => false,
     'render/image/default_pinnable'                     => false,
     'render/image/alt_fallback'                         => true,
+    'render/image/alt_fallback/function'                => function($image_id) {
+        if (($title = get_the_title($image_id))) {
+            return $title;
+        }
+        return false;
+    },
     'render/image/alt_limit'                            => 160,
 
     // Image caption control for the Image Render library.
