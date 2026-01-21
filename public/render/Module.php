@@ -29,8 +29,21 @@ class Modules extends Includes {
 
     protected $_from            = false; 
 
+    protected $_anchors         = true; 
+
     protected $_auto_blacklist  = [];
     protected $_auto_whitelist  = [];
+
+
+    // ------------------------------------------------------------
+
+    public function __construct() {
+
+        parent::__construct();
+
+        $this->_resetSession();
+
+    }
 
 
     // ------------------------------------------------------------
@@ -47,6 +60,7 @@ class Modules extends Includes {
         $this->_dir             = '_modules/';
         $this->_filename        = false;
         $this->_from            = false;
+        $this->_anchors         = HelloFrameworkConfig('render/modules/anchors');
         $this->_auto_blacklist  = [];
         $this->_auto_whitelist  = [];
         $this->_data            = [];
@@ -62,7 +76,7 @@ class Modules extends Includes {
 
         if ($this->_filename) {
 
-            if (strpos($this->_filename , '%s')) {
+            if (strpos($this->_filename , '%s') > -1) {
                 return sprintf($this->_filename, $value);
             } else {
                 return $this->_filename . $value;
@@ -184,7 +198,7 @@ class Modules extends Includes {
         $return = '';
 
         // Automatically inject anchor links:
-        if (HelloFrameworkConfig('render/modules/anchors')) {
+        if ($this->_anchors) {
             $fields = HelloFrameworkConfig('render/modules/anchors/fields');
             $index  = ($data['_index'] ?? $this->_data['_index']) + 1; 
             $anchor = 'section-'.$index;
@@ -214,6 +228,11 @@ class Modules extends Includes {
 
     public function blacklist($value=null) {
         if (!is_null($value)) $this->_auto_blacklist = $value;
+        return $this;
+    }
+
+    public function anchors($value=null) {
+        if (!is_null($value)) $this->_anchors = $value;
         return $this;
     }
 
