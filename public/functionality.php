@@ -31,43 +31,88 @@ namespace {
     // ---------------------------------------------------------------------------
     // Require all files in specified directory. 
 
+    // if (!function_exists('require_all_files')) {
+    //     function require_all_files($directory = false, $exclude = false) {
+
+    //         $files = [];
+
+    //         // Allow exclude to be string for single file, but convert to array to standardize it
+    //         if ($exclude && !is_array($exclude)) $exclude = array($exclude);
+
+    //         if (!$directory) return false;
+    //         if (!is_dir($directory)) {
+    //             $directory = get_template_directory() . '/' . $directory;
+    //             if (!is_dir($directory)) return false;
+    //         }
+            
+    //         if ($dh = opendir($directory)){
+    //             while (($file = readdir($dh)) !== false) {
+
+    //                 // if (substr($file, 0, 1) === '.') continue;
+    //                 if ($exclude && in_array($file, $exclude)) continue;
+    //                 if (substr($file, 0, 3) === 'OFF') continue;
+    //                 if (substr($file, -4) !== '.php') continue;
+
+    //                 $files[] = $directory . $file;
+            
+    //             }
+    //             closedir($dh);
+    //         }
+
+    //         if (count($files)) {
+    //             sort($files);
+    //             foreach($files as $file) {
+    //                 require($file);
+    //             }
+    //         }
+
+    //     }
+    // }
+
     if (!function_exists('require_all_files')) {
         function require_all_files($directory = false, $exclude = false) {
 
-            $files = [];
-
-            // Allow exclude to be string for single file, but convert to array to standardize it
-            if ($exclude && !is_array($exclude)) $exclude = array($exclude);
-
             if (!$directory) return false;
+
             if (!is_dir($directory)) {
-                $directory = get_template_directory() . '/' . $directory;
+                $directory = rtrim(get_template_directory(), '/\\') . '/' . ltrim($directory, '/\\');
                 if (!is_dir($directory)) return false;
             }
-            
-            if ($dh = opendir($directory)){
-                while (($file = readdir($dh)) !== false) {
 
-                    // if (substr($file, 0, 1) === '.') continue;
-                    if ($exclude && in_array($file, $exclude)) continue;
-                    if (substr($file, 0, 3) === 'OFF') continue;
-                    if (substr($file, -4) !== '.php') continue;
+            $directory = rtrim($directory, '/\\') . '/';
 
-                    $files[] = $directory . $file;
-            
-                }
-                closedir($dh);
+            if ($exclude) {
+                $exclude = is_array($exclude) ? $exclude : [$exclude];
+                $exclude = array_fill_keys($exclude, true);
+            } else {
+                $exclude = [];
             }
 
-            if (count($files)) {
-                sort($files);
-                foreach($files as $file) {
-                    require($file);
-                }
+            $files = glob($directory . '*.php', GLOB_NOSORT);
+            if (!$files) return false;
+
+            $include = [];
+
+            foreach ($files as $path) {
+                $file = basename($path);
+
+                if (isset($exclude[$file])) continue;
+                if (strncmp($file, 'OFF', 3) === 0) continue;
+
+                $include[] = $path;
             }
 
+            sort($include, SORT_STRING);
+
+            foreach ($include as $file) {
+                require_once $file;
+            }
+
+            return true;
         }
     }
+
+
 
     
     // ---------------------------------------------------------------------------
@@ -179,9 +224,6 @@ namespace {
         if ('' !== $name) {
             $templates[] = "{$slug}-{$name}.php";
         }
-
-// pr($templates);
-// exit();
 
         $templates[] = "{$slug}.php";
 
