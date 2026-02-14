@@ -31,16 +31,15 @@ class Dashboard  {
         }
 
         // Remove 'Howdy' from the Admin Top Bar.
-        // add_filter('admin_bar_menu', function($my_account) {
-            // $my_account = $wp_admin_bar->get_node('my-account');
-            // if ($my_account) {
-            //     $newtitle   = str_replace('Howdy,', '', $my_account->title );
-            //     $wp_admin_bar->add_node(array(
-            //         'id'    => 'my-account',
-            //         'title' => $newtitle,
-            //         )
-            //     );
-            // }
+        // add_filter('admin_bar_menu', function($wp_admin_bar) {
+        //     $my_account = $wp_admin_bar->get_node('my-account');
+        //     if ($my_account) {
+        //         $new_title = str_replace('Howdy,', '', $my_account->title);
+        //         $wp_admin_bar->add_node([
+        //             'id'    => 'my-account',
+        //             'title' => $new_title,
+        //         ]);
+        //     }
         // }, 25);
 
         $this->_toggleUserRoles();
@@ -346,6 +345,7 @@ class Dashboard  {
         });
 
     }
+
 
     // ------------------------------------------------------------
     // Clean up the 'User Edit' screen in Dashboard.

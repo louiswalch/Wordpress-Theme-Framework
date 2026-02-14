@@ -59,7 +59,7 @@ class DashboardNavigationBar extends Singleton {
         add_action('admin_bar_menu', array($this, 'addTopMenus'), $this->_action_priority);
 
         // Add CSS for better text colors and position the icon correctly. 
-        add_action('admin_head', array($this, 'addCSS'), $this->_action_priority);
+        // add_action('admin_head', array($this, 'addCSS'), $this->_action_priority);
 
     }
 
@@ -154,14 +154,14 @@ class DashboardNavigationBar extends Singleton {
 
 
     public function addCSS() {
-        echo '<style>
-            #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-label  { color: rgba(255,255,255,0.5) !important; }
-            #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-label  { color: #fff !important; }
-            #wpadminbar .custom_top_menu .ab-sub-wrapper ul li a:hover { color: #00a0d2 !important;}
-            #wpadminbar .custom_top_menu .ab-icon:before { top: 2px;}
-            #wpadminbar .custom_top_menu:hover { opacity: 1; }
-            #wpadminbar .custom_top_menu:hover .ab-sub-wrapper { display: block; }
-        </style>';
+        // echo '<style>
+        //     #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu .ab-item SPAN.ab-label  { color: rgba(255,255,255,0.5) !important; }
+        //     #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-icon:before, #wpadminbar>#wp-toolbar .custom_top_menu:hover .ab-item SPAN.ab-label  { color: #fff !important; }
+        //     #wpadminbar .custom_top_menu .ab-sub-wrapper ul li a:hover { color: #00a0d2 !important;}
+        //     #wpadminbar .custom_top_menu .ab-icon:before { top: 2px;}
+        //     #wpadminbar .custom_top_menu:hover { opacity: 1; }
+        //     #wpadminbar .custom_top_menu:hover .ab-sub-wrapper { display: block; }
+        // </style>';
     }
 
 
