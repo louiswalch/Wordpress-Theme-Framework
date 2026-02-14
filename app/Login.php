@@ -29,6 +29,38 @@ class Login  {
         // Misc login stuff.
         add_filter( 'login_headerurl', function() { return home_url(); });
 
+        $this->_toggleUsernameRest();
+
+    }
+
+
+    // ---------------------------------------------------------------------------
+    // Restrict password reset to email only:
+
+    private function _toggleUsernameRest() {
+
+        if (HelloFrameworkConfig('login/reset/allow_username')) return
+
+        add_filter('lostpassword_post', function($errors) {
+            if (empty($_POST['user_login'])) return $errors;
+            $login = trim((string) $_POST['user_login']);
+            if (!is_email($login)) {
+                $errors->add('invalidcombo', __('Please enter your email address.'));
+                return $errors;
+            }
+            return $errors;
+        }, 10, 1);
+
+        add_filter('gettext', function($translated, $text, $domain) {
+            if ($text === 'Username or Email Address') {
+                return 'Email Address';
+            }
+            if ($text === 'Please enter your username or email address. You will receive an email message with instructions on how to reset your password.') {
+                return 'Please enter your email address. You will receive an email message with instructions on how to reset your password.';
+            }
+            return $translated;
+        }, 10, 3);
+
     }
 
 }

@@ -229,6 +229,9 @@ HelloFrameworkConfig()->set([
     // Path relative to `asset/` directory in _framework directory.
     'login/css'                                         => '',
 
+    'login/reset/allow_username'                        => false,
+
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : General Settings
 
