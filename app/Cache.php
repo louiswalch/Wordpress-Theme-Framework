@@ -62,7 +62,7 @@ class Cache extends Singleton {
         $this->_reset();
 
         if (!empty($data)) {
-            if ($type == 'array') $data = json_decode($data, true);
+            // if ($type == 'array') $data = json_decode($data, true);
             return $data;
         } else {
             return false;
@@ -79,7 +79,7 @@ class Cache extends Singleton {
 
         $name    = $this->_name($name);
 
-        if ($type == 'array') $data = json_encode($data);
+        // if ($type == 'array') $data = json_encode($data);
 
         set_transient($name, $data, $this->_life);
 

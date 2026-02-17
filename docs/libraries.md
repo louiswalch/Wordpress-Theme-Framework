@@ -6,6 +6,7 @@
 
 Frontend Libraries are a collection of utilities meant to streamline your template authoring. This includes utilities to simplify image output (with a variety of options), render an include file (supporting proper data and caching), and automating a modular layout.
 
+1. [Cache](#frontend-library--cache)
 1. [Includes](#frontend-library--includes-render)
 1. [Modules](#frontend-library--modules-render)
 1. [Image](#frontend-library---image-render)
@@ -13,6 +14,31 @@ Frontend Libraries are a collection of utilities meant to streamline your templa
 1. [DataStore](#frontend-library--data-store)
 
 <br/>
+
+------
+
+### Frontend Library : Cache
+
+```php
+// Simplest usage:
+$data = CACHE()->load('test123', function() {
+    // Big query or expensive process to load $data
+    return $data;    
+});
+
+
+// Store for longer than default:
+$data = CACHE()->time(DAY_IN_SECONDS)->load('test123', function() {
+    // Big query or expensive process to load $data
+    return $data;    
+});
+
+// By default, cache are stored at the page/object level, you cam override that to store/fetch globally:
+$data = CACHE()->global(true)->load('footer-evnets', function() {
+    // Big query or expensive process to load $data
+    return $data;    
+});
+```
 
 ------
 
