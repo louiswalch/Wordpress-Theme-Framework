@@ -38,7 +38,21 @@ class Cache extends Singleton {
 
     // ------------------------------------------------------------
 
-    public function get($name) {
+    public function load($name, $callback, $type='string') {
+
+        if ($cached = $this->get($name, type:$type)) {
+            return $cached;
+        }
+
+        $value = $callback();
+        $this->set($name, $value, type:$type);
+
+        return $value;
+
+    }
+
+
+    public function get($name, $type='string') {
 
         if (!$this->_enabled) return false;
 
@@ -48,6 +62,7 @@ class Cache extends Singleton {
         $this->_reset();
 
         if (!empty($data)) {
+            if ($type == 'array') $data = json_decode($data, true);
             return $data;
         } else {
             return false;
@@ -55,7 +70,7 @@ class Cache extends Singleton {
 
     }
 
-    public function set($name, $data=false) {
+    public function set($name, $data=false, $type='string') {
 
         if (!$this->_enabled) return false;
 
@@ -63,6 +78,8 @@ class Cache extends Singleton {
         if (!$data) return false;
 
         $name    = $this->_name($name);
+
+        if ($type == 'array') $data = json_encode($data);
 
         set_transient($name, $data, $this->_life);
 
@@ -102,6 +119,10 @@ class Cache extends Singleton {
     public function life($life=null, $global=null) {
         if (!is_null($life)) $this->_life = $life;
         if (!is_null($global) && is_bool($global)) $this->_global = $global;
+        return $this;
+    }
+    public function time($time=null) {
+        if (!is_null($time)) $this->_life = $time;
         return $this;
     }
 
