@@ -38,7 +38,7 @@ class Cache extends Singleton {
 
     // ------------------------------------------------------------
 
-    public function load($name, $callback, $type='string') {
+    public function load($name, $callback, $type='auto') {
 
         if ($cached = $this->get($name, type:$type)) {
             return $cached;
@@ -52,7 +52,7 @@ class Cache extends Singleton {
     }
 
 
-    public function get($name, $type='string') {
+    public function get($name, $type='auto') {
 
         if (!$this->_enabled) return false;
 
@@ -70,7 +70,7 @@ class Cache extends Singleton {
 
     }
 
-    public function set($name, $data=false, $type='string') {
+    public function set($name, $data=false, $type='auto') {
 
         if (!$this->_enabled) return false;
 
