@@ -68,6 +68,8 @@ class Dashboard  {
 
         $this->_setContentEditor();
 
+        $this->_setHeartbeat();
+
         // Remove Gutenberg panel on Dashboard.
         remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
         add_filter('use_block_editor_for_post_type', '__return_false');
@@ -518,6 +520,21 @@ class Dashboard  {
             }
         }, 10, 1);
 
+
+    }
+
+
+    // ------------------------------------------------------------
+    // Heartbeat
+
+    private function _setHeartbeat() {
+
+        if (!HelloFrameworkConfig('dashboard/heartbeat/interval')) return;
+
+        add_filter( 'heartbeat_settings', function( $settings ) {
+            $settings['interval'] = HelloFrameworkConfig('dashboard/heartbeat/interval');
+            return $settings;
+        });
 
     }
 

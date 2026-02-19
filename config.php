@@ -262,6 +262,10 @@ HelloFrameworkConfig()->set([
     // Remove all notices within the back-end
     'dashboard/notices'                                 => true,
 
+    // Control the ajax 'heartbeat'
+    'dashboard/heartbeat/interval'                      => 60,
+
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Dashboard : Metabox Settings
