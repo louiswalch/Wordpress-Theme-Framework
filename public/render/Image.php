@@ -589,6 +589,8 @@ class ImageRender extends HelloFramework\Singleton {
         if (!$this->_pinnable)      $data['data-pin-nopin'] = 'true';
         if (!$this->_draggable)     $data['draggable']      = 'false';
 
+        $data['decoding']      = 'async';
+
         $attributes             = $this->_generateAttributes($data);
         $output                 = '<img '. $attributes .' />';
         $output                 = $this->_generateWrap($output, $image, $data);
