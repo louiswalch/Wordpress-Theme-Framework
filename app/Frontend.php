@@ -117,6 +117,10 @@ class Frontend {
         // Remove pesky injected css for recent comments widget
         add_filter( 'show_recent_comments_widget_style', '__return_false', 1 );
 
+        // Remove global styles (theme.json) inline CSS output
+        remove_action( 'wp_enqueue_scripts', 'wp_enqueue_global_styles' );
+        remove_action( 'wp_footer', 'wp_enqueue_global_styles', 1 );
+
         // Titles: Strip "Protected"
         if (CONFIG('frontend/title/strip_protected')) {
             add_filter('private_title_format', function() { return __('%s'); });
