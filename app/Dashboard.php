@@ -70,8 +70,7 @@ class Dashboard  {
 
         $this->_setHeartbeat();
 
-        // Remove Gutenberg panel on Dashboard.
-        remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
+        // Remove Gutenberg panel on Dashboard:
         add_filter('use_block_editor_for_post_type', '__return_false');
 
 
