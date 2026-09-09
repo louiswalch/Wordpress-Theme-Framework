@@ -48,7 +48,7 @@ class Frontend {
         // add_filter( 'user_contactmethods', 'clean_user_contactmethods', 10, 1 );
 
         // Clean up the meta title and make it more SEO friendly.
-        add_filter( 'wp_title', [$this, 'betterPageTitles'], 10, 3 );
+        add_filter( 'document_title_parts', [$this, 'betterPageTitles'] );
 
         // // clean up gallery output in wp
         add_filter( 'gallery_style', [$this, 'removeGalleryStyle']);
@@ -138,34 +138,20 @@ class Frontend {
     // Clean up the meta title and make it more SEO friendly.
     // http://www.deluxeblogtips.com/2012/03/better-title-meta-tag.html
 
-    public function betterPageTitles($title) {
+    public function betterPageTitles($title_parts) {
 
-        global $page, $paged;
+        // Don't affect feeds.
+        if ( is_feed() ) return $title_parts;
 
-        // Don't affect in feeds.
-        if ( is_feed() ) return $title;
-
-        $new_title = array();
-        $new_title[] = trim($title);
-
-        // Add the blog description for the home/front page.
+        // Add the blog description on the home/front page.
+        // (Core's default title parts only add this on is_front_page(), not is_home().)
         $site_description = get_bloginfo( 'description', 'display' );
 
         if ( $site_description && ( is_home() || is_front_page() ) ) {
-            $new_title[] = $site_description;
+            $title_parts['tagline'] = $site_description;
         }
 
-        // Add a page number if necessary:
-        if ( $paged >= 2 || $page >= 2 ) {
-           $new_title[] = sprintf( __( 'Page %s', 'dbt' ), max( $paged, $page ) );
-        }
-
-        // Remove empty array values.
-        $new_title = array_filter($new_title, function($value) { return $value !== ''; });
- 
-        $new_title[] = get_bloginfo( 'name' );
-
-        return implode(' - ', $new_title);
+        return $title_parts;
 
     }
 
