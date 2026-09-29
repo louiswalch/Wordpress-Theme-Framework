@@ -284,11 +284,14 @@ HelloFrameworkConfig()->set([
                                                                 'wpseo_page_support',
                                                             ],
 
-    // Remove all notices within the back-end
-    'dashboard/notices'                                 => true,
-
     // Control the ajax 'heartbeat'
     'dashboard/heartbeat/interval'                      => 60,
+
+    // Allow notices:
+    'dashboard/support/notices'                         => false,
+
+    // Allow export tools menu:
+    'dashboard/support/export'                          => false,
 
 
 

@@ -13,34 +13,40 @@ class Dashboard  {
         require_once HELLO_DIR . '/public/render/DataStore.php';
         require_once HELLO_DIR . '/public/render/DataStoreInstance.php';
 
-        // Remove desingnated items from the Top Navigation Bar.
+        // Remove desingnated items from the Top Navigation Bar:
         if (HelloFrameworkConfig('dashboard/admin_bar/remove')) {
             DashboardNavigationBar::get_instance()->removeTopMenus(HelloFrameworkConfig('dashboard/admin_bar/remove'));
         }
 
-        // Move designited items from the Sidebar to Top Navigation Bar.
+        // Move designited items from the Sidebar to Top Navigation Bar:
         if (HelloFrameworkConfig('dashboard/admin_bar/relocate')) {
             DashboardNavigationBar::get_instance()->relocateSideMenus(HelloFrameworkConfig('dashboard/admin_bar/relocate'));
         }
 
-        // Custom Admin Dashboard CSS
+        // Custom Admin Dashboard CSS:
         if (HelloFrameworkConfig('dashboard/css')) {
             add_action('admin_enqueue_scripts', function() {
                 wp_enqueue_style('custom-admin-css', framework_internal_asset(HelloFrameworkConfig('dashboard/css')));
             }, 99);
         }
 
-        // Remove 'Howdy' from the Admin Top Bar.
-        // add_filter('admin_bar_menu', function($wp_admin_bar) {
-        //     $my_account = $wp_admin_bar->get_node('my-account');
-        //     if ($my_account) {
-        //         $new_title = str_replace('Howdy,', '', $my_account->title);
-        //         $wp_admin_bar->add_node([
-        //             'id'    => 'my-account',
-        //             'title' => $new_title,
-        //         ]);
-        //     }
-        // }, 25);
+        // Remove the 'Howdy, ' greeting from the Admin Top Bar:
+        if (!HelloFrameworkConfig('dashboard/admin_bar/howdy')) {
+            add_action('admin_bar_menu', function($wp_admin_bar) {
+                $node = $wp_admin_bar->get_node('my-account');
+                if (!$node) return;
+                $node->title = preg_replace('/^.*?(<span class="display-name">)/s', '$1', $node->title);
+                $wp_admin_bar->add_node($node);
+            }, 10000); // Core adds 'my-account' at priority 9991.
+        }
+
+        // Remove the Tools > Export menu:
+        if (HelloFrameworkConfig('dashboard/support/export') === false) {
+            add_action('admin_menu', function() {
+                remove_submenu_page('tools.php', 'export.php');
+            });
+        }
+
 
         $this->_toggleUserRoles();
 
@@ -258,7 +264,7 @@ class Dashboard  {
 
     private function _toggleNotices() {
 
-        if (HelloFrameworkConfig('dashboard/notices') === true) return;
+        if (HelloFrameworkConfig('dashboard/support/notices') === false) return;
 
         add_action('admin_head', function() {
             remove_all_actions('admin_notices');
