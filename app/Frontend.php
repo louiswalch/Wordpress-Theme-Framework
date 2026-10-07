@@ -44,6 +44,9 @@ class Frontend {
         // Add output formatting
         $this->_addOutputFormatting();
 
+        // Custom password page
+        $this->_setCustomPasswordPage();
+
         // THIRD-PARTY - Clean up the Yoast SEO fields added to user profile
         // add_filter( 'user_contactmethods', 'clean_user_contactmethods', 10, 1 );
 
@@ -236,6 +239,32 @@ class Frontend {
         });
 
     }
+
+
+    // ------------------------------------------------------------
+
+
+    private function _setCustomPasswordPage() {
+
+        if (!CONFIG('frontend/password/custom')) return false;
+
+        add_action('template_redirect', function() {
+            if (post_password_required()) {
+
+                get_header();
+
+                $file       = HelloFrameworkConfig('frontend/password/custom/file') ?? 'password.php';
+                $template   = locate_template($file, true);
+                if (!$template) echo get_the_password_form();
+
+                get_footer();
+
+                exit;
+            }
+        });
+
+    }
+
 
 
     // ------------------------------------------------------------

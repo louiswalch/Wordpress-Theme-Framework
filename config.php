@@ -163,6 +163,13 @@ HelloFrameworkConfig()->set([
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Frontend Password Page
+
+    'frontend/password/custom'                           => true,
+    'frontend/password/custom/file'                      => 'password.php',
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Modules Render Render Library
 
     'render/modules/anchors'                            => false,
