@@ -47,6 +47,12 @@ class Dashboard  {
             });
         }
 
+        // Remove the Settings > Connections menu:
+        if (HelloFrameworkConfig('dashboard/support/export') === false) {
+            add_action('admin_menu', function() {
+                remove_submenu_page('options-general.php', 'options-connectors.php');
+            });
+        }
 
         $this->_toggleUserRoles();
 

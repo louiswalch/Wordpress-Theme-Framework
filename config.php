@@ -293,6 +293,9 @@ HelloFrameworkConfig()->set([
     // Allow export tools menu:
     'dashboard/support/export'                          => false,
 
+    // Allow 'Connections' settings menu:
+    'dashboard/support/connections'                     => false,
+
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
