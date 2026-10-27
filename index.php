@@ -41,17 +41,6 @@ define('HELLO_FILE', __FILE__);
 define('FRAMEWORK_DIR', '_framework');
 define('FRAMEWORK_ROOT', get_template_directory() . '/' . FRAMEWORK_DIR);
 
-// Confirm we're not running super old PHP.
-if (version_compare(PHP_VERSION, '5.3', '<')) {
-    add_action( 'admin_notices', function() {
-        echo '<div class="error"><p>' . __( 'This Framework requires PHP 5.3 (or higher) to function properly. Please upgrade PHP. The Plugin has been auto-deactivated.', 'hello' ) . '</p></div>';
-        if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
-    });
-    add_action( 'admin_init', function() {
-        deactivate_plugins( plugin_basename( HELLO_FILE ) );
-    });
-    return;
-}
 
 // Framework classes, eventually add autoloading.
 require_once HELLO_DIR . '/app/Singleton.php';

@@ -39,7 +39,7 @@ class Login  {
 
     private function _toggleUsernameRest() {
 
-        if (HelloFrameworkConfig('login/reset/allow_username')) return
+        if (HelloFrameworkConfig('login/reset/allow_username')) return;
 
         add_filter('lostpassword_post', function($errors) {
             if (empty($_POST['user_login'])) return $errors;

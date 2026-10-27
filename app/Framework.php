@@ -173,17 +173,9 @@ class Framework {
         }
 
         if (!HelloFrameworkConfig('support/patterns')) {
-            // None of this seems to work
-            // remove_theme_support('core-block-patterns');
-            // unregister_post_type( 'wp_block' );
-            // add_filter( 'should_load_remote_block_patterns', '__return_false' );
             add_action('init', function() {
                 remove_theme_support('core-block-patterns');
             }, 9);
-            // add_action( 'after_setup_theme', function() {
-            //     remove_theme_support( 'core-block-patterns' );
-            //     add_filter( 'should_load_remote_block_patterns', '__return_false' );
-            // });
         }
         
         if (HelloFrameworkConfig('support/thumbnails')) {
