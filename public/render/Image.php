@@ -32,6 +32,8 @@ class ImageRender extends HelloFramework\Singleton {
     private $_showcaption;
     private $_showdescription;
     private $_lazy;
+    private $_loading;
+    private $_fetchpriority;
     private $_responsive;
     private $_decoding;
     private $_size;
@@ -76,6 +78,9 @@ class ImageRender extends HelloFramework\Singleton {
             $this->_defaults['_size']                   = HelloFrameworkConfig('render/image/default_size');
 
             $this->_defaults['_lazy']                   = HelloFrameworkConfig('render/image/default_lazy');
+            // Explicit per-image hints; null preserves the legacy lazy(false) omission.
+            $this->_defaults['_loading']                = null;
+            $this->_defaults['_fetchpriority']          = false;
             $this->_defaults['_responsive']             = HelloFrameworkConfig('render/image/default_responsive');
             $this->_defaults['_decoding']               = HelloFrameworkConfig('render/image/default_decoding');
             
@@ -198,7 +203,8 @@ class ImageRender extends HelloFramework\Singleton {
         $image_caption                  = ($this->_showcaption) ? $this->_getImageCaption($image_id) : '';
         $image_description              = ($this->_showdescription) ? $this->_getImageDescription($image_id) : '';
 
-        $native_loading                 = $this->_lazy && $this->_isNativeLoading();
+        // Native source selection and dimensions also apply to eager images.
+        $native_loading                 = $this->_isNativeLoading();
         $image_src                      = ($this->_lazy && !$native_loading && ($image_mime != 'image/gif')) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
         $image_srcset                   = ($image_mime == 'image/gif') ? wp_get_attachment_image_url($image_id, $this->_size) : wp_get_attachment_image_srcset($image_id, $this->_size);
 
@@ -210,8 +216,21 @@ class ImageRender extends HelloFramework\Singleton {
 
         if ($attribute_src)                             $attributes[$attribute_src]     = $image_src;
         if ($this->_responsive && $attribute_srcset)    $attributes[$attribute_srcset]  = $image_srcset;
-        if ($this->_responsive && $attribute_sizes)     $attributes[$attribute_sizes]   = $native_loading ? HelloFrameworkConfig('render/image/native_sizes') : 'auto';
-        if ($native_loading && $mode == 'img')          $attributes['loading']          = 'lazy';
+        if ($this->_responsive && $attribute_sizes) {
+            $sizes = $native_loading ? HelloFrameworkConfig('render/image/native_sizes') : 'auto';
+            if ($native_loading && !$this->_lazy) {
+                // Auto-sizes requires lazy loading. Keep the configured fallback for eager images.
+                $sizes = preg_replace('/^\s*auto\s*(?:,\s*|$)/i', '', $sizes);
+                if (trim($sizes) === '') $sizes = '100vw';
+            }
+            $attributes[$attribute_sizes] = $sizes;
+        }
+        if ($mode == 'img') {
+            // Legacy lazy loading stays owned by lazysizes; eager works in either backend.
+            if ($native_loading && $this->_lazy) $attributes['loading'] = 'lazy';
+            if ($this->_loading === 'eager') $attributes['loading'] = 'eager';
+            if ($this->_fetchpriority) $attributes['fetchpriority'] = $this->_fetchpriority;
+        }
         if ($native_loading && $mode == 'img') {
             $attributes['width']                      = $image_dims[1];
             $attributes['height']                     = $image_dims[2];
@@ -222,7 +241,7 @@ class ImageRender extends HelloFramework\Singleton {
         if ($this->_lazy && !$native_loading) {
             $this->classes(HelloFrameworkConfig('render/image/lazy_class'));
         }
-        if ($native_loading) {
+        if ($native_loading && $this->_lazy) {
             $this->classes(HelloFrameworkConfig('render/image/native_class'));
         }
         if (class_exists('acf')) {
@@ -514,8 +533,34 @@ class ImageRender extends HelloFramework\Singleton {
         return $this;
     }
     public function lazy($incoming=false){
-        if (isset($incoming)) $this->_lazy = $incoming;
-        return $this;            
+        if (isset($incoming)) {
+            $this->_lazy = $incoming;
+            // The last loading-related call wins. Preserve omission for legacy lazy(false).
+            $this->_loading = null;
+        }
+        return $this;
+    }
+    /**
+     * Select loading for the next render. Eager bypasses lazysizes placeholders too.
+     * Lazy uses the configured backend; only native mode emits loading="lazy".
+     * Invalid values leave the current setting unchanged.
+     */
+    public function loading($incoming=null) {
+        if (in_array($incoming, ['lazy', 'eager'], true)) {
+            $this->_loading = $incoming;
+            $this->_lazy = $incoming === 'lazy';
+        }
+        return $this;
+    }
+    /**
+     * Set an IMG-only browser priority hint; false omits it.
+     * This does not change loading or decoding. Pair high with eager for a hero image.
+     */
+    public function fetchpriority($incoming=null) {
+        if ($incoming === false || in_array($incoming, ['high', 'low', 'auto'], true)) {
+            $this->_fetchpriority = $incoming;
+        }
+        return $this;
     }
     public function responsive($incoming=false){
         if (isset($incoming)) $this->_responsive = $incoming;
@@ -529,10 +574,8 @@ class ImageRender extends HelloFramework\Singleton {
     }
     public function above_fold($incoming=true) {
         if ($incoming) {
-            $this->_lazy = false;
-            $this->_decoding = 'sync';
-            $this->_attr['loading'] = 'eager';
-            $this->_attr['fetchpriority'] = 'high';
+            // Use the same state as individual setters so later calls can override each hint.
+            $this->loading('eager')->fetchpriority('high')->decoding('sync');
         }
         return $this;
     }

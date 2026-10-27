@@ -189,7 +189,9 @@ The library supports a variety of parameters to customize how the image should b
 > - caption($incoming=null)
 > - description($incoming=null)
 > - classes($incoming=false)
-> - lazy($incoming=true)
+> - lazy($incoming=false) // existing boolean switch
+> - loading($incoming=null) // lazy or eager
+> - fetchpriority($incoming=null) // high, low, auto, or false
 > - responsive($incoming=true)
 > - decoding($incoming=null) // async, sync, auto, or false
 > - above_fold($incoming=true)
@@ -282,7 +284,54 @@ echo IMAGE()->above_fold()->img($image);
 
 It outputs `loading="eager"`, `decoding="sync"`, and `fetchpriority="high"`. Use it only for the small number of images that are immediately visible when the page loads.
 
-The default class for native images is configurable. The class is only a CSS hook; it does not load JavaScript:
+##### Per-image loading and fetch priority
+
+Use `loading()` and `fetchpriority()` before `img()` to control each hint independently:
+
+```php
+// Native is the rendering backend; lazy remains the default.
+CONFIG()->set('render/image/loading_mode', 'native');
+CONFIG()->set('render/image/default_lazy', true);
+
+// Ordinary image: loading="lazy", no fetchpriority attribute.
+echo IMAGE()->img($image);
+
+// Visible image: loading="eager", browser chooses its normal priority.
+echo IMAGE()->loading('eager')->img($image);
+
+// Important hero: eager loading and high fetch priority.
+// Decoding keeps its configured default (normally async).
+echo IMAGE()->loading('eager')->fetchpriority('high')->img($hero);
+
+// Lower priority lazy image; priority alone does not change loading.
+echo IMAGE()->loading('lazy')->fetchpriority('low')->img($image);
+
+// Explicit browser-default priority, or omit the hint entirely.
+echo IMAGE()->fetchpriority('auto')->img($image);
+echo IMAGE()->fetchpriority(false)->img($image);
+
+// Existing convenience helper: eager + high + sync.
+// Later setters can override individual hints.
+echo IMAGE()->above_fold()->decoding('async')->fetchpriority(false)->img($hero);
+
+// Existing boolean API: disable lazy loading without an explicit loading attribute.
+echo IMAGE()->lazy(false)->img($image);
+
+// Last loading-related method wins: this renders a native lazy image.
+echo IMAGE()->loading('eager')->lazy(true)->img($image);
+```
+
+`loading()` accepts only `lazy` or `eager`. `fetchpriority()` accepts only `high`, `low`, `auto`, or boolean `false`. Invalid values (including omitted/null arguments) leave the current setting unchanged. Priority does not implicitly change loading or decoding; pair `high` with `eager` when immediate loading is intended.
+
+`loading()`, `lazy()`, and an enabled `above_fold()` share loading state: the last call wins. `above_fold(false)` remains a no-op. Explicit `attr()`/`attributes()` values retain final precedence over generated attributes regardless of chain order; use the dedicated methods to keep loading behavior, sources, and classes consistent. Generic attributes retain their existing wrapper behavior, whereas the new methods emit hints only on the IMG.
+
+In native mode, eager images retain real `src`, responsive `srcset`, configured `sizes`, and `width`/`height`. They do not automatically receive the native lazy CSS class. Because auto-sizes requires lazy loading, eager images remove a leading `auto` from `native_sizes`: `auto, 100vw` becomes `100vw`; bare `auto` falls back to `100vw`. Explicit `attr('sizes', ...)` still overrides this generated value.
+
+In lazysizes mode, `loading('lazy')` keeps JavaScript lazy loading without adding native `loading="lazy"`. `loading('eager')` bypasses placeholders and lazy classes, uses real sources, and emits `loading="eager"` on IMG output. Loading and priority attributes are never emitted by these methods on background DIVs; native `div()` continues to return its configured fallback.
+
+All per-image options reset after `img()`, `div()`, or `src()`, including missing-image/fallback output, so a priority hero does not affect the next image. No new global configuration is required.
+
+The default class for native lazy images is configurable. The class is only a CSS hook; it does not load JavaScript:
 
 ```php
 CONFIG()->set('render/image/native_class', 'lazy');

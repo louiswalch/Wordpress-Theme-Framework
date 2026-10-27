@@ -233,7 +233,7 @@ Each configuation rule has it's own require input type, refer to the default val
 > **Default:** `lazysizes`
 
 ##### `render/image/default_lazy`
-> Enable lazy loading by default for image renders.
+> Enable lazy loading by default for image renders. Per-image `loading('lazy')` / `loading('eager')` or the existing `lazy()` method override this default. `loading('eager')` explicitly emits `loading="eager"`; `lazy(false)` preserves omission of the loading attribute. Fetch priority is independently controlled with `fetchpriority('high' | 'low' | 'auto' | false)` and is omitted by default. See [per-image examples and precedence](libraries.md#per-image-loading-and-fetch-priority).
 >
 > **Default:** `true`
 
@@ -248,7 +248,7 @@ Each configuation rule has it's own require input type, refer to the default val
 > **Default:** `async`
 
 ##### `render/image/native_sizes`
-> The `sizes` attribute used by native responsive images. This must describe the image's rendered CSS width. It is used with `srcset` by the browser to select an image candidate.
+> The `sizes` attribute used by native responsive images, both lazy and eager. This must describe the image's rendered CSS width. It is used with `srcset` by the browser to select an image candidate. Eager images remove a leading `auto` and retain its fallback list (`auto, 100vw` becomes `100vw`); bare `auto` falls back to `100vw`.
 >
 > **Default:** `100vw`
 
