@@ -192,6 +192,8 @@ Each configuation rule has it's own require input type, refer to the default val
 > **Default:** true
 
 ##### `image/sizes`
+> Additional image widths generated for responsive `srcset` values. These are the available candidates; they do not define the rendered CSS width.
+>
 > **Default:** ['400', '600', '800', '1200', '1600', '2400']
 
 ##### `image/jpg_quality`
@@ -217,8 +219,171 @@ Each configuation rule has it's own require input type, refer to the default val
 
 ##### `image/remove_default`
 > Remove specified default Wordpress image sizes.
-> 
+>
 > **Default:** ['medium', 'medium_large', 'large']
+
+##### `image/max/w`
+> Maximum width allowed in generated responsive `srcset` values. Wordpress defaults this to 2048px; this framework setting overrides that limit.
+>
+> **Default:** 2400
+
+##### `render/image/loading_mode`
+> Image loading implementation. `lazysizes` preserves the existing JavaScript behavior; `native` outputs native lazy-loaded `<img>` elements. Native mode supports `img()` only; `div()` returns the configured fallback.
+>
+> **Default:** `lazysizes`
+
+##### `render/image/default_lazy`
+> Enable lazy loading by default for image renders.
+>
+> **Default:** `true`
+
+##### `render/image/default_responsive`
+> Enable responsive `srcset` and `sizes` output by default.
+>
+> **Default:** `true`
+
+##### `render/image/default_decoding`
+> Default value for the image `decoding` attribute. Supported values are `async`, `sync`, `auto`, or `false` to omit the attribute.
+>
+> **Default:** `async`
+
+##### `render/image/native_sizes`
+> The `sizes` attribute used by native responsive images. This must describe the image's rendered CSS width. It is used with `srcset` by the browser to select an image candidate.
+>
+> **Default:** `100vw`
+
+##### `render/image/native_class`
+> Class added to images using native lazy loading. Set to `false` to disable it.
+>
+> **Default:** `lazy`
+
+##### `render/image/default_size`
+> Default WordPress image size requested by the renderer.
+>
+> **Default:** `1600`
+
+##### `render/image/default_draggable`
+> Allow images to be dragged by the browser.
+>
+> **Default:** `false`
+
+##### `render/image/default_pinnable`
+> Allow images to be pinned by supported services such as Pinterest.
+>
+> **Default:** `false`
+
+##### `render/image/alt_fallback`
+> Generate fallback alt text when the attachment has no alt text.
+>
+> **Default:** `true`
+
+##### `render/image/alt_fallback/function`
+> Callback used to generate custom fallback alt text. Receives the attachment ID and should return a string or `false`.
+
+##### `render/image/alt_limit`
+> Maximum length for attachment alt text. Set to `false` to disable limiting.
+>
+> **Default:** `160`
+
+##### `render/image/default_caption`
+> Display attachment captions by default.
+>
+> **Default:** `true`
+
+##### `render/image/default_caption_location`
+> Caption location when an image is wrapped: `inside` or `outside`.
+>
+> **Default:** `inside`
+
+##### `render/image/caption_element`
+> HTML element used for captions.
+>
+> **Default:** `div`
+
+##### `render/image/caption_class`
+> Class added to the caption element.
+>
+> **Default:** `caption`
+
+##### `render/image/caption_strip_html`
+> Strip HTML from attachment captions before output.
+>
+> **Default:** `true`
+
+##### `render/image/caption_placeholder`
+> Output an empty caption element when no caption exists.
+>
+> **Default:** `false`
+
+##### `render/image/default_description`
+> Display the attachment description by default.
+>
+> **Default:** `false`
+
+##### `render/image/default_description_location`
+> Description location when an image is wrapped: `inside` or `outside`.
+>
+> **Default:** `inside`
+
+##### `render/image/description_element`
+> HTML element used for descriptions.
+>
+> **Default:** `div`
+
+##### `render/image/description_class`
+> Class added to the description element.
+>
+> **Default:** `description`
+
+##### `render/image/default_wrap`
+> Wrap rendered images in a container element.
+>
+> **Default:** `false`
+
+##### `render/image/default_wrap_size`
+> Default size class added to the image wrapper.
+>
+> **Default:** empty
+
+##### `render/image/default_wrap_autosize`
+> Add an aspect-ratio or padding-bottom style to wrappers.
+>
+> **Default:** `false`
+
+##### `render/image/default_wrap_class`
+> Class added to image wrappers.
+>
+> **Default:** `img-wrapper`
+
+##### `render/image/default_wrap_fallback`
+> Output the configured wrapper fallback when no image is available.
+>
+> **Default:** `true`
+
+##### `render/image/autosize_method`
+> Wrapper autosize calculation: `padding-bottom` or `aspect-ratio`.
+>
+> **Default:** `padding-bottom`
+
+##### `render/image/lazy_class`
+> Classes added in lazysizes mode.
+>
+> **Default:** `lazyload lazyload-persist`
+
+##### `render/image/lazy_img_srcset`
+> Attribute used for lazy IMG `srcset` values.
+>
+> **Default:** `data-srcset`
+
+##### `render/image/lazy_div_srcset`
+> Attribute used for lazy background-image candidate values.
+>
+> **Default:** `data-bgset`
+
+##### `render/image/lazy_sizes`
+> Attribute used for lazy `sizes` values.
+>
+> **Default:** `data-sizes`
 
 <br/>
 

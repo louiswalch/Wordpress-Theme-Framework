@@ -170,7 +170,7 @@ The following built-in variables are made available within your module file. The
 
 ### Frontend Library :  Image Render
 
-This allows you to easily output a Wordpress image, either coming from an ACF Image field or the post thumbnail. They can either be rendered as a standard IMG element a DIV with background image. In both cases it supports lazy loading as well as responsive src-set.
+This allows you to easily output a Wordpress image, either coming from an ACF Image field or the post thumbnail. Images can be rendered as a standard IMG element or, when using the legacy lazysizes mode, as a DIV with a background image.
 
 ##### Example Usage - Output IMG element from custom field value:
 
@@ -184,23 +184,35 @@ echo IMAGE()->img(get_field('image'));
 
 The library supports a variety of parameters to customize how the image should be rendered. These methods are designed to be chained and would be passed in prior to your final output call.
 
-> - srcset($incoming=true)
 > - wrap($incoming=false)
 > - autosize($incoming=false)
 > - caption($incoming=null)
+> - description($incoming=null)
 > - classes($incoming=false)
 > - lazy($incoming=true)
+> - responsive($incoming=true)
+> - decoding($incoming=null) // async, sync, auto, or false
+> - above_fold($incoming=true)
 > - size($incoming=false)
-> - alpha($incoming=false)
-> - attributes($incoming=false) 
+> - fallback($incoming=false)
+> - pinnable($incoming=false)
+> - debug($incoming=false)
+> - attributes($incoming=false)
 > - attr($one=false, $two=false)
-> - pinnable($incoming=false
 
 Once you have defined any parameters, then you call your final output - either an IMG, DIV, or to retrieve the SRC.
 
 > - div($image=false, $size=false)
-> - img($image=false, $size=false, $showcaption=false)
+> - img($image=false, $size=false)
 > - src($image=false, $size=false)
+
+Additional read-only helpers are available after an image has been rendered:
+
+> - get_caption($image=false, $format=false)
+> - get_description($image=false, $format=false)
+> - get_dimensions($image=false)
+> - get_orientation($image=false)
+> - get_autosize($image=false)
 
 ##### Basic Rendering Examples:
 
@@ -229,6 +241,83 @@ echo IMAGE()->size(600)->div(get_field('image'));
 // Output just the image src (e.g. for use in Meta Tag), passing in the size we want.
 echo IMAGE()->src(get_post_thumbnail_id(), 800); 
 ```
+
+##### Image Render Library - Loading Modes
+
+The loading mode is controlled globally through the theme's `_framework/config.php` file:
+
+```php
+// Preserve the legacy JavaScript/lazysizes implementation (default).
+CONFIG()->set('render/image/loading_mode', 'lazysizes');
+
+// Use browser-native lazy loading for IMG elements.
+CONFIG()->set('render/image/loading_mode', 'native');
+```
+
+The `lazysizes` mode outputs the existing `data-srcset`, `data-sizes`, and placeholder behavior. It also supports the `div()` renderer and background-image loading.
+
+The `native` mode outputs an IMG element with real image attributes:
+
+```html
+<img class="lazy" src="image-1600.jpg"
+     srcset="image-480.jpg 480w, image-768.jpg 768w, image-1600.jpg 1600w"
+     sizes="100vw" loading="lazy" decoding="async" />
+```
+
+Native mode does not output lazysizes `data-*` attributes and does not require lazysizes to load an image. The `div()` renderer is not supported in native mode and returns the configured fallback instead.
+
+For an image that should load eagerly and be synchronously decoded, override the defaults for that render:
+
+```php
+echo IMAGE()->lazy(false)->decoding('sync')->img($image);
+```
+
+The `decoding` attribute is only a browser hint. It does not increase network priority. For a true above-the-fold priority image, `loading` should be eager and `fetchpriority="high"` may also be appropriate.
+
+The `above_fold()` helper applies all of those settings automatically:
+
+```php
+echo IMAGE()->above_fold()->img($image);
+```
+
+It outputs `loading="eager"`, `decoding="sync"`, and `fetchpriority="high"`. Use it only for the small number of images that are immediately visible when the page loads.
+
+The default class for native images is configurable. The class is only a CSS hook; it does not load JavaScript:
+
+```php
+CONFIG()->set('render/image/native_class', 'lazy');
+
+// Disable the class.
+CONFIG()->set('render/image/native_class', false);
+```
+
+##### Image Render Library - Responsive Images
+
+The framework generates `srcset` candidates from the configured `image/sizes` values. For example:
+
+```php
+CONFIG()->set('image/sizes', ['480', '768', '1024', '1280', '1680', '2048', '2560', '3840']);
+```
+
+These values describe the files available to the browser. They do not describe the rendered CSS width. In native mode, that width is described by `render/image/native_sizes`:
+
+```php
+// A full-width image.
+CONFIG()->set('render/image/native_sizes', '100vw');
+
+// An image that occupies half the viewport on larger screens.
+CONFIG()->set('render/image/native_sizes', '(max-width: 767px) 100vw, 50vw');
+```
+
+The browser combines `srcset`, `sizes`, viewport width, and device pixel ratio to select the most suitable candidate. `native_sizes` must match the actual CSS layout. A generic `100vw` value is safe, but can download unnecessarily large images for grid or column layouts.
+
+Wordpress limits responsive candidates to 2048px by default. The framework exposes this limit through `image/max/w`:
+
+```php
+CONFIG()->set('image/max/w', 3840);
+```
+
+Candidates larger than the original uploaded image, unavailable generated files, or incompatible image ratios may still be omitted by Wordpress.
 
 ##### Image Render Library - Wrapper Functionality
 

@@ -223,7 +223,7 @@ class Frontend {
         if (!CONFIG('frontend/edit_link') || !current_user_can('edit_pages')) return;
 
         add_filter('edit_post_link', function($link) {
-            return str_replace('href=', 'data-barba-prevent="self" href=', $link);
+            return str_replace('href=', 'data-no-swup href=', $link);
         });
 
         add_action('wp_footer', function() {
@@ -235,12 +235,16 @@ class Frontend {
             $queried_object = get_queried_object();
 
             if (!empty($queried_object->post_type)) {
-                edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after, null, 'no-barba' );
+                edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after);
             } else if (!empty($queried_object->taxonomy)) {
                 $button = edit_term_link(CONFIG('frontend/edit_link/text'), $before, $after, $queried_object, false);
-                echo str_replace('href=', 'class="no-barba" data-barba-prevent="self" href=', $button);
-            } else {
-                echo $before . $after;
+                if ($button) {
+                    echo str_replace('href=', 'data-no-swup href=', $button);
+                }
+            } else if (is_front_page() && ($front_page_id = (int) get_option('page_on_front'))) {
+                edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after, $front_page_id);
+            } else if (is_home() && ($posts_page_id = (int) get_option('page_for_posts'))) {
+                edit_post_link(CONFIG('frontend/edit_link/text'), $before, $after, $posts_page_id);
             }
 
         });

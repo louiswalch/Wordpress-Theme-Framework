@@ -212,6 +212,10 @@ HelloFrameworkConfig()->set([
     // Lazy loading & responsive controls for image output.
     'render/image/default_lazy'                         => true,
     'render/image/default_responsive'                   => true,
+    'render/image/default_decoding'                      => 'async',
+    'render/image/loading_mode'                          => 'lazysizes',
+    'render/image/native_sizes'                          => '100vw',
+    'render/image/native_class'                          => 'lazy',
     'render/image/lazy_class'                           => 'lazyload lazyload-persist',
     'render/image/lazy_img_srcset'                      => 'data-srcset',
     'render/image/lazy_div_srcset'                      => 'data-bgset',

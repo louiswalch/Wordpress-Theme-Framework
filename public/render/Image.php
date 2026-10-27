@@ -33,6 +33,7 @@ class ImageRender extends HelloFramework\Singleton {
     private $_showdescription;
     private $_lazy;
     private $_responsive;
+    private $_decoding;
     private $_size;
     private $_wrap;
     private $_wrap_class;
@@ -76,6 +77,7 @@ class ImageRender extends HelloFramework\Singleton {
 
             $this->_defaults['_lazy']                   = HelloFrameworkConfig('render/image/default_lazy');
             $this->_defaults['_responsive']             = HelloFrameworkConfig('render/image/default_responsive');
+            $this->_defaults['_decoding']               = HelloFrameworkConfig('render/image/default_decoding');
             
             $this->_defaults['_showcaption']            = HelloFrameworkConfig('render/image/default_caption');
             $this->_defaults['_caption_location']       = HelloFrameworkConfig('render/image/default_caption_location');
@@ -178,6 +180,10 @@ class ImageRender extends HelloFramework\Singleton {
 
     }
 
+    private function _isNativeLoading() {
+        return HelloFrameworkConfig('render/image/loading_mode') === 'native';
+    }
+
     private function _getImageData($image, $mode='img') {
 
         $attributes                     = array();
@@ -192,23 +198,32 @@ class ImageRender extends HelloFramework\Singleton {
         $image_caption                  = ($this->_showcaption) ? $this->_getImageCaption($image_id) : '';
         $image_description              = ($this->_showdescription) ? $this->_getImageDescription($image_id) : '';
 
-        $image_src                      = ($this->_lazy && ($image_mime != 'image/gif')) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
+        $native_loading                 = $this->_lazy && $this->_isNativeLoading();
+        $image_src                      = ($this->_lazy && !$native_loading && ($image_mime != 'image/gif')) ? $this->_alphadata : wp_get_attachment_image_url($image_id, $this->_size);
         $image_srcset                   = ($image_mime == 'image/gif') ? wp_get_attachment_image_url($image_id, $this->_size) : wp_get_attachment_image_srcset($image_id, $this->_size);
 
         // ---
 
-        $attribute_src                  = ($this->_lazy && $mode == 'div') ? false : 'src';
-        $attribute_srcset               = ($this->_lazy) ? HelloFrameworkConfig('render/image/lazy_'. $mode .'_srcset') : 'srcset';
-        $attribute_sizes                = ($this->_lazy) ? HelloFrameworkConfig('render/image/lazy_sizes') : 'sizes';
+        $attribute_src                  = ($native_loading && $mode == 'div') ? false : 'src';
+        $attribute_srcset               = ($native_loading || !$this->_lazy) ? 'srcset' : HelloFrameworkConfig('render/image/lazy_'. $mode .'_srcset');
+        $attribute_sizes                = ($native_loading || !$this->_lazy) ? 'sizes' : HelloFrameworkConfig('render/image/lazy_sizes');
 
         if ($attribute_src)                             $attributes[$attribute_src]     = $image_src;
         if ($this->_responsive && $attribute_srcset)    $attributes[$attribute_srcset]  = $image_srcset;
-        if ($this->_responsive && $attribute_sizes)     $attributes[$attribute_sizes]   = 'auto';
+        if ($this->_responsive && $attribute_sizes)     $attributes[$attribute_sizes]   = $native_loading ? HelloFrameworkConfig('render/image/native_sizes') : 'auto';
+        if ($native_loading && $mode == 'img')          $attributes['loading']          = 'lazy';
+        if ($native_loading && $mode == 'img') {
+            $attributes['width']                      = $image_dims[1];
+            $attributes['height']                     = $image_dims[2];
+        }
 
         // ---
 
-        if ($this->_lazy) {
+        if ($this->_lazy && !$native_loading) {
             $this->classes(HelloFrameworkConfig('render/image/lazy_class'));
+        }
+        if ($native_loading) {
+            $this->classes(HelloFrameworkConfig('render/image/native_class'));
         }
         if (class_exists('acf')) {
             $this->classes(get_field('crop_alignment', $image_id));
@@ -223,6 +238,9 @@ class ImageRender extends HelloFramework\Singleton {
 
         // ---
 
+        if ($native_loading) {
+            $this->_classes = array_diff($this->_classes, ['lazyload', 'lazyload-persist']);
+        }
         $attributes['class']            = implode(' ', $this->_classes); 
 
         $attributes['meta']             = array(
@@ -503,6 +521,21 @@ class ImageRender extends HelloFramework\Singleton {
         if (isset($incoming)) $this->_responsive = $incoming;
         return $this;            
     }
+    public function decoding($incoming=null) {
+        if ($incoming === false || in_array($incoming, ['async', 'sync', 'auto'], true)) {
+            $this->_decoding = $incoming;
+        }
+        return $this;
+    }
+    public function above_fold($incoming=true) {
+        if ($incoming) {
+            $this->_lazy = false;
+            $this->_decoding = 'sync';
+            $this->_attr['loading'] = 'eager';
+            $this->_attr['fetchpriority'] = 'high';
+        }
+        return $this;
+    }
     public function size($incoming=false) {
         if ($incoming) {
             $this->_size = $incoming;
@@ -552,6 +585,9 @@ class ImageRender extends HelloFramework\Singleton {
 
     public function div($image=false, $size=false, $inside='') {
 
+        // Native lazy loading is supported for IMG output only.
+        if ($this->_isNativeLoading()) return $this->_generateFallback();
+
         $this->size($size);
 
         $data           = $this->_getImageData($image, 'div');
@@ -589,7 +625,7 @@ class ImageRender extends HelloFramework\Singleton {
         if (!$this->_pinnable)      $data['data-pin-nopin'] = 'true';
         if (!$this->_draggable)     $data['draggable']      = 'false';
 
-        $data['decoding']      = 'async';
+        if ($this->_decoding) $data['decoding'] = $this->_decoding;
 
         $attributes             = $this->_generateAttributes($data);
         $output                 = '<img '. $attributes .' />';
