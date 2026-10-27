@@ -217,16 +217,66 @@ HelloFrameworkConfig()->set([
     'render/image/autosize_method'                      => 'padding-bottom',
 
     // Lazy loading & responsive controls for image output.
+    // Choose the backend: 'lazysizes' uses JavaScript; 'native' uses browser loading.
+    // To enable native loading, change the active value below to 'native', or add
+    // this override in your theme's _framework/config.php:
+    // CONFIG()->set('render/image/loading_mode', 'native');
+    // Native mode supports img() only; div() returns the configured fallback.
+    'render/image/loading_mode'                         => 'lazysizes',
+    // 'render/image/loading_mode'                      => 'native',
+
+    // Defaults for each image. Per-image methods override these for one render.
     'render/image/default_lazy'                         => true,
     'render/image/default_responsive'                   => true,
-    'render/image/default_decoding'                      => 'async',
-    'render/image/loading_mode'                          => 'lazysizes',
-    'render/image/native_sizes'                          => '100vw',
-    'render/image/native_class'                          => 'lazy',
+    // Decoding hint: 'async', 'sync', 'auto', or false to omit the attribute.
+    'render/image/default_decoding'                     => 'async',
+
+    // Native responsive sizes should describe the image's rendered CSS width.
+    // Examples: '100vw', '(max-width: 767px) 100vw, 50vw', or 'auto, 100vw'.
+    // Eager images remove leading 'auto', retaining the fallback; bare 'auto'
+    // falls back to '100vw'. Width and height are included for native IMG output.
+    'render/image/native_sizes'                         => '100vw',
+    // CSS hook added only to native lazy images; false disables the class.
+    'render/image/native_class'                         => 'lazy',
+
+    // Legacy lazysizes classes and data attributes (not used by native mode).
     'render/image/lazy_class'                           => 'lazyload lazyload-persist',
-    'render/image/lazy_img_srcset'                      => 'data-srcset',
-    'render/image/lazy_div_srcset'                      => 'data-bgset',
-    'render/image/lazy_sizes'                           => 'data-sizes',
+    'render/image/lazy_img_srcset'                       => 'data-srcset',
+    'render/image/lazy_div_srcset'                       => 'data-bgset',
+    'render/image/lazy_sizes'                            => 'data-sizes',
+
+    // Template examples: copy these PHP statements into a theme template.
+    // $image can be an attachment ID or a supported ACF image value.
+    // With native mode and default_lazy=true, ordinary images use loading="lazy":
+    // echo IMAGE()->img($image);
+    // Explicit lazy loading (uses JavaScript instead when in lazysizes mode):
+    // echo IMAGE()->loading('lazy')->img($image);
+    // Eager loading with normal browser priority:
+    // echo IMAGE()->loading('eager')->img($image);
+    // Important hero: loading="eager" and fetchpriority="high"; decoding unchanged:
+    // echo IMAGE()->loading('eager')->fetchpriority('high')->img($image);
+    // Priority options are independent of loading: 'high', 'low', 'auto', or false.
+    // echo IMAGE()->fetchpriority('low')->img($image);
+    // echo IMAGE()->fetchpriority('auto')->img($image);
+    // echo IMAGE()->fetchpriority(false)->img($image); // Omit fetchpriority (default).
+    // Existing shortcut: eager loading, high priority, and synchronous decoding:
+    // echo IMAGE()->above_fold()->img($image);
+    // Override individual shortcut settings with later chained methods:
+    // echo IMAGE()->above_fold()->decoding('async')->fetchpriority(false)->img($image);
+    // Existing boolean switch: disable lazy loading, omit the loading attribute:
+    // echo IMAGE()->lazy(false)->img($image);
+    // Other decoding options (async is the default):
+    // echo IMAGE()->decoding('sync')->img($image);
+    // echo IMAGE()->decoding('auto')->img($image);
+    // echo IMAGE()->decoding(false)->img($image); // Omit decoding.
+    // Disable responsive srcset/sizes, or override sizes for a particular image:
+    // echo IMAGE()->responsive(false)->img($image);
+    // echo IMAGE()->attr('sizes', '(max-width: 767px) 100vw, 50vw')->img($image);
+    // The last loading()/lazy()/enabled above_fold() call wins. Invalid loading
+    // or priority values are ignored. Raw attr() values have final precedence.
+    // Dedicated loading/priority methods affect the IMG only, not its wrapper.
+    // All per-image settings reset after rendering, including fallback output.
+
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
