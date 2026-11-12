@@ -18,9 +18,10 @@ $include_contents = INCLUDES()->fetch('header');
 class Includes extends HelloFramework\Singleton {
 
     protected $_remember        = array('_cache_this', '_cache_life', '_cache_global', '_cache_prefix', '_cache_key', '_data', '_key', '_from');
+    protected $_default         = array();
     protected $_memory          = array();
 
-    protected $_cache_on        = true;
+    protected $_cache_on       = true;
     protected $_cache_this      = false;
     protected $_cache_life      = DAY_IN_SECONDS;
     protected $_cache_global    = false;
@@ -45,13 +46,13 @@ class Includes extends HelloFramework\Singleton {
         $this->_dir         = HelloFrameworkConfig($this->_dir_config_key);
 
         // Default settings based on current environment.
-        $this->_cache_on    = !detect_environment('development');
+        // $this->_cache_on    = !detect_environment('development');
         $this->_debug       = !detect_environment('production');
 
         // Store default values to be used for each new instance.
-        // foreach($this->_remember as $key) {
-        //     $this->_default[$key] = $this->{$key};
-        // }
+        foreach($this->_remember as $key) {
+            $this->_default[$key] = $this->{$key};
+        }
 
     }
 
@@ -82,6 +83,8 @@ class Includes extends HelloFramework\Singleton {
 
         // Mke sure caching is for the entire site as well as this request.
         if (!$this->_cache_on || !$this->_cache_this) return false;
+
+return false;
 
         return HelloFrameworkCache()->global($this->_cache_global)->get($this->_cache_key);
 
@@ -224,6 +227,11 @@ class Includes extends HelloFramework\Singleton {
     public function newSession() {
 
         $this->_rememberSession();
+
+        // Start every new include from defaults so nested includes don't inherit the parent's cache settings or data:
+        foreach ($this->_default as $key => $value) {
+            $this->{$key} = $value;
+        }
 
         return $this;
 
