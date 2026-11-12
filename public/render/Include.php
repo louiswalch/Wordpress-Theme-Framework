@@ -46,7 +46,7 @@ class Includes extends HelloFramework\Singleton {
         $this->_dir         = HelloFrameworkConfig($this->_dir_config_key);
 
         // Default settings based on current environment.
-        // $this->_cache_on    = !detect_environment('development');
+        $this->_cache_on    = !detect_environment('development');
         $this->_debug       = !detect_environment('production');
 
         // Store default values to be used for each new instance.
@@ -83,8 +83,6 @@ class Includes extends HelloFramework\Singleton {
 
         // Mke sure caching is for the entire site as well as this request.
         if (!$this->_cache_on || !$this->_cache_this) return false;
-
-return false;
 
         return HelloFrameworkCache()->global($this->_cache_global)->get($this->_cache_key);
 
