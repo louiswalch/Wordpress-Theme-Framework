@@ -22,7 +22,6 @@ class Modules extends Includes {
 
     protected $_cache_prefix    = 'include_module_';
     protected $_dir_config_key  = 'framework/modules_dir';
-    // protected $_dir             = '_modules/';
     protected $_type            = 'MODULE';
 
     protected $_filename        = false;
